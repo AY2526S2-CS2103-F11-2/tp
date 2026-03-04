@@ -296,31 +296,36 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **MSS:**
 1. User provides contact details for contact.
-2. CampusBridge saves the contact details. 
-3. CampusBridge saves the updated list to storage. 
-4. CampusBridge shows a success message.
+2. CampusBridge validates the input. 
+3. CampusBridge saves the contact details to the contact list. 
+4. CampusBridge saves the updated list to storage. 
+5. CampusBridge shows a success message.
 
 Use case ends.
 
 **Extension:**
-* 1a. User input is empty. 
-  * 1a1. CampusBridge shows a failure message indicating that user input is empty.
+* 2a. User input is empty. 
+  * 2a1. CampusBridge shows a failure message indicating that user input is empty. 
+  * 2a2. CampusBridge requests the user to re-enter input. 
+  
+  Use case resumes at step 2.
+
+
+* 2b. User input does not follow the specified format. 
+  * 2b1. CampusBridge shows a failure message indicating that input is invalid. 
+  * 2b2. CampusBridge requests the user to re-enter input.
+
+  Use case resumes at step 2.
+
+
+* 2c. Email provided in contact details already exists in the contact list. 
+  * 2c1. CampusBridge shows a failure message indicating that email already exists. 
   
   Use case ends.
 
 
-* 1b. User input does not follow the specified format. 
-  * 1b1. CampusBridge shows a failure message indicating that input is invalid. 
-  
-  Use case ends.
-
-
-* 1c. Email provided in contact details already exists in the contact list. 
-  * 1c1. CampusBridge shows a failure message indicating that email already exists.
-  
-  Use case ends. 
-* 3a. Storage file cannot be written or accessed. 
-  * 3a1. CampusBridge shows a failure message indicating that the list could not be saved.
+* 4a. Storage file cannot be written or accessed. 
+  * 4a1. CampusBridge shows a failure message indicating that the list could not be saved. 
   
   Use case ends.
 
