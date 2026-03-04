@@ -9,14 +9,6 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 
 ## Project team
 
-### Chew Wei Jie
-<img src="images/happyweijie.png" width="200px">
-
-[[github](https://github.com/happyweijie)]
-
-* Role: Developer
-* Responsibilities: Code Quality
-
 ### Ng See Pui
 
 <img src="images/seepui.png" width="200px">
@@ -25,6 +17,14 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 
 * Role: Team Lead
 * Responsibilities: Scheduling & Tracking
+
+### Chew Wei Jie
+<img src="images/happyweijie.png" width="200px">
+
+[[github](https://github.com/happyweijie)]
+
+* Role: Developer
+* Responsibilities: Code Quality
 
 ### Chua Chloe
 
@@ -43,6 +43,16 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 
 * Role: Developer, Model IC
 * Responsibilities: In charge of the Model Folder
+
+### Jack Tan
+
+<img src="images/calijacked.png" width="200px">
+
+[[github](http://github.com/calijacked)]
+[[portfolio](team/jack.md)]
+
+* Role: Developer
+* Responsibilities: Documentation, Git Expert, Integration
 
 ### Nguyen Thai Binh
 
