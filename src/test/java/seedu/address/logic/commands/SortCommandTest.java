@@ -40,6 +40,10 @@ public class SortCommandTest {
         // different reverse -> returns false
         assertNotEquals(sortByNameAsc, sortByNameDesc);
 
+        // different order -> returns false
+        SortCommand sortByEmailAsc = new SortCommand("email", false);
+        assertNotEquals(sortByNameAsc, sortByEmailAsc);
+
         // different type -> returns false
         assertNotEquals(1, sortByNameAsc);
 
