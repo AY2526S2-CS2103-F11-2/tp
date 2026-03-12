@@ -21,6 +21,17 @@ public class FindCommandParserTest {
     }
 
     @Test
+    public void parse_emptyNameArg_throwsParseException() {
+        assertParseFailure(parser, "n/", String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
+    }
+
+    @Test
+    public void parse_unprefixedKeywords_throwsParseException() {
+        assertParseFailure(parser, "alice bob",
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
+    }
+
+    @Test
     public void parse_validArgs_returnsFindCommand() {
         // no leading and trailing whitespaces
         FindCommand expectedFindCommand =
