@@ -261,13 +261,13 @@ _{Explain here how the data archiving feature will be implemented}_
 ### Product scope
 
 **Target user profile**:
-NUS undergraduate students who 
-* Need to organize contact information of their Professors, Teaching Assistants and Groupmates. 
+NUS undergraduate students who
+* Need to organize contact information of their Professors, Teaching Assistants and Groupmates.
 * Values efficiency and prefers tools that save time and reduce friction.
 * Prefer using CLI over GUI.
 
 **Value proposition**:
-CampusBridge helps NUS undergraduate students to organize and access contact information for their academic peers across different modules and faculties. 
+CampusBridge helps NUS undergraduate students to organize and access contact information for their academic peers across different modules and faculties.
 
 It does so by providing a centralized, easy-to-use system to save, search, and manage academic contacts efficiently.
 
@@ -294,47 +294,49 @@ See the full list on [GitHub](https://github.com/AY2526S2-CS2103-F11-2/tp/issues
 
 (For all use cases below, the **System** is the `CampusBridge` and the **Actor** is the `user`, unless specified otherwise)
 
-**Use Case: UC01 - Add a contact**
+#### Use Case: UC01 - Add a contact
 
 **Preconditions: Application is running**
 
 **MSS:**
 1. User provides contact details for contact.
-2. CampusBridge validates the input. 
-3. CampusBridge saves the contact details to the contact list. 
-4. CampusBridge saves the updated list to storage. 
+2. CampusBridge validates the input.
+3. CampusBridge saves the contact details to the contact list.
+4. CampusBridge saves the updated list to storage.
 5. CampusBridge shows a success message.
 
+Use case ends.
+
 **Extension:**
-* 2a. User input is empty. 
-  * 2a1. CampusBridge shows a failure message indicating that user input is empty. 
-  * 2a2. CampusBridge requests the user to re-enter input. 
-  
+* 2a. User input is empty.
+  * 2a1. CampusBridge shows a failure message indicating that user input is empty.
+  * 2a2. CampusBridge requests the user to re-enter input.
+
   Use case resumes at step 2.
-  
-* 2b. User input does not follow the specified format. 
-  * 2b1. CampusBridge shows a failure message indicating that input is invalid. 
+
+* 2b. User input does not follow the specified format.
+  * 2b1. CampusBridge shows a failure message indicating that input is invalid.
   * 2b2. CampusBridge requests the user to re-enter input.
 
   Use case resumes at step 2.
 
-* 2c. Email provided in contact details already exists in the contact list. 
-  * 2c1. CampusBridge shows a failure message indicating that email already exists. 
-  
+* 2c. Email provided in contact details already exists in the contact list.
+  * 2c1. CampusBridge shows a failure message indicating that email already exists.
+
   Use case ends.
 
-* 4a. Storage file cannot be written or accessed. 
-  * 4a1. CampusBridge shows a failure message indicating that the list could not be saved. 
-  
+* 4a. Storage file cannot be written or accessed.
+  * 4a1. CampusBridge shows a failure message indicating that the list could not be saved.
+
   Use case ends.
-  
-  
-**Use Case: UC02 - Edit a contact**
+
+
+#### Use Case: UC02 - Edit a contact
 
 **Preconditions: Application is running and the user has added a contact.**
 
 **MSS:**
-1. User requests to list contacts.
+1. User requests to list contacts (UC04).
 2. CampusBridge shows a list of contacts.
 3. User requests to edit a contact in the list.
 4. User provides new contact details for that contact.
@@ -342,33 +344,36 @@ See the full list on [GitHub](https://github.com/AY2526S2-CS2103-F11-2/tp/issues
 6. CampusBridge saves the updated list to storage.
 7. CampusBridge shows a success message.
 
+Use case ends.
+
+**Extension:**
 * 2a. The list is empty.
-    * 2a1. CampusBridge shows a failure message indicating that the contact list is empty.
+  * 2a1. CampusBridge shows a failure message indicating that the contact list is empty.
 
   Use case ends.
-  
+
 * 3a. The given index/email is invalid.
-    * 3a1. CampusBridge shows a failure message indicating that the index/email is invalid.
+  * 3a1. CampusBridge shows a failure message indicating that the index/email is invalid.
 
   Use case resumes at step 2.
 
 * 4a. The given new contact details does not follow the specified format.
-    * 4a1. CampusBridge shows a failure message indicating that input is invalid.
+  * 4a1. CampusBridge shows a failure message indicating that input is invalid.
 
   Use case resumes at step 2.
 
 * 6a. Storage file cannot be written or accessed.
-    * 6a1. CampusBridge shows a failure message indicating that the list could not be saved.
+  * 6a1. CampusBridge shows a failure message indicating that the list could not be saved.
 
   Use case resumes at step 2.
 
 
-**Use Case: UC03 - Delete a contact**
+#### Use Case: UC03 - Delete a contact
 
 **Preconditions: Application is running and the user has added a contact.**
 
 **MSS:**
-1. User requests to list contacts.
+1. User requests to list contacts (UC04).
 2. CampusBridge shows a list of contacts.
 3. User requests to delete a contact in the list.
 4. CampusBridge validates the input.
@@ -376,29 +381,48 @@ See the full list on [GitHub](https://github.com/AY2526S2-CS2103-F11-2/tp/issues
 6. CampusBridge saves the updated list in storage.
 7. CampusBridge shows a success message.
 
-
 Use case ends.
 
 **Extensions:**
 * 2a. The list is empty.
+  * 2a1. CampusBridge shows a failure message indicating that the contact list is empty.
 
   Use case ends.
 
-
 * 4a. The given index/email is invalid.
-    * 4a1. CampusBridge shows an error message indicating the invalid.
-    * 4a2. CampusBridge requests the user to re-enter input.
+  * 4a1. CampusBridge shows an error message indicating the invalid.
+  * 4a2. CampusBridge requests the user to re-enter input.
 
   Use case resumes at step 3.
 
-
 * 6a. Storage file cannot be written or accessed.
-    * 6a1. CampusBridge shows a failure message indicating that the list could not be saved.
+  * 6a1. CampusBridge shows a failure message indicating that the list could not be saved.
 
   Use case ends.
 
 
-**Use Case: UC05 - Search contacts**
+#### Use Case: UC04 - View all contacts
+
+**Preconditions: Application is running**
+
+**MSS:**
+
+1. User requests to list contacts.
+2. CampusBridge shows a list of all contacts.
+3. User can view details of each contact in the list.
+
+Use case ends.
+
+**Extensions:**
+
+* 1a. User input does not follow the specified format.
+  * 1a1. CampusBridge shows a failure message indicating that input is invalid.
+  * 1a2. CampusBridge requests the user to re-enter input.
+
+  Use case resumes at step 1.
+
+
+#### Use Case: UC05 - Search contacts
 
 **Preconditions: Application is running**
 
@@ -412,26 +436,25 @@ Use case ends.
 **Extensions:**
 
 * 3a. CampusBridge can’t find any contacts matching the search query.
-    * 3a1. CampusBridge shows an error message indicating that there are no contacts.
-    
+  * 3a1. CampusBridge shows an error message indicating that there are no contacts.
+
   Use case ends.
 
 * 3b. CampusBridge detects that the email format is invalid.
-    * 3b1. CampusBridge shows an error message indicating that the email format is invalid.
-  
+  * 3b1. CampusBridge shows an error message indicating that the email format is invalid.
+
   Use case ends.
-  
-  
-**Use Case: UC06 - Add a tag to an existing contact**
+
+#### Use Case: UC06 - Add a tag to an existing contact
 
 **Preconditions: Application is running**
 
 **MSS:**
-1. User enters the command tag <contact email / contact index> <tag name>.
+1. User enters the command `tag <contact email / contact index> <tag name>`.
 2. CampusBridge validates the command format.
 3. CampusBridge checks that the contact exists.
 4. CampusBridge adds the tag to the specified contact.
-5. Tag is saved in storage
+5. Tag is saved in storage.
 6. CampusBridge displays a success message showing the updated contact.
 
 Use case ends.
@@ -441,33 +464,31 @@ Use case ends.
   * 2a1. CampusBridge displays an error message showing the correct command format.
 
   Use case resumes at step 1.
-  
 
 * 3a. Contact Does Not Exist
   * 3a1. CampusBridge informs the user that the contact cannot be found.
 
   Use case ends.
 
-
 * 4a. Tag Already Exists for Contact
   * 4a1. CampusBridge informs the user that the contact already has this tag.
 
   Use case resumes at step 1.
 
-
 * 5a. Storage file cannot be written or accessed.
   * 5a1. CampusBridge shows a failure message indicating that the list could not be saved.
-    
+
   Use case ends.
-  
+
 
 ### Non-Functional Requirements
 
-1.  Should work on any _mainstream OS_ as long as it has Java `17` or above installed.
-2.  Should be able to hold up to 1000 persons without a noticeable sluggishness in performance for typical usage.
-3.  A user with above average typing speed for regular English text (i.e. not code, not system admin commands) should be able to accomplish most of the tasks faster using commands than using the mouse.
-
-*{More to be added}*
+1. Should work on any _mainstream OS_ as long as it has Java `17` or above installed.
+2. Should be able to hold up to 1000 persons without a noticeable sluggishness in performance for typical usage.
+3. A user with above average typing speed for regular English text (i.e. not code, not system admin commands) should be able to accomplish most of the tasks faster using commands than using the mouse.
+4. Changes should be implemented incrementally, i.e. in a way that allows the app to be usable after each increment, even if some features are not yet implemented.
+5. All logics and storage should be implemented locally, to ensure testability and usability in secure environments without internet access.
+6. The distributed JAR file should not be bloated, preferably less than 10MB, to ensure that it can be easily downloaded and stored on devices with limited storage.
 
 ### Glossary
 
