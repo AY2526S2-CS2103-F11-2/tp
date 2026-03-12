@@ -18,6 +18,9 @@ public class Messages {
     public static final String MESSAGE_PERSONS_LISTED_OVERVIEW = "%1$d persons listed!";
     public static final String MESSAGE_DUPLICATE_FIELDS =
                 "Multiple values specified for the following single-valued field(s): ";
+    public static final String MESSAGE_INVALID_SORT_ORDER =
+                "Invalid order value. Supported values: %1$s";
+    public static final String MESSAGE_INVALID_PERSON_DISPLAYED_EMAIL = "The person email provided is invalid";
 
     /**
      * Returns an error message indicating the duplicate prefixes.
