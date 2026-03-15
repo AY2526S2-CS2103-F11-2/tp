@@ -86,6 +86,18 @@ public class PersonTest {
     }
 
     @Test
+    public void equals_differentTelegramHandle_false() {
+        Person editedAlice = new PersonBuilder(ALICE).withTelegramHandle("alice123").build();
+        assertFalse(ALICE.equals(editedAlice));
+    }
+
+    @Test
+    public void hashCode_sameValuesSameHashCode() {
+        Person aliceCopy = new PersonBuilder(ALICE).build();
+        assertEquals(ALICE.hashCode(), aliceCopy.hashCode());
+    }
+
+    @Test
     public void toStringMethod() {
         String expected = Person.class.getCanonicalName() + "{name=" + ALICE.getName() + ", phone=" + ALICE.getPhone()
                 + ", email=" + ALICE.getEmail() + ", address=" + ALICE.getAddress()

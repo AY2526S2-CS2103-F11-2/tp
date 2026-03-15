@@ -123,6 +123,20 @@ public class JsonAdaptedPersonTest {
     }
 
     @Test
+    public void toModelType_personWithNullPhoneAndTelegram_returnsPerson() throws Exception {
+        Person person = new Person(
+                BENSON.getName(),
+                null,
+                BENSON.getEmail(),
+                BENSON.getAddress(),
+                new seedu.address.model.person.TelegramHandle("benson123"),
+                BENSON.getTags());
+
+        JsonAdaptedPerson adaptedPerson = new JsonAdaptedPerson(person);
+        assertEquals(person, adaptedPerson.toModelType());
+    }
+
+    @Test
     public void toModelType_invalidTags_throwsIllegalValueException() {
         List<JsonAdaptedTag> invalidTags = new ArrayList<>(VALID_TAGS);
         invalidTags.add(new JsonAdaptedTag(INVALID_TAG));
