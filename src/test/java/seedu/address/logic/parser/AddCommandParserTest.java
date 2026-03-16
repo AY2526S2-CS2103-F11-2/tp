@@ -37,6 +37,7 @@ import org.junit.jupiter.api.Test;
 
 import seedu.address.logic.Messages;
 import seedu.address.logic.commands.AddCommand;
+import seedu.address.model.person.Address;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
@@ -51,7 +52,7 @@ public class AddCommandParserTest {
     @Test
     public void parse_allFieldsPresent_success() {
         Person expectedPerson = new PersonBuilder(BOB)
-                .withAddress("Not provided")
+                .withAddress(Address.DEFAULT_ADDRESS)
                 .withTelegramHandle(VALID_TELEGRAM_HANDLE_BOB)
                 .withTags(VALID_TAG_FRIEND)
                 .build();
@@ -62,7 +63,7 @@ public class AddCommandParserTest {
 
         // multiple tags - all accepted
         Person expectedPersonMultipleTags = new PersonBuilder(BOB)
-                .withAddress("Not provided")
+                .withAddress(Address.DEFAULT_ADDRESS)
                 .withTelegramHandle(VALID_TELEGRAM_HANDLE_BOB)
                 .withTags(VALID_TAG_FRIEND, VALID_TAG_HUSBAND)
                 .build();
@@ -144,7 +145,7 @@ public class AddCommandParserTest {
                 AMY.getName(),
                 null,
                 AMY.getEmail(),
-                new seedu.address.model.person.Address("Not provided"),
+                Address.makeDefault(),
                 null,
                 java.util.Collections.emptySet());
 
@@ -158,7 +159,7 @@ public class AddCommandParserTest {
                 BOB.getName(),
                 null,
                 BOB.getEmail(),
-                new seedu.address.model.person.Address("Not provided"),
+                Address.makeDefault(),
                 new TelegramHandle(VALID_TELEGRAM_HANDLE_BOB),
                 java.util.Collections.emptySet());
 

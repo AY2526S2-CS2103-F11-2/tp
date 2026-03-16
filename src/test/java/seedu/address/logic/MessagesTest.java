@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
+import seedu.address.model.person.Address;
 import seedu.address.model.person.Person;
 import seedu.address.testutil.PersonBuilder;
 
@@ -14,7 +15,7 @@ public class MessagesTest {
         Person person = new PersonBuilder()
                 .withName("Amy Bee")
                 .withEmail("amy@gmail.com")
-                .withAddress("Not provided")
+                .withAddress(Address.DEFAULT_ADDRESS)
                 .withTags("friend")
                 .build();
         person = new Person(person.getName(), null, person.getEmail(),
@@ -29,7 +30,7 @@ public class MessagesTest {
                 .withName("Amy Bee")
                 .withPhone("85355255")
                 .withEmail("amy@gmail.com")
-                .withAddress("Not provided")
+                .withAddress(Address.DEFAULT_ADDRESS)
                 .withTelegramHandle("amybee")
                 .withTags("friend")
                 .build();

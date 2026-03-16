@@ -48,7 +48,7 @@ public class AddCommandParser implements Parser<AddCommand> {
             phone = ParserUtil.parsePhone(argMultimap.getValue(PREFIX_PHONE).get());
         }
         Email email = ParserUtil.parseEmail(argMultimap.getValue(PREFIX_EMAIL).get());
-        Address address = new Address("Not provided");
+        Address address = Address.makeDefault();
         TelegramHandle telegramHandle = null;
         if (argMultimap.getValue(PREFIX_TELEGRAM_HANDLE).isPresent()) {
             telegramHandle = ParserUtil.parseTelegramHandle(argMultimap.getValue(PREFIX_TELEGRAM_HANDLE).get());

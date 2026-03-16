@@ -10,6 +10,7 @@ import static seedu.address.commons.util.AppUtil.checkArgument;
 public class Address {
 
     public static final String MESSAGE_CONSTRAINTS = "Addresses can take any values, and it should not be blank";
+    public static final String DEFAULT_ADDRESS = "Not provided";
 
     /*
      * The first character of the address must not be a whitespace,
@@ -28,6 +29,13 @@ public class Address {
         requireNonNull(address);
         checkArgument(isValidAddress(address), MESSAGE_CONSTRAINTS);
         value = address;
+    }
+
+    /**
+     * Returns the default placeholder address used when no address is provided.
+     */
+    public static Address makeDefault() {
+        return new Address(DEFAULT_ADDRESS);
     }
 
     /**
