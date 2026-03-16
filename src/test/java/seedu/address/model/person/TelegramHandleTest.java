@@ -33,12 +33,18 @@ public class TelegramHandleTest {
         assertFalse(TelegramHandle.isValidTelegramHandle("user!name")); // invalid character
         assertFalse(TelegramHandle.isValidTelegramHandle("user-name")); // invalid character
         assertFalse(TelegramHandle.isValidTelegramHandle("user name")); // spaces not allowed
+        assertFalse(TelegramHandle.isValidTelegramHandle("1user")); // must start with a letter
+        assertFalse(TelegramHandle.isValidTelegramHandle("_user1")); // must start with a letter
+        assertFalse(TelegramHandle.isValidTelegramHandle("user_")); // cannot end with underscore
+        assertFalse(TelegramHandle.isValidTelegramHandle("user__name")); // no consecutive underscores
+        assertFalse(TelegramHandle.isValidTelegramHandle("abcd_")); // ends with underscore
 
         // valid telegram handles
         assertTrue(TelegramHandle.isValidTelegramHandle("abcde"));
         assertTrue(TelegramHandle.isValidTelegramHandle("rachel_walker"));
         assertTrue(TelegramHandle.isValidTelegramHandle("user123"));
         assertTrue(TelegramHandle.isValidTelegramHandle("User_Name_123"));
+        assertTrue(TelegramHandle.isValidTelegramHandle("a1234")); // minimal valid length
     }
 
     @Test

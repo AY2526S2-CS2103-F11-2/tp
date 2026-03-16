@@ -10,9 +10,10 @@ import static seedu.address.commons.util.AppUtil.checkArgument;
 public class TelegramHandle {
 
     public static final String MESSAGE_CONSTRAINTS =
-            "Telegram handles should only contain letters, numbers, and underscores, "
-                    + "and be between 5 and 32 characters long.";
-    public static final String VALIDATION_REGEX = "[A-Za-z0-9_]{5,32}";
+            "Telegram handles must start with a letter, contain only letters, numbers, and underscores, "
+                    + "be 5 to 32 characters long, not contain consecutive underscores, "
+                    + "and not end with an underscore.";
+    public static final String VALIDATION_REGEX = "^(?!.*__)[a-zA-Z][a-zA-Z0-9_]{3,30}[a-zA-Z0-9]$";
     public final String value;
 
     /**
