@@ -21,10 +21,15 @@ public class NameOrEmailContainsKeywordsPredicateTest {
         List<String> secondNameKeywordList = List.of("first", "second");
         List<String> secondEmailKeywordList = List.of("first@gmail.com", "second@gmail.com");
 
+        List<String> thirdNameKeywordList = List.of("first");
+        List<String> thirdEmailKeywordList = List.of("gmail");
+
         NameOrEmailContainsKeywordsPredicate firstPredicate = new NameOrEmailContainsKeywordsPredicate(
                 firstNameKeywordList, firstEmailKeywordList);
         NameOrEmailContainsKeywordsPredicate secondPredicate = new NameOrEmailContainsKeywordsPredicate(
                 secondNameKeywordList, secondEmailKeywordList);
+        NameOrEmailContainsKeywordsPredicate thirdPredicate = new NameOrEmailContainsKeywordsPredicate(
+                thirdNameKeywordList, thirdEmailKeywordList);
 
         // same object -> returns true
         assertEquals(firstPredicate, firstPredicate);
@@ -36,12 +41,17 @@ public class NameOrEmailContainsKeywordsPredicateTest {
 
         // different types -> returns false
         assertNotEquals(1, firstPredicate);
+        assertFalse(firstPredicate.equals("first"));
+        assertFalse(firstPredicate.equals("first@gmail.com"));
 
         // null -> returns false
         assertNotEquals(null, firstPredicate);
 
         // different person -> returns false
         assertNotEquals(firstPredicate, secondPredicate);
+
+        // same name keywords but different email keywords -> returns false
+        assertNotEquals(firstPredicate, thirdPredicate);
     }
 
     @Test
