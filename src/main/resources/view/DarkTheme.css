@@ -350,3 +350,13 @@
     -fx-background-radius: 2;
     -fx-font-size: 11;
 }
+
+.copyable-label:hover {
+    -fx-cursor: hand;
+    -fx-underline: true;
+}
+
+#tags .label:hover {
+    -fx-cursor: hand;
+    -fx-underline: true;
+}

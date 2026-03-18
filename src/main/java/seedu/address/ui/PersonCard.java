@@ -1,9 +1,12 @@
 package seedu.address.ui;
 
 import java.util.Comparator;
+import java.util.function.Consumer;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.input.Clipboard;
+import javafx.scene.input.ClipboardContent;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
@@ -26,6 +29,8 @@ public class PersonCard extends UiPart<Region> {
 
     public final Person person;
 
+    private final Consumer<String> feedbackConsumer;
+
     @FXML
     private HBox cardPane;
     @FXML
@@ -44,9 +49,10 @@ public class PersonCard extends UiPart<Region> {
     /**
      * Creates a {@code PersonCode} with the given {@code Person} and index to display.
      */
-    public PersonCard(Person person, int displayedIndex) {
+    public PersonCard(Person person, int displayedIndex, Consumer<String> feedbackConsumer) {
         super(FXML);
         this.person = person;
+        this.feedbackConsumer = feedbackConsumer;
         id.setText(displayedIndex + ". ");
         name.setText(person.getName().fullName);
         email.setText(person.getEmail().value);
@@ -60,8 +66,34 @@ public class PersonCard extends UiPart<Region> {
         telegramHandle.setText(hasTelegram ? person.getTelegramHandle().value : "");
         telegramHandle.setManaged(hasTelegram);
         telegramHandle.setVisible(hasTelegram);
+
+        name.getStyleClass().add("copyable-label");
+        email.getStyleClass().add("copyable-label");
+        phone.getStyleClass().add("copyable-label");
+        telegramHandle.getStyleClass().add("copyable-label");
+
+        name.setOnMouseClicked(e -> copyToClipboard(person.getName().fullName));
+        email.setOnMouseClicked(e -> copyToClipboard(person.getEmail().value));
+        if (hasPhone) {
+            phone.setOnMouseClicked(e -> copyToClipboard(person.getPhone().value));
+        }
+        if (hasTelegram) {
+            telegramHandle.setOnMouseClicked(e -> copyToClipboard(person.getTelegramHandle().value));
+        }
+
         person.getTags().stream()
                 .sorted(Comparator.comparing(tag -> tag.tagName))
-                .forEach(tag -> tags.getChildren().add(new Label(tag.tagName)));
+                .forEach(tag -> {
+                    Label tagLabel = new Label(tag.tagName);
+                    tagLabel.setOnMouseClicked(e -> copyToClipboard(tag.tagName));
+                    tags.getChildren().add(tagLabel);
+                });
+    }
+
+    private void copyToClipboard(String text) {
+        ClipboardContent content = new ClipboardContent();
+        content.putString(text);
+        Clipboard.getSystemClipboard().setContent(content);
+        feedbackConsumer.accept("Copied: " + text);
     }
 }
