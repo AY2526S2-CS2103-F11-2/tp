@@ -149,15 +149,30 @@ Examples:
 
 Deletes the specified person from the address book.
 
-Format: `delete INDEX`
+Format: 
+* `delete i/INDEX`
+  * Deletes the person at the specified `INDEX`. 
+  * The index refers to the index number shown in the displayed person list.
+  * The index **must be a positive integer** 1, 2, 3, …​
 
-* Deletes the person at the specified `INDEX`.
-* The index refers to the index number shown in the displayed person list.
-* The index **must be a positive integer** 1, 2, 3, …​
+* `delete e/EMAIL`
+  * Deletes the person with the specified `EMAIL`.
+  * The email refers to the email address of a person shown in the displayed person list.
+  * The email **must be a valid email address**. 
+  * Email matching is **case-insensitive**.
+
+<div markdown="block" class="alert alert-info">:information_source: **NOTE:**
+Only one of `i/INDEX` or `e/EMAIL` can be provided at a time.
+</div>
 
 Examples:
-* `list` followed by `delete 2` deletes the 2nd person in the address book.
-* `find Betsy` followed by `delete 1` deletes the 1st person in the results of the `find` command.
+* Delete by index
+  * `list` followed by `delete i/2` deletes the 2nd person in the address book.
+  * `find n/Betsy` followed by `delete i/1` deletes the 1st person in the results of the `find` command.
+  
+* Delete by email
+  * `list` followed by `delete e/betsy@example.com` deletes the person with email `betsy@example.com` in the address book.
+  * `find n/Betsy` followed by `delete e/BETSY@example.com` deletes the person with email `BETSY@example.com` in the results of the `find` command (case-insensitive match also works).
 
 ### Clearing all entries : `clear`
 

@@ -25,9 +25,9 @@ public class DeleteCommand extends Command {
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Deletes the person identified by the index number or email used in the displayed person list.\n"
-            + "Parameters: " + PREFIX_INDEX + "INDEX (must be a positive integer) or " + PREFIX_EMAIL + "EMAIL\n"
+            + "Parameters: " + PREFIX_INDEX + "INDEX (must be a positive integer) or " + PREFIX_EMAIL + "EMAIL.\n"
             + "Example: " + COMMAND_WORD + " " + PREFIX_INDEX + "1, "
-            + COMMAND_WORD + " " + PREFIX_EMAIL + "e1234567@u.nus.edu";
+            + COMMAND_WORD + " " + PREFIX_EMAIL + "johnd@exampl.com";
 
     public static final String MESSAGE_DELETE_PERSON_SUCCESS = "Deleted Person: %1$s";
 
