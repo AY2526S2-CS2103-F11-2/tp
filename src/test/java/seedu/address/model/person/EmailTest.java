@@ -101,4 +101,29 @@ public class EmailTest {
         assertTrue(first.equals(second));
         assertEquals(first.hashCode(), second.hashCode());
     }
+
+    @Test
+    public void containsIgnoreCase_substringsWithDifferentCases_returnsTrue() {
+        Email email = new Email("Alice@u.nus.edu");
+
+        // name part
+        assertTrue(email.containsIgnoreCase("Alice"));
+        assertTrue(email.containsIgnoreCase("alice"));
+
+        // domain part
+        assertTrue(email.containsIgnoreCase("nus"));
+        assertTrue(email.containsIgnoreCase("NuS"));
+    }
+
+    @Test
+    public void containsIgnoreCase_invalidSubstring_returnsFalse() {
+        Email email = new Email("Alice@u.nus.edu");
+
+        // name part
+        assertFalse(email.containsIgnoreCase("Alicia"));
+
+        // domain part
+        assertFalse(email.containsIgnoreCase("gmail"));
+        assertFalse(email.containsIgnoreCase("@domain.comm"));
+    }
 }

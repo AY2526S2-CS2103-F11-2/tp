@@ -47,6 +47,19 @@ public class Email {
     }
 
     /**
+     * Returns true if this email contains the specified keyword,
+     * ignoring case differences.
+     *
+     * @param keyword The keyword to search for within the email.
+     * @return true if the email contains the keyword (case-insensitive),
+     *         false otherwise.
+     */
+    public boolean containsIgnoreCase(String keyword) {
+        return this.value.toLowerCase()
+                .contains(keyword.toLowerCase());
+    }
+
+    /**
      * Returns if a given string is a valid email.
      */
     public static boolean isValidEmail(String test) {

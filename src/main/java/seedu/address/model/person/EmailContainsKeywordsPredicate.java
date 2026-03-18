@@ -19,10 +19,7 @@ public class EmailContainsKeywordsPredicate implements Predicate<Person> {
     public boolean test(Person person) {
         return keywords.stream()
                 .anyMatch(keyword -> person.getEmail()
-                        .value
-                        .toLowerCase()
-                        .contains(keyword.toLowerCase())
-                );
+                        .containsIgnoreCase(keyword));
     }
 
     @Override
