@@ -9,7 +9,7 @@ import java.util.List;
 
 import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
-import seedu.address.model.person.NameContainsKeywordsPredicate;
+import seedu.address.model.person.NameOrEmailContainsKeywordsPredicate;
 
 /**
  * Parses input arguments and creates a new FindCommand object
@@ -22,36 +22,44 @@ public class FindCommandParser implements Parser<FindCommand> {
      * @throws ParseException if the user input does not conform the expected format
      */
     public FindCommand parse(String args) throws ParseException {
-        String trimmedArgs = args.trim();
+        // ArgumentTokenizer recognizes prefixes only when preceded by whitespace.
+        // Add a leading space so first prefix at start of argument string is recognized.
+        ArgumentMultimap argumentMultimap = ArgumentTokenizer.tokenize(" " + args, PREFIX_NAME, PREFIX_EMAIL);
 
-        if (trimmedArgs.isEmpty()) {
+        List<String> nameKeywords = parseKeywords(argumentMultimap, PREFIX_NAME);
+
+        List<String> emailKeywords = parseKeywords(argumentMultimap, PREFIX_EMAIL);
+
+        // Throw exception if preamble is not empty, eg "find alice n/bob"
+        // Both name or email keywords are not specified
+        if (!argumentMultimap.getPreamble().isBlank()
+            || (nameKeywords.isEmpty() && emailKeywords.isEmpty())) {
             throw new ParseException(
                     String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
         }
 
-        // ArgumentTokenizer requires a space before the first prefix to recognize it.
-        // Add a leading space if input starts with a prefix (e.g., "n/alice" -> " n/alice").
-        // The preamble check below will validate no unprefixed content exists.
-        ArgumentMultimap argumentMultimap = ArgumentTokenizer.tokenize(" " + trimmedArgs,
-                PREFIX_NAME, PREFIX_EMAIL);
+        return new FindCommand(new NameOrEmailContainsKeywordsPredicate(nameKeywords, emailKeywords));
+    }
 
-        if (!argumentMultimap.getPreamble().trim().isEmpty()) {
-            throw new ParseException(
-                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
-        }
-
-        List<String> nameKeywords = argumentMultimap.getAllValues(PREFIX_NAME)
+    /**
+     * Extracts and processes keywords associated with the specified {@code prefix}
+     * from the given {@code ArgumentMultimap}.
+     *
+     * <p>All values corresponding to the prefix are split by whitespace into individual
+     * keywords. Blank or empty keywords are discarded.</p>
+     *
+     * <p>For example, if the input contains {@code n/alice bob n/charlie}, this method
+     * returns a list containing {@code ["alice", "bob", "charlie"]}.</p>
+     *
+     * @param argumentMultimap The {@code ArgumentMultimap} containing parsed arguments.
+     * @param prefix The {@code Prefix} whose associated values are to be processed.
+     * @return A list of non-blank keywords extracted from the specified prefix.
+     */
+    private static List<String> parseKeywords(ArgumentMultimap argumentMultimap, Prefix prefix) {
+        return argumentMultimap.getAllValues(prefix)
                 .stream()
                 .flatMap(keyword -> Arrays.stream(keyword.split("\\s+")))
                 .filter(keyword -> !keyword.isBlank())
                 .toList();
-
-        if (nameKeywords.isEmpty()) {
-            throw new ParseException(
-                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
-        }
-
-        return new FindCommand(new NameContainsKeywordsPredicate(nameKeywords));
     }
-
 }

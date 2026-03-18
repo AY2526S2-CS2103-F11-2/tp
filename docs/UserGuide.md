@@ -124,37 +124,55 @@ Examples:
 *  `edit 1 p/91234567 e/johndoe@example.com` Edits the phone number and email address of the 1st person to be `91234567` and `johndoe@example.com` respectively.
 *  `edit 2 n/Betsy Crower t/` Edits the name of the 2nd person to be `Betsy Crower` and clears all existing tags.
 
-### Locating persons by name: `find`
+### Locating persons by name/email: `find`
 
-Finds persons whose names contain any of the given keywords.
+Finds persons whose names or emails contain any of the given keywords.
 
-Format: `find n/KEYWORD [MORE_KEYWORDS]`
+Format: `find n/NAME [MORE_NAMES] e/EMAIL [MORE_EMAILS]`
 
-* The search is case-insensitive. e.g `hans` will match `Hans`
+* Both `n/` and `e/` are optional, but at least one must be present.
+* The search is case-insensitive for both name and email. e.g `hans` will match `Hans`
 * The order of the keywords does not matter. e.g. `Hans Bo` will match `Bo Hans`
-* Only the name is searched.
-* Only full words will be matched e.g. `Han` will not match `Hans`
-* Persons matching at least one keyword will be returned (i.e. `OR` search).
+* For name, only full words will be matched e.g. `Han` will not match `Hans`
+* For email, partial substrings will be matched e.g. `gmail` will match `alice@gmail.com`
+* Persons matching at least one name/email keyword will be returned (i.e. `OR` search).
   e.g. `Hans Bo` will return `Hans Gruber`, `Bo Yang`
 
 Examples:
 * `find n/John` returns `john` and `John Doe`
 * `find n/alex david` returns `Alex Yeoh`, `David Li`<br>
+* `find e/david` returns `Alex Yeoh`, `David Li`<br>
+* `find n/alex e/doe` returns `Alex Yeoh`, `John Doe`<br>
   ![result for 'find alex david'](images/findAlexDavidResult.png)
 
 ### Deleting a person : `delete`
 
 Deletes the specified person from the address book.
 
-Format: `delete INDEX`
+Format: 
+* `delete i/INDEX`
+  * Deletes the person at the specified `INDEX`. 
+  * The index refers to the index number shown in the displayed person list.
+  * The index **must be a positive integer** 1, 2, 3, …​
 
-* Deletes the person at the specified `INDEX`.
-* The index refers to the index number shown in the displayed person list.
-* The index **must be a positive integer** 1, 2, 3, …​
+* `delete e/EMAIL`
+  * Deletes the person with the specified `EMAIL`.
+  * The email refers to the email address of a person shown in the displayed person list.
+  * The email **must be a valid email address**. 
+  * Email matching is **case-insensitive**.
+
+<div markdown="block" class="alert alert-info">:information_source: **NOTE:**
+Only one of `i/INDEX` or `e/EMAIL` can be provided at a time.
+</div>
 
 Examples:
-* `list` followed by `delete 2` deletes the 2nd person in the address book.
-* `find Betsy` followed by `delete 1` deletes the 1st person in the results of the `find` command.
+* Delete by index
+  * `list` followed by `delete i/2` deletes the 2nd person in the address book.
+  * `find n/Betsy` followed by `delete i/1` deletes the 1st person in the results of the `find` command.
+  
+* Delete by email
+  * `list` followed by `delete e/betsy@example.com` deletes the person with email `betsy@example.com` in the address book.
+  * `find n/Betsy` followed by `delete e/BETSY@example.com` deletes the person with email `BETSY@example.com` in the results of the `find` command (case-insensitive match also works).
 
 ### Clearing all entries : `clear`
 
