@@ -24,26 +24,38 @@ public class Person {
 
     // Data fields
     private final Address address;
-    private final Set<Tag> tags = new HashSet<>();
+    private final Set<Tag> tags;
 
     /**
-     * Every field other than phone and telegramHandle must be present and not null.
+     * Full constructor
+     */
+    public Person(Name name, Phone phone, Email email, Address address,
+                  TelegramHandle telegramHandle, Set<Tag> tags) {
+
+        requireAllNonNull(name, email, address, tags);
+
+        this.name = name;
+        this.phone = phone;
+        this.email = email;
+        this.address = address;
+        this.telegramHandle = telegramHandle;
+
+        // defensive copy
+        this.tags = new HashSet<>(tags);
+    }
+
+    /**
+     * Without telegram handle
      */
     public Person(Name name, Phone phone, Email email, Address address, Set<Tag> tags) {
         this(name, phone, email, address, null, tags);
     }
 
     /**
-     * Overloaded constructor with TelegramHandle field.
+     * Without tags (default empty set)
      */
-    public Person(Name name, Phone phone, Email email, Address address, TelegramHandle telegramHandle, Set<Tag> tags) {
-        requireAllNonNull(name, email, address, tags);
-        this.name = name;
-        this.phone = phone;
-        this.email = email;
-        this.address = address;
-        this.telegramHandle = telegramHandle;
-        this.tags.addAll(tags);
+    public Person(Name name, Phone phone, Email email, Address address, TelegramHandle telegramHandle) {
+        this(name, phone, email, address, telegramHandle, new HashSet<>());
     }
 
     public Name getName() {

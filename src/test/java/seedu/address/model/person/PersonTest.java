@@ -12,8 +12,12 @@ import static seedu.address.testutil.Assert.assertThrows;
 import static seedu.address.testutil.TypicalPersons.ALICE;
 import static seedu.address.testutil.TypicalPersons.BOB;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.junit.jupiter.api.Test;
 
+import seedu.address.model.tag.Tag;
 import seedu.address.testutil.PersonBuilder;
 
 public class PersonTest {
@@ -112,5 +116,65 @@ public class PersonTest {
                 + ", email=" + person.getEmail() + ", address=" + person.getAddress()
                 + ", telegramHandle=" + person.getTelegramHandle() + ", tags=" + person.getTags() + "}";
         assertEquals(expected, person.toString());
+    }
+
+    @Test
+    public void constructor_withoutTelegramHandle_success() {
+        Person person = new Person(
+                ALICE.getName(),
+                ALICE.getPhone(),
+                ALICE.getEmail(),
+                ALICE.getAddress(),
+                ALICE.getTags()
+        );
+
+        assertEquals(ALICE.getName(), person.getName());
+        assertEquals(ALICE.getPhone(), person.getPhone());
+        assertEquals(ALICE.getEmail(), person.getEmail());
+        assertEquals(ALICE.getAddress(), person.getAddress());
+        assertEquals(ALICE.getTags(), person.getTags());
+
+        // telegram should be null
+        assertEquals(null, person.getTelegramHandle());
+    }
+
+    @Test
+    public void constructor_withoutTags_success() {
+        Person person = new Person(
+                ALICE.getName(),
+                ALICE.getPhone(),
+                ALICE.getEmail(),
+                ALICE.getAddress(),
+                ALICE.getTelegramHandle()
+        );
+
+        assertEquals(ALICE.getName(), person.getName());
+        assertEquals(ALICE.getPhone(), person.getPhone());
+        assertEquals(ALICE.getEmail(), person.getEmail());
+        assertEquals(ALICE.getAddress(), person.getAddress());
+        assertEquals(ALICE.getTelegramHandle(), person.getTelegramHandle());
+
+        // tags should be empty
+        assertTrue(person.getTags().isEmpty());
+    }
+
+    @Test
+    public void constructor_defensiveCopy_tagsNotAffected() {
+        Set<Tag> originalTags = new HashSet<>(ALICE.getTags());
+
+        Person person = new Person(
+                ALICE.getName(),
+                ALICE.getPhone(),
+                ALICE.getEmail(),
+                ALICE.getAddress(),
+                ALICE.getTelegramHandle(),
+                originalTags
+        );
+
+        // mutate original set
+        originalTags.clear();
+
+        // person should NOT be affected
+        assertFalse(person.getTags().isEmpty());
     }
 }
