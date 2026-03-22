@@ -20,7 +20,7 @@ public class MessagesTest {
                 .build();
         person = new Person(person.getName(), null, person.getEmail(),
                 person.getAddress(), null, person.getTags());
-        assertEquals("Amy Bee; Email: amy@gmail.com; Tags: [friend]",
+        assertEquals("Amy Bee; Email: amy@gmail.com; Tags: [GENERAL: friend]",
                 Messages.format(person));
     }
 
@@ -35,7 +35,7 @@ public class MessagesTest {
                 .withTags("friend")
                 .build();
 
-        assertEquals("Amy Bee; Phone: 85355255; Email: amy@gmail.com; Telegram: amybee; Tags: [friend]",
+        assertEquals("Amy Bee; Phone: 85355255; Email: amy@gmail.com; Telegram: amybee; Tags: [GENERAL: friend]",
                 Messages.format(person));
     }
 }
