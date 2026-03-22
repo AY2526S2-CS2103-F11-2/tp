@@ -68,6 +68,19 @@ public class NameOrEmailContainsKeywordsPredicateTest {
     }
 
     @Test
+    public void test_nameSubstringMatches_returnsTrue() {
+        Person alice = new PersonBuilder()
+                .withName("Alice Tan")
+                .withEmail("alice@gmail.com")
+                .build();
+
+        NameOrEmailContainsKeywordsPredicate predicate =
+                new NameOrEmailContainsKeywordsPredicate(List.of("Ali"), Collections.emptyList());
+
+        assertTrue(predicate.test(alice));
+    }
+
+    @Test
     public void test_emailMatches_returnsTrue() {
         Person alice = new PersonBuilder()
                 .withName("Alice Tan")
