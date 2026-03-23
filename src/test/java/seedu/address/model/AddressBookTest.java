@@ -92,7 +92,6 @@ public class AddressBookTest {
         assertTrue(addressBook.hasPerson(editedAlice));
     }
 
-
     @Test
     public void hasPerson_personWithSameTelegramHandleInAddressBook_returnsTrue() {
         Person aliceWithTelegram = new PersonBuilder(ALICE).withTelegramHandle("alice123").build();
