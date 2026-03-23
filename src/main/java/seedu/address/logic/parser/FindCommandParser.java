@@ -3,13 +3,17 @@ package seedu.address.logic.parser;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.NameOrEmailContainsKeywordsPredicate;
+import seedu.address.model.tag.Tag;
+import seedu.address.model.tag.TagType;
 
 /**
  * Parses input arguments and creates a new FindCommand object
@@ -24,16 +28,19 @@ public class FindCommandParser implements Parser<FindCommand> {
     public FindCommand parse(String args) throws ParseException {
         // ArgumentTokenizer recognizes prefixes only when preceded by whitespace.
         // Add a leading space so first prefix at start of argument string is recognized.
-        ArgumentMultimap argumentMultimap = ArgumentTokenizer.tokenize(" " + args, PREFIX_NAME, PREFIX_EMAIL);
+        ArgumentMultimap argumentMultimap = ArgumentTokenizer.tokenize(" " + args,
+                PREFIX_NAME, PREFIX_EMAIL, PREFIX_TAG);
 
         List<String> nameKeywords = parseKeywords(argumentMultimap, PREFIX_NAME);
 
         List<String> emailKeywords = parseKeywords(argumentMultimap, PREFIX_EMAIL);
 
+        Set<Tag> tags = ParserUtil.parseTags(argumentMultimap.getAllValues(PREFIX_TAG), TagType.GENERAL);
+
         // Throw exception if preamble is not empty, eg "find alice n/bob"
-        // Both name or email keywords are not specified
+        // If no name or email or tag keywords are specified
         if (!argumentMultimap.getPreamble().isBlank()
-            || (nameKeywords.isEmpty() && emailKeywords.isEmpty())) {
+            || (nameKeywords.isEmpty() && emailKeywords.isEmpty() && tags.isEmpty())) {
             throw new ParseException(
                     String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
         }
