@@ -26,29 +26,29 @@ public class TagCommand extends Command {
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Add tags to the person identified by the index number used in the displayed person list. "
-            + "Input values will be appended to the person.\n"
+            + "Existing tags will be preserved (new tags are appended).\n"
             + "Parameters: INDEX (must be a positive integer) "
-            + "[" + PREFIX_ROLE_TAG + "TAG]... "
-            + "[" + PREFIX_COURSE_TAG + "TAG]... "
-            + "[" + PREFIX_GENERAL_TAG + "TAG]... \n"
+            + "[" + PREFIX_ROLE_TAG + "ROLE_TAG]... "
+            + "[" + PREFIX_COURSE_TAG + "COURSE_TAG]... "
+            + "[" + PREFIX_GENERAL_TAG + "GENERAL_TAG]... \n"
             + "Example: " + COMMAND_WORD + " 1 " + PREFIX_ROLE_TAG + "tutor "
-            + PREFIX_COURSE_TAG + "CS2103 " + PREFIX_GENERAL_TAG + "friends";
+            + PREFIX_COURSE_TAG + "cs2103 " + PREFIX_GENERAL_TAG + "friends";
 
     public static final String MESSAGE_SUCCESS = "New tags added: %1$s";
 
     private final Index index;
-    private final Set<Tag> tagList;
+    private final Set<Tag> tagsToAdd;
 
     /**
-     * @param index   of the person in the filtered person list to edit
-     * @param tagList the lag list to add
+     * @param index     of the person in the filtered person list to add tags.
+     * @param tagsToAdd the tags to add.
      */
-    public TagCommand(Index index, Set<Tag> tagList) {
+    public TagCommand(Index index, Set<Tag> tagsToAdd) {
         requireNonNull(index);
-        requireNonNull(tagList);
+        requireNonNull(tagsToAdd);
 
         this.index = index;
-        this.tagList = tagList;
+        this.tagsToAdd = tagsToAdd;
     }
 
     @Override
@@ -56,33 +56,23 @@ public class TagCommand extends Command {
         requireNonNull(model);
         List<Person> lastShownList = model.getFilteredPersonList();
 
-        Person personToAddTag;
-
         if (index.getZeroBased() >= lastShownList.size()) {
             throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
         }
 
-        personToAddTag = lastShownList.get(index.getZeroBased());
+        Person personToAddTag = lastShownList.get(index.getZeroBased());
 
         // Merge existing tags with new tags
         Set<Tag> updatedTags = new HashSet<>(personToAddTag.getTags());
-        updatedTags.addAll(tagList);
+        updatedTags.addAll(tagsToAdd);
 
-        // Create edited person (immutability)
-        Person editedPerson = new Person(
-                personToAddTag.getName(),
-                personToAddTag.getPhone(),
-                personToAddTag.getEmail(),
-                personToAddTag.getTelegramHandle(),
-                updatedTags
-        );
+        Person editedPerson = createEditedPerson(personToAddTag, updatedTags);
 
         model.setPerson(personToAddTag, editedPerson);
         model.updateFilteredPersonList(Model.PREDICATE_SHOW_ALL_PERSONS);
 
-        return new CommandResult(String.format(MESSAGE_SUCCESS, tagList));
+        return new CommandResult(String.format(MESSAGE_SUCCESS, tagsToAdd));
     }
-
 
     @Override
     public boolean equals(Object other) {
@@ -97,13 +87,26 @@ public class TagCommand extends Command {
 
         TagCommand otherTagCommand = (TagCommand) other;
         return index.equals(otherTagCommand.index)
-                && tagList.equals(otherTagCommand.tagList);
+                && tagsToAdd.equals(otherTagCommand.tagsToAdd);
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this)
-                .add("tags", tagList)
+                .add("tagsToAdd", tagsToAdd)
                 .toString();
+    }
+
+    /**
+     * Creates a new {@code Person} with updated tags while preserving other fields.
+     */
+    private Person createEditedPerson(Person original, Set<Tag> updatedTags) {
+        return new Person(
+                original.getName(),
+                original.getPhone(),
+                original.getEmail(),
+                original.getTelegramHandle(),
+                updatedTags
+        );
     }
 }
