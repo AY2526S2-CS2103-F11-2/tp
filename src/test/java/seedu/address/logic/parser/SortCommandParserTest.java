@@ -1,6 +1,7 @@
 package seedu.address.logic.parser;
 
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
+import static seedu.address.logic.Messages.MESSAGE_INVALID_REVERSE_FLAG;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_SORT_ORDER;
 import static seedu.address.logic.commands.SortCommand.SORT_COMPARATORS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ORDER;
@@ -61,6 +62,11 @@ public class SortCommandParserTest {
         String expectedMessage = String.format(MESSAGE_INVALID_SORT_ORDER,
                 String.join(", ", SORT_COMPARATORS.keySet()));
         assertParseFailure(parser, " o/address", expectedMessage);
+    }
+
+    @Test
+    public void parse_reverseFlagWithValue_throwsParseException() {
+        assertParseFailure(parser, " o/name r/sometext", MESSAGE_INVALID_REVERSE_FLAG);
     }
 
     @Test
