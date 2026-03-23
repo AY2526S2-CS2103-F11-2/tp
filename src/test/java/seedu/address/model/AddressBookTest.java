@@ -45,7 +45,7 @@ public class AddressBookTest {
     @Test
     public void resetData_withDuplicateEmailPersons_throwsDuplicatePersonException() {
         // Two persons with the same email
-        Person editedAlice = new PersonBuilder(ALICE).withAddress("Block 123, Bobby Street 3").withRoleTags(VALID_TAG_HUSBAND)
+        Person editedAlice = new PersonBuilder(ALICE).withRoleTags(VALID_TAG_HUSBAND)
                 .build();
         List<Person> newPersons = Arrays.asList(ALICE, editedAlice);
         AddressBookStub newData = new AddressBookStub(newPersons);
@@ -86,7 +86,7 @@ public class AddressBookTest {
     @Test
     public void hasPerson_personWithSameEmailInAddressBook_returnsTrue() {
         addressBook.addPerson(ALICE);
-        Person editedAlice = new PersonBuilder(ALICE).withAddress("Block 123, Bobby Street 3").withRoleTags(VALID_TAG_HUSBAND)
+        Person editedAlice = new PersonBuilder(ALICE).withRoleTags(VALID_TAG_HUSBAND)
                 .build();
         assertTrue(addressBook.hasPerson(editedAlice));
     }

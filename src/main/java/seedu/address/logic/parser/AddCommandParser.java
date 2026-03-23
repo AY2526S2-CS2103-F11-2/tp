@@ -10,7 +10,6 @@ import java.util.stream.Stream;
 
 import seedu.address.logic.commands.AddCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
-import seedu.address.model.person.Address;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
@@ -45,13 +44,12 @@ public class AddCommandParser implements Parser<AddCommand> {
             phone = ParserUtil.parsePhone(argMultimap.getValue(PREFIX_PHONE).get());
         }
         Email email = ParserUtil.parseEmail(argMultimap.getValue(PREFIX_EMAIL).get());
-        Address address = Address.makeDefault();
         TelegramHandle telegramHandle = null;
         if (argMultimap.getValue(PREFIX_TELEGRAM_HANDLE).isPresent()) {
             telegramHandle = ParserUtil.parseTelegramHandle(argMultimap.getValue(PREFIX_TELEGRAM_HANDLE).get());
         }
 
-        Person person = new Person(name, phone, email, address, telegramHandle);
+        Person person = new Person(name, phone, email, telegramHandle);
 
         return new AddCommand(person);
     }

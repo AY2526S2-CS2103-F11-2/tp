@@ -10,7 +10,6 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import seedu.address.commons.exceptions.IllegalValueException;
-import seedu.address.model.person.Address;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
@@ -28,7 +27,6 @@ class JsonAdaptedPerson {
     private final String name;
     private final String phone;
     private final String email;
-    private final String address;
     private final String telegramHandle;
     private final List<JsonAdaptedTag> tags = new ArrayList<>();
 
@@ -45,7 +43,6 @@ class JsonAdaptedPerson {
         this.name = name;
         this.phone = phone;
         this.email = email;
-        this.address = address;
         this.telegramHandle = telegramHandle;
         if (tags != null) {
             this.tags.addAll(tags);
@@ -59,7 +56,6 @@ class JsonAdaptedPerson {
         name = source.getName().fullName;
         phone = source.getPhone() == null ? null : source.getPhone().value;
         email = source.getEmail().value;
-        address = source.getAddress().value;
         telegramHandle = source.getTelegramHandle() == null ? null : source.getTelegramHandle().value;
         tags.addAll(source.getTags().stream()
                 .map(JsonAdaptedTag::new)
@@ -103,14 +99,6 @@ class JsonAdaptedPerson {
         }
         final Email modelEmail = new Email(email);
 
-        if (address == null) {
-            throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT, Address.class.getSimpleName()));
-        }
-        if (!Address.isValidAddress(address)) {
-            throw new IllegalValueException(Address.MESSAGE_CONSTRAINTS);
-        }
-        final Address modelAddress = new Address(address);
-
         final TelegramHandle modelTelegramHandle;
         if (telegramHandle == null) {
             modelTelegramHandle = null;
@@ -122,7 +110,7 @@ class JsonAdaptedPerson {
         }
 
         final Set<Tag> modelTags = new HashSet<>(personTags);
-        return new Person(modelName, modelPhone, modelEmail, modelAddress, modelTelegramHandle, modelTags);
+        return new Person(modelName, modelPhone, modelEmail, modelTelegramHandle, modelTags);
     }
 
 }

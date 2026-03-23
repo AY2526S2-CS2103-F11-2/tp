@@ -51,7 +51,6 @@ public class TagCommandTest {
                 personToEdit.getName(),
                 personToEdit.getPhone(),
                 personToEdit.getEmail(),
-                personToEdit.getAddress(),
                 personToEdit.getTelegramHandle(),
                 expectedTags
         );

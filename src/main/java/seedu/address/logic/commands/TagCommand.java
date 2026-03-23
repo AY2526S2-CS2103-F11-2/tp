@@ -73,7 +73,6 @@ public class TagCommand extends Command {
                 personToAddTag.getName(),
                 personToAddTag.getPhone(),
                 personToAddTag.getEmail(),
-                personToAddTag.getAddress(),
                 personToAddTag.getTelegramHandle(),
                 updatedTags
         );

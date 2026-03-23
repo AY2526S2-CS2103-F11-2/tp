@@ -94,7 +94,6 @@ public class EmailContainsKeywordsPredicateTest {
                 .withName("Alice")
                 .withPhone("12345")
                 .withEmail("alice@email.com")
-                .withAddress("Main Street")
                 .build();
 
         predicate = new EmailContainsKeywordsPredicate(List.of("12345", "Main", "Street"));

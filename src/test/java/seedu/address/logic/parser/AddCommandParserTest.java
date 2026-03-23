@@ -32,7 +32,6 @@ import org.junit.jupiter.api.Test;
 
 import seedu.address.logic.Messages;
 import seedu.address.logic.commands.AddCommand;
-import seedu.address.model.person.Address;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
@@ -47,7 +46,6 @@ public class AddCommandParserTest {
     @Test
     public void parse_allFieldsPresent_success() {
         Person expectedPerson = new PersonBuilder(BOB_NO_TAGS)
-                .withAddress(Address.DEFAULT_ADDRESS)
                 .withTelegramHandle(VALID_TELEGRAM_HANDLE_BOB)
                 .build();
         // whitespace only preamble
@@ -127,7 +125,6 @@ public class AddCommandParserTest {
                 AMY_NO_TAGS.getName(),
                 null,
                 AMY_NO_TAGS.getEmail(),
-                Address.makeDefault(),
                 null,
                 java.util.Collections.emptySet());
 
@@ -141,7 +138,6 @@ public class AddCommandParserTest {
                 BOB_NO_TAGS.getName(),
                 null,
                 BOB_NO_TAGS.getEmail(),
-                Address.makeDefault(),
                 new TelegramHandle(VALID_TELEGRAM_HANDLE_BOB),
                 java.util.Collections.emptySet());
 
