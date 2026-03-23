@@ -51,6 +51,10 @@ public class CommandBox extends UiPart<Region> {
             navigateHistory(1);
             event.consume();
             break;
+        case DELETE:
+            commandTextField.clear();
+            event.consume();
+            break;
         default:
             break;
         }
