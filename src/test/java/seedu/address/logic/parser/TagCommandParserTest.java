@@ -52,6 +52,31 @@ public class TagCommandParserTest {
     }
 
     @Test
+    public void parse_multipleSamePrefix_success() {
+        Index index = Index.fromOneBased(1);
+        Set<Tag> expectedTags = Set.of(
+                new Tag(VALID_COURSE_TAG, TagType.COURSE),
+                new Tag(VALID_COURSE_TAG_2, TagType.COURSE)
+        );
+
+        assertParseSuccess(parser,
+                "1"
+                        + " tc/" + VALID_COURSE_TAG
+                        + " tc/" + VALID_COURSE_TAG_2,
+                new TagCommand(index, expectedTags));
+    }
+
+    @Test
+    public void parse_duplicateTags_success() {
+        Index index = Index.fromOneBased(1);
+        Set<Tag> expectedTags = Set.of(new Tag(VALID_GENERAL_TAG, TagType.GENERAL));
+
+        assertParseSuccess(parser,
+                "1 tg/" + VALID_GENERAL_TAG + " tg/" + VALID_GENERAL_TAG,
+                new TagCommand(index, expectedTags));
+    }
+
+    @Test
     public void parse_missingIndex_failure() {
         assertParseFailure(parser,
                 " tg/" + VALID_GENERAL_TAG,
@@ -84,21 +109,6 @@ public class TagCommandParserTest {
         assertParseFailure(parser,
                 "1 to/" + VALID_ROLE_TAG,
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, TagCommand.MESSAGE_USAGE));
-    }
-
-    @Test
-    public void parse_multipleSamePrefix_success() {
-        Index index = Index.fromOneBased(1);
-        Set<Tag> expectedTags = Set.of(
-                new Tag(VALID_COURSE_TAG, TagType.COURSE),
-                new Tag(VALID_COURSE_TAG_2, TagType.COURSE)
-        );
-
-        assertParseSuccess(parser,
-                "1"
-                        + " tc/" + VALID_COURSE_TAG
-                        + " tc/" + VALID_COURSE_TAG_2,
-                new TagCommand(index, expectedTags));
     }
 
     @Test
