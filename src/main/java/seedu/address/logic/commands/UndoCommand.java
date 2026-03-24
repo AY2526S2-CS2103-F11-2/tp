@@ -15,6 +15,6 @@ public class UndoCommand extends Command {
 
     @Override
     public CommandResult execute(Model model) throws CommandException {
-        throw new CommandException("UndoCommand should be handled by LogicManager.");
+        throw new AssertionError("UndoCommand should be handled by LogicManager.");
     }
 }

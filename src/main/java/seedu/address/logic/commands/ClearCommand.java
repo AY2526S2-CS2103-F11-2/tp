@@ -2,6 +2,7 @@ package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
 
+import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.AddressBook;
 import seedu.address.model.Model;
 
@@ -32,10 +33,10 @@ public class ClearCommand extends Command {
     }
 
     @Override
-    public CommandResult undo(Model model) {
+    public CommandResult undo(Model model) throws CommandException {
         requireNonNull(model);
         if (previousAddressBook == null) {
-            return new CommandResult(MESSAGE_UNDO_FAILURE);
+            throw new CommandException(MESSAGE_UNDO_FAILURE);
         }
         model.setAddressBook(previousAddressBook);
         return new CommandResult(MESSAGE_UNDO_SUCCESS);
