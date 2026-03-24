@@ -8,6 +8,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextInputControl;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.StackPane;
@@ -16,6 +17,8 @@ import seedu.address.commons.core.GuiSettings;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.logic.Logic;
 import seedu.address.logic.commands.CommandResult;
+import seedu.address.logic.commands.ExitCommand;
+import seedu.address.logic.commands.ListCommand;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.logic.parser.exceptions.ParseException;
 
@@ -73,6 +76,33 @@ public class MainWindow extends UiPart<Stage> {
 
     private void setAccelerators() {
         setAccelerator(helpMenuItem, KeyCombination.valueOf("F1"));
+        setGlobalShortcuts();
+    }
+
+    /**
+     * Sets global keyboard shortcuts for frequently used commands.
+     */
+    private void setGlobalShortcuts() {
+        getRoot().addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+            if (event.getCode() == KeyCode.F2) {
+                executeShortcutCommand(ListCommand.COMMAND_WORD);
+                event.consume();
+            } else if (event.getCode() == KeyCode.F3) {
+                executeShortcutCommand(ExitCommand.COMMAND_WORD);
+                event.consume();
+            }
+        });
+    }
+
+    /**
+     * Executes a command triggered from a keyboard shortcut.
+     */
+    private void executeShortcutCommand(String commandText) {
+        try {
+            executeCommand(commandText);
+        } catch (CommandException | ParseException e) {
+            logger.info("Shortcut command failed: " + commandText);
+        }
     }
 
     /**
