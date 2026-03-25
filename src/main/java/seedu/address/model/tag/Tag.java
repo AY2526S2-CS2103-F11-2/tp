@@ -30,7 +30,7 @@ public class Tag {
 
         checkArgument(isValidTagName(tagName), MESSAGE_CONSTRAINTS);
 
-        this.tagName = tagName;
+        this.tagName = tagName.toLowerCase();
         this.type = type;
     }
 
@@ -57,13 +57,13 @@ public class Tag {
         }
 
         Tag otherTag = (Tag) other;
-        return tagName.equals(otherTag.tagName)
+        return tagName.equalsIgnoreCase(otherTag.tagName)
                 && type.equals(otherTag.type);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(tagName, type);
+        return Objects.hash(tagName.toLowerCase(), type);
     }
 
     /**
