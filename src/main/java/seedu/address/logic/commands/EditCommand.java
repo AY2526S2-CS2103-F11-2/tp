@@ -1,12 +1,12 @@
 package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_COURSE_TAG;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_GENERAL_TAG;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ROLE_TAG;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_COURSE_TAG;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_GENERAL_TAG;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TELEGRAM_HANDLE;
 import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 
@@ -51,7 +51,7 @@ public class EditCommand extends Command {
             + "[" + PREFIX_ROLE_TAG + "ROLE_TAG]... "
             + "[" + PREFIX_COURSE_TAG + "COURSE_TAG]... "
             + "[" + PREFIX_GENERAL_TAG + "GENERAL_TAG]...\n"
-            + "(Use t/ alone to clear all tags)\n"            + "Example: " + COMMAND_WORD + " 1 "
+            + "(Use t/ alone to clear all tags)\n" + "Example: " + COMMAND_WORD + " 1 "
             + PREFIX_EMAIL + "johndoe@example.com "
             + PREFIX_PHONE + "91234567 "
             + PREFIX_TELEGRAM_HANDLE + "johndoe123 "
@@ -197,9 +197,9 @@ public class EditCommand extends Command {
         private Phone phone;
         private Email email;
         private TelegramHandle telegramHandle;
-        private Set<Tag> roleTags;    // null = not specified (preserve existing)
-        private Set<Tag> courseTags;  // null = not specified (preserve existing)
-        private Set<Tag> generalTags; // null = not specified (preserve existi
+        private Set<Tag> roleTags;
+        private Set<Tag> courseTags;
+        private Set<Tag> generalTags;
         public EditPersonDescriptor() {}
 
         /**
@@ -255,8 +255,8 @@ public class EditCommand extends Command {
             return Optional.ofNullable(telegramHandle);
         }
 
-        public void setRoleTags(Set<Tag> courseTags) {
-            this.courseTags = (courseTags != null) ? new HashSet<>(courseTags) : null;
+        public void setRoleTags(Set<Tag> roleTags) {
+            this.roleTags = (roleTags != null) ? new HashSet<>(roleTags) : null;
         }
 
         public Optional<Set<Tag>> getRoleTags() {
