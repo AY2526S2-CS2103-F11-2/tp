@@ -102,7 +102,7 @@ Examples:
 * `help sort` — opens the user guide at the **Sorting persons** section.
 
 
-### Adding a person: `add`
+### Adding a person : `add`
 
 Adds a person to the address book.
 
@@ -124,7 +124,7 @@ Examples:
 * `add n/Alex Lim e/alexlim@example.com h/alex_lim123`
 * `add e/berniceyu@example.com n/Bernice Yu p/98765432 h/bernice_yu`
 
-### Tagging a person: `tag`
+### Tagging a person : `tag`
 
 Adds one or more tags to an existing person in the address book.
 
@@ -156,7 +156,7 @@ Adds the `tutor` role tag, `cs2103` course tag and `helpful` general tag to the 
 * `tag 3 tg/friends tg/groupmates`  
 Adds both `friends` and `groupmates` general tags to the 3rd person in the displayed list.
 
-### Untagging a person: `untag`
+### Untagging a person : `untag`
 
 Removes one or more tags from an existing person in the address book.
 
@@ -193,7 +193,7 @@ Removes the `tutor` role tag, `cs2103` course tag and `classmates` general tag f
 * `untag 3 tc/cs2103 tc/cs2109`  
 Removes both `cs2103` and `cs2109` course tags from the 3rd person in the list.
 
-## Clearing tags from a person: `cleartag`
+### Clearing tags from a person : `cleartag`
 
 Clears all tags of a specific type from an existing person in the address book.
 
@@ -255,7 +255,7 @@ Examples:
 *  `edit 1 p/91234567 e/johndoe@example.com` Edits the phone number and email address of the 1st person to be `91234567` and `johndoe@example.com` respectively.
 *  `edit 2 n/Betsy Crower h/betsyy` Edits the name of the 2nd person to be `Betsy Crower` and the telegram handle to be `betsyy`.
 
-### Locating persons by name/email/tag: `find`
+### Locating persons by name/email/tag : `find`
 
 Finds persons whose names, emails, or tags match the given keywords.
 
