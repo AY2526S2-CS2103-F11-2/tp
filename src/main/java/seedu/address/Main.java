@@ -19,7 +19,7 @@ import seedu.address.commons.core.LogsCenter;
  * find the javafx.graphics module, and so the launch is aborted.
  *
  * By having a separate main class (Main) that doesn't extend Application
- * to be the entry point of the application, we avoid this issue.gi
+ * to be the entry point of the application, we avoid this issue.
  */
 public class Main {
     private static Logger logger = LogsCenter.getLogger(Main.class);
