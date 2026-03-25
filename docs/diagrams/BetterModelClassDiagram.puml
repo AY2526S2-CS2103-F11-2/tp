@@ -8,14 +8,17 @@ AddressBook *-right-> "1" UniquePersonList
 AddressBook *-right-> "1" UniqueTagList
 UniqueTagList -[hidden]down- UniquePersonList
 UniqueTagList -[hidden]down- UniquePersonList
+UniquePersonList -right-> Person
 
 UniqueTagList -right-> "*" Tag
-UniquePersonList -right-> Person
+Tag -right-> "1" TagType
+enum TagType <<enumeration>> {
+}
 
 Person -up-> "*" Tag
 
 Person *--> Name
 Person *--> Phone
 Person *--> Email
-Person *--> Address
+Person *--> TelegramHandle
 @enduml
