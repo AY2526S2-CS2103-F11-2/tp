@@ -17,4 +17,13 @@ public class CliSyntax {
     public static final Prefix PREFIX_ROLE_TAG = new Prefix("tr/");
     public static final Prefix PREFIX_COURSE_TAG = new Prefix("tc/");
     public static final Prefix PREFIX_GENERAL_TAG = new Prefix("tg/");
+
+    public static final Prefix[] ADD_COMMAND_PREFIXES = {
+        PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL, PREFIX_TELEGRAM_HANDLE
+    };
+
+    public static final Prefix[] NON_ADD_COMMAND_PREFIXES = {
+        PREFIX_TAG, PREFIX_ORDER, PREFIX_REVERSE, PREFIX_INDEX,
+        PREFIX_ROLE_TAG, PREFIX_COURSE_TAG, PREFIX_GENERAL_TAG
+    };
 }

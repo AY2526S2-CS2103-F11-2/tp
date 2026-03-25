@@ -20,8 +20,11 @@ import static seedu.address.logic.commands.CommandTestUtil.VALID_NAME_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_PHONE_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TELEGRAM_HANDLE_BOB;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_INDEX;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_ROLE_TAG;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TELEGRAM_HANDLE;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseFailure;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseSuccess;
@@ -188,5 +191,54 @@ public class AddCommandParserTest {
         assertParseFailure(parser,
                 PREAMBLE_NON_EMPTY + NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB,
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
+    }
+
+    @Test
+    public void parse_knownNonAddPrefixes_failure() {
+        assertParseFailure(parser,
+                NAME_DESC_BOB + EMAIL_DESC_BOB + " " + PREFIX_ROLE_TAG + "tutor",
+                "Invalid command format! \nUnexpected extra input in add command: 'tr/tutor'.");
+
+        assertParseFailure(parser,
+                NAME_DESC_BOB + EMAIL_DESC_BOB + " " + PREFIX_INDEX + "3",
+                "Invalid command format! \nUnexpected extra input in add command: 'i/3'.");
+
+        assertParseFailure(parser,
+                NAME_DESC_BOB + EMAIL_DESC_BOB + " " + PREFIX_TAG + "friend",
+                "Invalid command format! \nUnexpected extra input in add command: 't/friend'.");
+    }
+
+    @Test
+    public void parse_plainWordThatLooksLikeCommandWord_success() {
+        Person expectedPerson = new Person(
+                new Name("Chloe tag"),
+                null,
+                AMY_NO_TAGS.getEmail(),
+                null,
+                java.util.Collections.emptySet());
+
+        assertParseSuccess(parser, " n/Chloe tag e/" + AMY_NO_TAGS.getEmail().value,
+                new AddCommand(expectedPerson));
+    }
+
+    @Test
+    public void parse_unknownTrailingText_keepsExistingValidationFailure() {
+        assertParseFailure(parser,
+                " n/Chloe e/chloe@example.com gibberish",
+                Email.MESSAGE_CONSTRAINTS);
+    }
+
+    @Test
+    public void parse_multipleKnownNonAddPrefixes_reportsEarliestPrefix() {
+        assertParseFailure(parser,
+                NAME_DESC_BOB + EMAIL_DESC_BOB + " " + PREFIX_INDEX + "3 " + PREFIX_ROLE_TAG + "tutor",
+                "Invalid command format! \nUnexpected extra input in add command: 'i/3'.");
+    }
+
+    @Test
+    public void parse_multipleKnownNonAddPrefixes_replacesWithEarlierPrefix() {
+        assertParseFailure(parser,
+                NAME_DESC_BOB + EMAIL_DESC_BOB + " " + PREFIX_ROLE_TAG + "tutor " + PREFIX_INDEX + "3",
+                "Invalid command format! \nUnexpected extra input in add command: 'tr/tutor'.");
     }
 }
