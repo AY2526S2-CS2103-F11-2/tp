@@ -28,9 +28,9 @@ public class TagCommand extends Command {
             + ": Add tags to the person identified by the index number used in the displayed person list. "
             + "Existing tags will be preserved (new tags are appended).\n"
             + "Parameters: INDEX (must be a positive integer) "
-            + "[" + PREFIX_ROLE_TAG + "ROLE]... "
-            + "[" + PREFIX_COURSE_TAG + "COURSE]... "
-            + "[" + PREFIX_GENERAL_TAG + "GENERAL]... \n"
+            + "[" + PREFIX_ROLE_TAG + "ROLE_TAG]... "
+            + "[" + PREFIX_COURSE_TAG + "COURSE_TAG]... "
+            + "[" + PREFIX_GENERAL_TAG + "GENERAL_TAG]... \n"
             + "At least one tag must be provided.\n"
             + "Example: " + COMMAND_WORD + " 1 " + PREFIX_ROLE_TAG + "tutor "
             + PREFIX_COURSE_TAG + "cs2103 " + PREFIX_GENERAL_TAG + "friends";
