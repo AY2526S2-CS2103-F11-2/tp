@@ -25,5 +25,3 @@ docs/_site/
 # VSCode
 /bin/
 
-# Claude Code
-.claude/
