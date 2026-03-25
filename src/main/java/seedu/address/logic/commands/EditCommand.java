@@ -60,9 +60,13 @@ public class EditCommand extends Command {
     public static final String MESSAGE_EDIT_PERSON_SUCCESS = "Edited Person: %1$s";
     public static final String MESSAGE_NOT_EDITED = "At least one field to edit must be provided.";
     public static final String MESSAGE_DUPLICATE_PERSON = "This person already exists in the address book.";
+    public static final String MESSAGE_UNDO_SUCCESS = "Undo edit person: %1$s";
+    public static final String MESSAGE_UNDO_FAILURE = "Cannot undo edit before command execution.";
 
     private final Index index;
     private final EditPersonDescriptor editPersonDescriptor;
+    private Person originalPerson;
+    private Person updatedPerson;
 
     /**
      * @param index of the person in the filtered person list to edit
@@ -93,6 +97,8 @@ public class EditCommand extends Command {
         } catch (DuplicatePersonException e) {
             throw new CommandException(MESSAGE_DUPLICATE_PERSON);
         }
+        originalPerson = personToEdit;
+        updatedPerson = editedPerson;
 
         model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
         return new CommandResult(String.format(MESSAGE_EDIT_PERSON_SUCCESS, Messages.format(editedPerson)));
@@ -100,6 +106,28 @@ public class EditCommand extends Command {
 
     private static Set<Tag> filterByType(Set<Tag> tags, TagType type) {
         return tags.stream().filter(t -> t.type == type).collect(Collectors.toSet());
+    }
+
+    @Override
+    public boolean isUndoable() {
+        return true;
+    }
+
+    @Override
+    public CommandResult undo(Model model) throws CommandException {
+        requireNonNull(model);
+        if (originalPerson == null || updatedPerson == null) {
+            throw new CommandException(MESSAGE_UNDO_FAILURE);
+        }
+
+        try {
+            model.setPerson(updatedPerson, originalPerson);
+        } catch (DuplicatePersonException e) {
+            throw new CommandException(MESSAGE_DUPLICATE_PERSON);
+        }
+
+        model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
+        return new CommandResult(String.format(MESSAGE_UNDO_SUCCESS, Messages.format(originalPerson)));
     }
 
     /**
@@ -112,7 +140,7 @@ public class EditCommand extends Command {
         Name updatedName = editPersonDescriptor.getName().orElse(personToEdit.getName());
         Phone updatedPhone = editPersonDescriptor.getPhone().orElse(personToEdit.getPhone());
         Email updatedEmail = editPersonDescriptor.getEmail().orElse(personToEdit.getEmail());
-        TelegramHandle telegramHandle = editPersonDescriptor.getTelgramHandle()
+        TelegramHandle telegramHandle = editPersonDescriptor.getTelegramHandle()
                 .orElse(personToEdit.getTelegramHandle());
 
         Set<Tag> updatedTags = editPersonDescriptor.getTags().orElse(personToEdit.getTags());
@@ -167,14 +195,16 @@ public class EditCommand extends Command {
             setPhone(toCopy.phone);
             setEmail(toCopy.email);
             setTelegramHandle(toCopy.telegramHandle);
-            setTags(toCopy.tags);
+            setRoleTags(toCopy.roleTags);
+            setCourseTags(toCopy.courseTags);
+            setGeneralTags(toCopy.generalTags);
         }
 
         /**
          * Returns true if at least one field is edited.
          */
         public boolean isAnyFieldEdited() {
-            return CollectionUtil.isAnyNonNull(name, phone, email, telegramHandle, tags);
+            return CollectionUtil.isAnyNonNull(name, phone, email, telegramHandle, roleTags, courseTags, generalTags);
         }
 
         public void setName(Name name) {
@@ -205,25 +235,32 @@ public class EditCommand extends Command {
             this.telegramHandle = telegramHandle;
         }
 
-        public Optional<TelegramHandle> getTelgramHandle() {
+        public Optional<TelegramHandle> getTelegramHandle() {
             return Optional.ofNullable(telegramHandle);
         }
 
-        /**
-         * Sets {@code tags} to this object's {@code tags}.
-         * A defensive copy of {@code tags} is used internally.
-         */
-        public void setTags(Set<Tag> tags) {
-            this.tags = (tags != null) ? new HashSet<>(tags) : null;
+        public void setRoleTags(Set<Tag> courseTags) {
+            this.courseTags = (courseTags != null) ? new HashSet<>(courseTags) : null;
         }
 
-        /**
-         * Returns an unmodifiable tag set, which throws {@code UnsupportedOperationException}
-         * if modification is attempted.
-         * Returns {@code Optional#empty()} if {@code tags} is null.
-         */
-        public Optional<Set<Tag>> getTags() {
-            return (tags != null) ? Optional.of(Collections.unmodifiableSet(tags)) : Optional.empty();
+        public Optional<Set<Tag>> getRoleTags() {
+            return (roleTags != null) ? Optional.of(Collections.unmodifiableSet(roleTags)) : Optional.empty();
+        }
+
+        public void setCourseTags(Set<Tag> courseTags) {
+            this.courseTags = (courseTags != null) ? new HashSet<>(courseTags) : null;
+        }
+
+        public Optional<Set<Tag>> getCourseTags() {
+            return (courseTags != null) ? Optional.of(Collections.unmodifiableSet(courseTags)) : Optional.empty();
+        }
+
+        public void setGeneralTags(Set<Tag> generalTags) {
+            this.generalTags = (generalTags != null) ? new HashSet<>(generalTags) : null;
+        }
+
+        public Optional<Set<Tag>> getGeneralTags() {
+            return (generalTags != null) ? Optional.of(Collections.unmodifiableSet(generalTags)) : Optional.empty();
         }
 
         @Override
@@ -242,7 +279,9 @@ public class EditCommand extends Command {
                     && Objects.equals(phone, otherEditPersonDescriptor.phone)
                     && Objects.equals(email, otherEditPersonDescriptor.email)
                     && Objects.equals(telegramHandle, otherEditPersonDescriptor.telegramHandle)
-                    && Objects.equals(tags, otherEditPersonDescriptor.tags);
+                    && Objects.equals(roleTags, otherEditPersonDescriptor.roleTags)
+                    && Objects.equals(courseTags, otherEditPersonDescriptor.courseTags)
+                    && Objects.equals(generalTags, otherEditPersonDescriptor.generalTags);
         }
 
         @Override
@@ -252,7 +291,9 @@ public class EditCommand extends Command {
                     .add("phone", phone)
                     .add("email", email)
                     .add("telegramHandle", telegramHandle)
-                    .add("tags", tags)
+                    .add("roleTags", roleTags)
+                    .add("courseTags", courseTags)
+                    .add("generalTags", generalTags)
                     .toString();
         }
 

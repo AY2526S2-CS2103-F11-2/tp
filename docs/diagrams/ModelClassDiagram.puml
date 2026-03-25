@@ -14,11 +14,14 @@ Class UserPrefs
 
 Class UniquePersonList
 Class Person
-Class Address
+Class TelegramHandle
 Class Email
 Class Name
 Class Phone
 Class Tag
+
+Class "<<enumeration>>\nTagType" as TagType
+
 
 Class I #FFFFFF
 }
@@ -40,15 +43,18 @@ UniquePersonList --> "~* all" Person
 Person *--> Name
 Person *--> Phone
 Person *--> Email
-Person *--> Address
+Person *--> TelegramHandle
 Person *--> "*" Tag
+Tag -left-> "1" TagType
+enum TagType <<enumeration>> {
+}
 
 Person -[hidden]up--> I
 UniquePersonList -[hidden]right-> I
 
 Name -[hidden]right-> Phone
-Phone -[hidden]right-> Address
-Address -[hidden]right-> Email
+Phone -[hidden]right-> TelegramHandle
+TelegramHandle -[hidden]right-> Email
 
 ModelManager --> "~* filtered" Person
 @enduml

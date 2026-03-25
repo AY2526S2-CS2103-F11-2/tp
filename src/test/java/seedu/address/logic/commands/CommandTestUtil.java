@@ -112,6 +112,47 @@ public class CommandTestUtil {
         assertEquals(expectedAddressBook, actualModel.getAddressBook());
         assertEquals(expectedFilteredList, actualModel.getFilteredPersonList());
     }
+
+    /**
+     * Undoes the given {@code command}, confirms that <br>
+     * - the returned {@link CommandResult} matches {@code expectedCommandResult} <br>
+     * - the {@code actualModel} matches {@code expectedModel}
+     */
+    public static void assertUndoSuccess(Command command, Model actualModel, CommandResult expectedCommandResult,
+            Model expectedModel) {
+        try {
+            CommandResult result = command.undo(actualModel);
+            assertEquals(expectedCommandResult, result);
+            assertEquals(expectedModel, actualModel);
+        } catch (CommandException ce) {
+            throw new AssertionError("Undo of command should not fail.", ce);
+        }
+    }
+
+    /**
+     * Convenience wrapper to {@link #assertUndoSuccess(Command, Model, CommandResult, Model)}
+     * that takes a string {@code expectedMessage}.
+     */
+    public static void assertUndoSuccess(Command command, Model actualModel, String expectedMessage,
+            Model expectedModel) {
+        CommandResult expectedCommandResult = new CommandResult(expectedMessage);
+        assertUndoSuccess(command, actualModel, expectedCommandResult, expectedModel);
+    }
+
+    /**
+     * Undoes the given {@code command}, confirms that <br>
+     * - a {@code CommandException} is thrown <br>
+     * - the CommandException message matches {@code expectedMessage} <br>
+     * - the address book and filtered person list in {@code actualModel} remain unchanged
+     */
+    public static void assertUndoFailure(Command command, Model actualModel, String expectedMessage) {
+        AddressBook expectedAddressBook = new AddressBook(actualModel.getAddressBook());
+        List<Person> expectedFilteredList = new ArrayList<>(actualModel.getFilteredPersonList());
+
+        assertThrows(CommandException.class, expectedMessage, () -> command.undo(actualModel));
+        assertEquals(expectedAddressBook, actualModel.getAddressBook());
+        assertEquals(expectedFilteredList, actualModel.getFilteredPersonList());
+    }
     /**
      * Updates {@code model}'s filtered list to show only the person at the given {@code targetIndex} in the
      * {@code model}'s address book.

@@ -4,8 +4,12 @@ import static java.util.Objects.requireNonNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
+import static seedu.address.logic.commands.CommandTestUtil.assertUndoFailure;
+import static seedu.address.logic.commands.CommandTestUtil.assertUndoSuccess;
 import static seedu.address.testutil.Assert.assertThrows;
 import static seedu.address.testutil.TypicalPersons.AMY_NO_TAGS;
+import static seedu.address.testutil.TypicalPersons.HOON;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -21,10 +25,13 @@ import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.AddressBook;
 import seedu.address.model.Model;
+import seedu.address.model.ModelManager;
 import seedu.address.model.ReadOnlyAddressBook;
 import seedu.address.model.ReadOnlyUserPrefs;
+import seedu.address.model.UserPrefs;
 import seedu.address.model.person.Person;
 import seedu.address.testutil.PersonBuilder;
+import seedu.address.testutil.TypicalPersons;
 
 public class AddCommandTest {
 
@@ -98,6 +105,41 @@ public class AddCommandTest {
         assertEquals(expected, addCommand.toString());
     }
 
+    @Test
+    public void undo_afterExecute_removesPerson() {
+        Model model = new ModelManager(TypicalPersons.getTypicalAddressBook(), new UserPrefs());
+        Model expectedBefore = new ModelManager(model.getAddressBook(), new UserPrefs());
+        Person toAdd = new PersonBuilder(HOON).build();
+        AddCommand addCommand = new AddCommand(toAdd);
+
+        Model expectedAfterAdd = new ModelManager(model.getAddressBook(), new UserPrefs());
+        expectedAfterAdd.addPerson(toAdd);
+
+        assertCommandSuccess(addCommand, model,
+                String.format(AddCommand.MESSAGE_SUCCESS, Messages.format(toAdd)),
+                expectedAfterAdd);
+
+        assertUndoSuccess(addCommand, model,
+                String.format(AddCommand.MESSAGE_UNDO_SUCCESS, Messages.format(toAdd)),
+                expectedBefore);
+    }
+
+    @Test
+    public void undo_personNoLongerInModel_throwsCommandException() {
+        Model model = new ModelManager(TypicalPersons.getTypicalAddressBook(), new UserPrefs());
+        Person toAdd = new PersonBuilder(HOON).build();
+        AddCommand addCommand = new AddCommand(toAdd);
+
+        Model expectedAfterAdd = new ModelManager(model.getAddressBook(), new UserPrefs());
+        expectedAfterAdd.addPerson(toAdd);
+        assertCommandSuccess(addCommand, model,
+                String.format(AddCommand.MESSAGE_SUCCESS, Messages.format(toAdd)),
+                expectedAfterAdd);
+
+        model.deletePerson(toAdd);
+        assertUndoFailure(addCommand, model, AddCommand.MESSAGE_UNDO_FAILURE);
+    }
+
     /**
      * A default model stub that have all of the methods failing.
      */
@@ -134,6 +176,11 @@ public class AddCommandTest {
 
         @Override
         public void addPerson(Person person) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void addPerson(int index, Person person) {
             throw new AssertionError("This method should not be called.");
         }
 

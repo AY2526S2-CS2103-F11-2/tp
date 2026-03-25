@@ -10,6 +10,7 @@ import seedu.address.model.person.Email;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
+import seedu.address.model.person.TelegramHandle;
 import seedu.address.model.tag.Tag;
 import seedu.address.model.tag.TagType;
 
@@ -19,18 +20,30 @@ import seedu.address.model.tag.TagType;
 public class SampleDataUtil {
     public static Person[] getSamplePersons() {
         return new Person[]{
-            new Person(new Name("Alex Yeoh"), new Phone("87438807"), new Email("alexyeoh@example.com"),
-                combineTags(getGeneralTagSet("friends"))),
-            new Person(new Name("Bernice Yu"), new Phone("99272758"), new Email("berniceyu@example.com"),
-                combineTags(getGeneralTagSet("colleagues", "friends"))),
-            new Person(new Name("Charlotte Oliveiro"), new Phone("93210283"), new Email("charlotte@example.com"),
-                combineTags(getGeneralTagSet("neighbours"))),
-            new Person(new Name("David Li"), new Phone("91031282"), new Email("lidavid@example.com"),
-                combineTags(getGeneralTagSet("family"))),
-            new Person(new Name("Irfan Ibrahim"), new Phone("92492021"), new Email("irfan@example.com"),
-                combineTags(getGeneralTagSet("classmates"))),
-            new Person(new Name("Roy Balakrishnan"), new Phone("92624417"), new Email("royb@example.com"),
-                combineTags(getGeneralTagSet("colleagues"))),
+            new Person(new Name("Tan Wei Ming"), new Phone("65162345"),
+                new Email("tanwm@comp.nus.edu.sg"),
+                new TelegramHandle("tanwm_nus"),
+                combineTags(getRoleTagSet("Professor"), getCourseTagSet("CS2103T"))),
+            new Person(new Name("Lim Beng Huat"), new Phone("91234567"),
+                new Email("limbenghuat@u.nus.edu"),
+                new TelegramHandle("limbenghuat"),
+                combineTags(getRoleTagSet("TeachingAssistant"), getCourseTagSet("CS2103T"))),
+            new Person(new Name("Alice Tan"), new Phone("87654321"),
+                new Email("alicetan@u.nus.edu"),
+                new TelegramHandle("alicetan_sg"),
+                combineTags(getCourseTagSet("CS2103T", "CS2101"), getGeneralTagSet("ProjectMate"))),
+            new Person(new Name("Bob Chen"), new Phone("92345678"),
+                new Email("bobchen@u.nus.edu"),
+                new TelegramHandle("bobchen_nus"),
+                combineTags(getCourseTagSet("CS2040S"), getGeneralTagSet("StudyGroup"))),
+            new Person(new Name("Priya Suresh"), new Phone("83456789"),
+                new Email("priyasuresh@u.nus.edu"),
+                new TelegramHandle("priyasuresh"),
+                combineTags(getRoleTagSet("TeachingAssistant"), getCourseTagSet("CS2101"))),
+            new Person(new Name("David Lim"), new Phone("65161234"),
+                new Email("davidlim@comp.nus.edu.sg"),
+                new TelegramHandle("davidlim_nus"),
+                combineTags(getRoleTagSet("Professor"), getCourseTagSet("CS1101S"))),
         };
     }
 

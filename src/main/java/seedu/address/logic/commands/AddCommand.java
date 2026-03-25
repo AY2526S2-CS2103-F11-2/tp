@@ -35,6 +35,8 @@ public class AddCommand extends Command {
     public static final String MESSAGE_SUCCESS = "New person added: %1$s";
     public static final String MESSAGE_DUPLICATE_PERSON =
             "A person with this email or Telegram handle already exists in the address book";
+    public static final String MESSAGE_UNDO_SUCCESS = "Undo add person: %1$s";
+    public static final String MESSAGE_UNDO_FAILURE = "Cannot undo add because the person no longer exists.";
     private final Person toAdd;
 
     /**
@@ -55,6 +57,21 @@ public class AddCommand extends Command {
 
         model.addPerson(toAdd);
         return new CommandResult(String.format(MESSAGE_SUCCESS, Messages.format(toAdd)));
+    }
+
+    @Override
+    public boolean isUndoable() {
+        return true;
+    }
+
+    @Override
+    public CommandResult undo(Model model) throws CommandException {
+        requireNonNull(model);
+        if (!model.hasPerson(toAdd)) {
+            throw new CommandException(MESSAGE_UNDO_FAILURE);
+        }
+        model.deletePerson(toAdd);
+        return new CommandResult(String.format(MESSAGE_UNDO_SUCCESS, Messages.format(toAdd)));
     }
 
     @Override

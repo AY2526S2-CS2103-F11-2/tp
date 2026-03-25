@@ -13,6 +13,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.util.Duration;
 import seedu.address.model.person.Person;
+import seedu.address.model.tag.TagType;
 
 /**
  * An UI component that displays information of a {@code Person}.
@@ -85,11 +86,18 @@ public class PersonCard extends UiPart<Region> {
                 .sorted(Comparator.comparing(tag -> tag.tagName))
                 .forEach(tag -> {
                     Label tagLabel = new Label(tag.tagName);
-                    int hue = Math.floorMod(tag.tagName.hashCode(), 360);
-                    tagLabel.setStyle("-fx-background-color: hsb(" + hue + ", 70%, 50%);");
+                    tagLabel.getStyleClass().add(getTagStyleClass(tag.getType()));
                     setupCopyable(tagLabel, tag.tagName);
                     tags.getChildren().add(tagLabel);
                 });
+    }
+
+    private String getTagStyleClass(TagType type) {
+        return switch (type) {
+        case ROLE -> "tag-role";
+        case COURSE -> "tag-course";
+        default -> "tag-general";
+        };
     }
 
     private void setupCopyable(Label label, String text) {

@@ -29,7 +29,10 @@ public class HelpCommandParserTest {
         assertParseSuccess(parser, "clear", new HelpCommand("clear"));
         assertParseSuccess(parser, "exit", new HelpCommand("exit"));
         assertParseSuccess(parser, "tag", new HelpCommand("tag"));
+        assertParseSuccess(parser, "untag", new HelpCommand("untag"));
+        assertParseSuccess(parser, "cleartag", new HelpCommand("cleartag"));
     }
+
 
     @Test
     public void parse_invalidCommand_throwsParseException() {

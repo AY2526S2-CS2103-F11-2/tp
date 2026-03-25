@@ -22,6 +22,7 @@ import org.junit.jupiter.api.Test;
 
 import seedu.address.logic.commands.AddCommand;
 import seedu.address.logic.commands.ClearCommand;
+import seedu.address.logic.commands.ClearTagCommand;
 import seedu.address.logic.commands.DeleteCommand;
 import seedu.address.logic.commands.EditCommand;
 import seedu.address.logic.commands.EditCommand.EditPersonDescriptor;
@@ -31,6 +32,7 @@ import seedu.address.logic.commands.HelpCommand;
 import seedu.address.logic.commands.ListCommand;
 import seedu.address.logic.commands.SortCommand;
 import seedu.address.logic.commands.TagCommand;
+import seedu.address.logic.commands.UndoCommand;
 import seedu.address.logic.commands.UntagCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.NameEmailTagPredicate;
@@ -134,6 +136,12 @@ public class AddressBookParserTest {
     }
 
     @Test
+    public void parseCommand_undo() throws Exception {
+        assertTrue(parser.parseCommand(UndoCommand.COMMAND_WORD) instanceof UndoCommand);
+        assertTrue(parser.parseCommand(UndoCommand.COMMAND_WORD + " 1") instanceof UndoCommand);
+    }
+
+    @Test
     public void parseCommand_untag() throws Exception {
         String input = UntagCommand.COMMAND_WORD + " "
                 + INDEX_FIRST_PERSON.getOneBased() + " "
@@ -149,6 +157,16 @@ public class AddressBookParserTest {
         expectedTags.add(new Tag("friends", TagType.GENERAL));
 
         assertEquals(new UntagCommand(INDEX_FIRST_PERSON, expectedTags), command);
+    }
+
+    @Test
+    public void parseCommand_cleartag() throws Exception {
+        String input = ClearTagCommand.COMMAND_WORD + " "
+                + INDEX_FIRST_PERSON.getOneBased() + " "
+                + PREFIX_ROLE_TAG;
+
+        ClearTagCommand command = (ClearTagCommand) parser.parseCommand(input);
+        assertEquals(new ClearTagCommand(INDEX_FIRST_PERSON, TagType.ROLE), command);
     }
 
     @Test

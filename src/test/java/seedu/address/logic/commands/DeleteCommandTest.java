@@ -7,9 +7,12 @@ import static seedu.address.logic.commands.CommandTestUtil.VALID_EMAIL_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_EMAIL_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandFailure;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
+import static seedu.address.logic.commands.CommandTestUtil.assertUndoFailure;
+import static seedu.address.logic.commands.CommandTestUtil.assertUndoSuccess;
 import static seedu.address.logic.commands.CommandTestUtil.showPersonAtIndex;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 import static seedu.address.testutil.TypicalIndexes.INDEX_SECOND_PERSON;
+import static seedu.address.testutil.TypicalPersons.ALICE;
 import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 
 import org.junit.jupiter.api.Test;
@@ -21,6 +24,7 @@ import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Person;
+import seedu.address.testutil.PersonBuilder;
 
 /**
  * Contains integration tests (interaction with the Model) and unit tests for
@@ -201,6 +205,50 @@ public class DeleteCommandTest {
                 + "{targetIndex=null, targetEmail=" + email + "}";
 
         assertEquals(expected, deleteCommand.toString());
+    }
+
+    @Test
+    public void undo_afterExecute_restoresPerson() {
+        Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
+        Model expectedBefore = new ModelManager(model.getAddressBook(), new UserPrefs());
+        Person personToDelete = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        DeleteCommand deleteCommand = new DeleteCommand(INDEX_FIRST_PERSON);
+
+        String deleteMessage = String.format(DeleteCommand.MESSAGE_DELETE_PERSON_SUCCESS,
+                Messages.format(personToDelete));
+
+        Model expectedAfterDelete = new ModelManager(model.getAddressBook(), new UserPrefs());
+        expectedAfterDelete.deletePerson(personToDelete);
+
+        assertCommandSuccess(deleteCommand, model, deleteMessage, expectedAfterDelete);
+
+        String undoMessage = String.format(DeleteCommand.MESSAGE_UNDO_SUCCESS, Messages.format(personToDelete));
+        assertUndoSuccess(deleteCommand, model, undoMessage, expectedBefore);
+    }
+
+    @Test
+    public void undo_beforeExecute_throwsCommandException() {
+        Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
+        DeleteCommand deleteCommand = new DeleteCommand(INDEX_FIRST_PERSON);
+        assertUndoFailure(deleteCommand, model, "Cannot undo delete before command execution.");
+    }
+
+    @Test
+    public void undo_personAlreadyExists_throwsCommandException() {
+        Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
+        Person personToDelete = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        DeleteCommand deleteCommand = new DeleteCommand(INDEX_FIRST_PERSON);
+
+        Model expectedAfterDelete = new ModelManager(model.getAddressBook(), new UserPrefs());
+        expectedAfterDelete.deletePerson(personToDelete);
+        assertCommandSuccess(deleteCommand, model,
+                String.format(DeleteCommand.MESSAGE_DELETE_PERSON_SUCCESS, Messages.format(personToDelete)),
+                expectedAfterDelete);
+
+        Person benson = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        model.setPerson(benson, new PersonBuilder(benson).withEmail(ALICE.getEmail().value).build());
+
+        assertUndoFailure(deleteCommand, model, DeleteCommand.MESSAGE_UNDO_FAILURE);
     }
 
     /**

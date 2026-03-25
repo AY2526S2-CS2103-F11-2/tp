@@ -3,6 +3,8 @@ package seedu.address.logic;
 import java.io.IOException;
 import java.nio.file.AccessDeniedException;
 import java.nio.file.Path;
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.logging.Logger;
 
 import javafx.collections.ObservableList;
@@ -10,6 +12,7 @@ import seedu.address.commons.core.GuiSettings;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.logic.commands.Command;
 import seedu.address.logic.commands.CommandResult;
+import seedu.address.logic.commands.UndoCommand;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.logic.parser.AddressBookParser;
 import seedu.address.logic.parser.exceptions.ParseException;
@@ -32,6 +35,7 @@ public class LogicManager implements Logic {
     private final Model model;
     private final Storage storage;
     private final AddressBookParser addressBookParser;
+    private final Deque<Command> undoHistory;
 
     /**
      * Constructs a {@code LogicManager} with the given {@code Model} and {@code Storage}.
@@ -40,6 +44,7 @@ public class LogicManager implements Logic {
         this.model = model;
         this.storage = storage;
         addressBookParser = new AddressBookParser();
+        undoHistory = new ArrayDeque<>();
     }
 
     @Override
@@ -48,7 +53,14 @@ public class LogicManager implements Logic {
 
         CommandResult commandResult;
         Command command = addressBookParser.parseCommand(commandText);
-        commandResult = command.execute(model);
+        if (command instanceof UndoCommand) {
+            commandResult = executeUndo();
+        } else {
+            commandResult = command.execute(model);
+            if (command.isUndoable()) {
+                undoHistory.push(command);
+            }
+        }
 
         try {
             storage.saveAddressBook(model.getAddressBook());
@@ -59,6 +71,16 @@ public class LogicManager implements Logic {
         }
 
         return commandResult;
+    }
+
+    private CommandResult executeUndo() throws CommandException {
+        if (undoHistory.isEmpty()) {
+            throw new CommandException(UndoCommand.MESSAGE_NO_HISTORY);
+        }
+        Command commandToUndo = undoHistory.peek();
+        CommandResult result = commandToUndo.undo(model);
+        undoHistory.pop();
+        return result;
     }
 
     @Override

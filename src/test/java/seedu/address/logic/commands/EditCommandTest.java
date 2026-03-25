@@ -10,6 +10,8 @@ import static seedu.address.logic.commands.CommandTestUtil.VALID_PHONE_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_HUSBAND;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandFailure;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
+import static seedu.address.logic.commands.CommandTestUtil.assertUndoFailure;
+import static seedu.address.logic.commands.CommandTestUtil.assertUndoSuccess;
 import static seedu.address.logic.commands.CommandTestUtil.showPersonAtIndex;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 import static seedu.address.testutil.TypicalIndexes.INDEX_SECOND_PERSON;
@@ -203,6 +205,56 @@ public class EditCommandTest {
         String expected = EditCommand.class.getCanonicalName() + "{index=" + index + ", editPersonDescriptor="
                 + editPersonDescriptor + "}";
         assertEquals(expected, editCommand.toString());
+    }
+
+    @Test
+    public void undo_afterExecute_restoresOriginalPerson() {
+        Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
+        Model expectedOriginal = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
+
+        Person alice = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        Person editedAlice = new PersonBuilder(alice).withName("Temporary Name").build();
+        EditCommand editCommand = new EditCommand(INDEX_FIRST_PERSON,
+                new EditPersonDescriptorBuilder().withName("Temporary Name").build());
+
+        String executeMessage = String.format(EditCommand.MESSAGE_EDIT_PERSON_SUCCESS,
+                Messages.format(editedAlice));
+        Model expectedAfterEdit = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
+        expectedAfterEdit.setPerson(alice, editedAlice);
+
+        assertCommandSuccess(editCommand, model, executeMessage, expectedAfterEdit);
+
+        String undoMessage = String.format(EditCommand.MESSAGE_UNDO_SUCCESS, Messages.format(alice));
+        assertUndoSuccess(editCommand, model, undoMessage, expectedOriginal);
+    }
+
+    @Test
+    public void undo_beforeExecute_throwsCommandException() {
+        Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
+        EditCommand editCommand = new EditCommand(INDEX_FIRST_PERSON,
+                new EditPersonDescriptorBuilder().withName(VALID_NAME_BOB).build());
+        assertUndoFailure(editCommand, model, EditCommand.MESSAGE_UNDO_FAILURE);
+    }
+
+    @Test
+    public void undo_duplicatePerson_throwsCommandException() {
+        Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
+        Person alice = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        EditCommand editCommand = new EditCommand(INDEX_FIRST_PERSON,
+                new EditPersonDescriptorBuilder().withEmail("tempalice@example.com").build());
+        Person editedAlice = new PersonBuilder(alice).withEmail("tempalice@example.com").build();
+
+        String executeMessage = String.format(EditCommand.MESSAGE_EDIT_PERSON_SUCCESS,
+                Messages.format(editedAlice));
+        Model expectedAfterEdit = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
+        expectedAfterEdit.setPerson(alice, editedAlice);
+
+        assertCommandSuccess(editCommand, model, executeMessage, expectedAfterEdit);
+
+        Person benson = model.getFilteredPersonList().get(INDEX_SECOND_PERSON.getZeroBased());
+        model.setPerson(benson, new PersonBuilder(benson).withEmail(alice.getEmail().value).build());
+
+        assertUndoFailure(editCommand, model, EditCommand.MESSAGE_DUPLICATE_PERSON);
     }
 
 }

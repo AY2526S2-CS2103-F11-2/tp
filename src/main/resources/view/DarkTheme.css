@@ -359,6 +359,18 @@
     -fx-font-size: 11;
 }
 
+#tags .tag-role {
+    -fx-background-color: #2e7a50;
+}
+
+#tags .tag-course {
+    -fx-background-color: #2b5ea7;
+}
+
+#tags .tag-general {
+    -fx-background-color: #ac3819;
+}
+
 .placeholder-label {
     -fx-text-fill: #aaaaaa;
     -fx-font-style: italic;

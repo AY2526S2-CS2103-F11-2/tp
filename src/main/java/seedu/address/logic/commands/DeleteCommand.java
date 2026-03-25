@@ -30,9 +30,13 @@ public class DeleteCommand extends Command {
             + COMMAND_WORD + " " + PREFIX_EMAIL + "johnd@exampl.com";
 
     public static final String MESSAGE_DELETE_PERSON_SUCCESS = "Deleted Person: %1$s";
+    public static final String MESSAGE_UNDO_SUCCESS = "Undo delete person: %1$s";
+    public static final String MESSAGE_UNDO_FAILURE = "Cannot undo delete because the person already exists.";
 
     private final Index targetIndex;
     private final Email targetEmail;
+    private Person deletedPerson;
+    private int deletedPersonIndex = -1;
 
     /**
      * Creates a DeleteCommand using index
@@ -69,8 +73,32 @@ public class DeleteCommand extends Command {
             personToDelete = findPersonByEmail(lastShownList);
         }
 
+        deletedPersonIndex = model.getAddressBook().getPersonList().indexOf(personToDelete);
         model.deletePerson(personToDelete);
+        deletedPerson = personToDelete;
         return new CommandResult(String.format(MESSAGE_DELETE_PERSON_SUCCESS, Messages.format(personToDelete)));
+    }
+
+    @Override
+    public boolean isUndoable() {
+        return true;
+    }
+
+    @Override
+    public CommandResult undo(Model model) throws CommandException {
+        requireNonNull(model);
+        if (deletedPerson == null) {
+            throw new CommandException("Cannot undo delete before command execution.");
+        }
+        if (model.hasPerson(deletedPerson)) {
+            throw new CommandException(MESSAGE_UNDO_FAILURE);
+        }
+        if (deletedPersonIndex < 0 || deletedPersonIndex > model.getAddressBook().getPersonList().size()) {
+            model.addPerson(deletedPerson);
+        } else {
+            model.addPerson(deletedPersonIndex, deletedPerson);
+        }
+        return new CommandResult(String.format(MESSAGE_UNDO_SUCCESS, Messages.format(deletedPerson)));
     }
 
     @Override
