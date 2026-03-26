@@ -452,6 +452,17 @@ undo
   (when no more commands to undo)
   Shows an error message indicating that there are no actions to undo.
 
+### Navigating command history
+
+Previously entered commands can be recalled using the keyboard.
+
+* Press the **Up arrow** key to go back to an earlier command.
+* Press the **Down arrow** key to go forward to a more recent command.
+
+Examples:
+* After running `add n/John Doe e/john@example.com`, press **Up** to recall it and modify it.
+* After running several commands, press **Up** repeatedly to scroll back through them.
+
 ### Clearing all entries : `clear`
 
 Clears all entries from the address book.
