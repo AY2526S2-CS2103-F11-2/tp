@@ -2,10 +2,12 @@ package seedu.address.logic.commands;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_COURSE_TAG;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_GENERAL_TAG;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_ROLE_TAG;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TELEGRAM_HANDLE;
 import static seedu.address.testutil.Assert.assertThrows;
 
@@ -34,8 +36,6 @@ public class CommandTestUtil {
     public static final String VALID_EMAIL_BOB = "bob@example.com";
     public static final String VALID_TELEGRAM_HANDLE_AMY = "amybee";
     public static final String VALID_TELEGRAM_HANDLE_BOB = "bobchoo";
-    public static final String VALID_TAG_HUSBAND = "husband";
-    public static final String VALID_TAG_FRIEND = "friend";
 
     public static final String NAME_DESC_AMY = " " + PREFIX_NAME + VALID_NAME_AMY;
     public static final String NAME_DESC_BOB = " " + PREFIX_NAME + VALID_NAME_BOB;
@@ -45,29 +45,56 @@ public class CommandTestUtil {
     public static final String EMAIL_DESC_BOB = " " + PREFIX_EMAIL + VALID_EMAIL_BOB;
     public static final String TELEGRAM_HANDLE_DESC_AMY = " " + PREFIX_TELEGRAM_HANDLE + VALID_TELEGRAM_HANDLE_AMY;
     public static final String TELEGRAM_HANDLE_DESC_BOB = " " + PREFIX_TELEGRAM_HANDLE + VALID_TELEGRAM_HANDLE_BOB;
-    public static final String TAG_DESC_FRIEND = " " + PREFIX_TAG + VALID_TAG_FRIEND;
-    public static final String TAG_DESC_HUSBAND = " " + PREFIX_TAG + VALID_TAG_HUSBAND;
 
     public static final String INVALID_NAME_DESC = " " + PREFIX_NAME + "James&"; // '&' not allowed in names
     public static final String INVALID_PHONE_DESC = " " + PREFIX_PHONE + "911a"; // 'a' not allowed in phones
     public static final String INVALID_EMAIL_DESC = " " + PREFIX_EMAIL + "bob!yahoo"; // missing '@' symbol
     public static final String INVALID_TELEGRAM_HANDLE_DESC = " " + PREFIX_TELEGRAM_HANDLE
             + "ab"; // handle is less than 5 characters
-    public static final String INVALID_TAG_DESC = " " + PREFIX_TAG + "hubby*"; // '*' not allowed in tags
 
     public static final String PREAMBLE_WHITESPACE = "\t  \r  \n";
     public static final String PREAMBLE_NON_EMPTY = "NonEmptyPreamble";
+
+    // Role tags
+    public static final String VALID_ROLE_TAG_TEAMMATE = "Teammate";
+    public static final String VALID_ROLE_TAG_PROFESSOR = "Professor";
+    public static final String ROLE_TAG_DESC_TEAMMATE = " " + PREFIX_ROLE_TAG + VALID_ROLE_TAG_TEAMMATE;
+
+    // Course tags
+    public static final String VALID_COURSE_TAG_CS2101 = "CS2101";
+    public static final String VALID_COURSE_TAG_CS2103 = "CS2103";
+    public static final String COURSE_TAG_DESC_CS2103 = " " + PREFIX_COURSE_TAG + VALID_COURSE_TAG_CS2103;
+
+    // General tags
+    public static final String VALID_GENERAL_TAG_FRIEND = "Friend";
+    public static final String VALID_GENERAL_TAG_HUSBAND = "Husband";
+    public static final String GENERAL_TAG_DESC_FRIEND = " " + PREFIX_GENERAL_TAG + VALID_GENERAL_TAG_FRIEND;
+    public static final String GENERAL_TAG_DESC_HUSBAND = " " + PREFIX_GENERAL_TAG + VALID_GENERAL_TAG_HUSBAND;
+
+    public static final String INVALID_GENERAL_TAG_DESC = " " + PREFIX_GENERAL_TAG + "hubby*";
 
     public static final EditCommand.EditPersonDescriptor DESC_AMY;
     public static final EditCommand.EditPersonDescriptor DESC_BOB;
 
     static {
-        DESC_AMY = new EditPersonDescriptorBuilder().withName(VALID_NAME_AMY)
-                .withPhone(VALID_PHONE_AMY).withEmail(VALID_EMAIL_AMY).withTelegramHandle(VALID_TELEGRAM_HANDLE_AMY)
-                .withTags(VALID_TAG_FRIEND).build();
-        DESC_BOB = new EditPersonDescriptorBuilder().withName(VALID_NAME_BOB)
-                .withPhone(VALID_PHONE_BOB).withEmail(VALID_EMAIL_BOB).withTelegramHandle(VALID_TELEGRAM_HANDLE_BOB)
-                .withTags(VALID_TAG_HUSBAND, VALID_TAG_FRIEND).build();
+        DESC_AMY = new EditPersonDescriptorBuilder()
+                .withName(VALID_NAME_AMY)
+                .withPhone(VALID_PHONE_AMY)
+                .withEmail(VALID_EMAIL_AMY)
+                .withTelegramHandle(VALID_TELEGRAM_HANDLE_AMY)
+                .withRoleTags(VALID_ROLE_TAG_TEAMMATE)
+                .withCourseTags(VALID_COURSE_TAG_CS2103)
+                .withGeneralTags(VALID_GENERAL_TAG_FRIEND)
+                .build();
+        DESC_BOB = new EditPersonDescriptorBuilder()
+                .withName(VALID_NAME_BOB)
+                .withPhone(VALID_PHONE_BOB)
+                .withEmail(VALID_EMAIL_BOB)
+                .withTelegramHandle(VALID_TELEGRAM_HANDLE_BOB)
+                .withRoleTags(VALID_ROLE_TAG_TEAMMATE)
+                .withCourseTags(VALID_COURSE_TAG_CS2103)
+                .withGeneralTags(VALID_GENERAL_TAG_HUSBAND, VALID_GENERAL_TAG_FRIEND)
+                .build();
     }
 
     /**

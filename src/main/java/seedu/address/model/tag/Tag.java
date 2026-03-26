@@ -5,6 +5,8 @@ import static seedu.address.commons.util.AppUtil.checkArgument;
 
 import java.util.Locale;
 import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Represents a Tag in the address book.
@@ -72,5 +74,17 @@ public class Tag {
      */
     public String toString() {
         return type + ": " + tagName;
+    }
+    /**
+     * Filters a set of tags by the specified tag type.
+     *
+     * @param tags The set of tags to filter.
+     * @param type The tag type to filter by.
+     * @return A new set containing only tags of the specified type.
+     */
+    public static Set<Tag> filterByType(Set<Tag> tags, TagType type) {
+        return tags.stream()
+                .filter(t -> t.getType() == type)
+                .collect(Collectors.toSet());
     }
 }

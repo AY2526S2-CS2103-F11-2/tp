@@ -5,10 +5,12 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.commands.CommandTestUtil.DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.DESC_BOB;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_COURSE_TAG_CS2101;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_EMAIL_BOB;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_GENERAL_TAG_HUSBAND;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_NAME_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_PHONE_BOB;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_HUSBAND;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_ROLE_TAG_PROFESSOR;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TELEGRAM_HANDLE_BOB;
 
 import org.junit.jupiter.api.Test;
@@ -48,12 +50,20 @@ public class EditPersonDescriptorTest {
         editedAmy = new EditPersonDescriptorBuilder(DESC_AMY).withEmail(VALID_EMAIL_BOB).build();
         assertFalse(DESC_AMY.equals(editedAmy));
 
-        // different telegram handle  -> returns false
+        // different telegram handle -> returns false
         editedAmy = new EditPersonDescriptorBuilder(DESC_AMY).withTelegramHandle(VALID_TELEGRAM_HANDLE_BOB).build();
         assertFalse(DESC_AMY.equals(editedAmy));
 
-        // different tags -> returns false
-        editedAmy = new EditPersonDescriptorBuilder(DESC_AMY).withTags(VALID_TAG_HUSBAND).build();
+        // different role tags -> returns false
+        editedAmy = new EditPersonDescriptorBuilder(DESC_AMY).withRoleTags(VALID_ROLE_TAG_PROFESSOR).build();
+        assertFalse(DESC_AMY.equals(editedAmy));
+
+        // different course tags -> returns false
+        editedAmy = new EditPersonDescriptorBuilder(DESC_AMY).withCourseTags(VALID_COURSE_TAG_CS2101).build();
+        assertFalse(DESC_AMY.equals(editedAmy));
+
+        // different general tags -> returns false
+        editedAmy = new EditPersonDescriptorBuilder(DESC_AMY).withGeneralTags(VALID_GENERAL_TAG_HUSBAND).build();
         assertFalse(DESC_AMY.equals(editedAmy));
     }
 
@@ -64,8 +74,10 @@ public class EditPersonDescriptorTest {
                 + editPersonDescriptor.getName().orElse(null) + ", phone="
                 + editPersonDescriptor.getPhone().orElse(null) + ", email="
                 + editPersonDescriptor.getEmail().orElse(null) + ", telegramHandle="
-                + editPersonDescriptor.getTelgramHandle().orElse(null) + ", tags="
-                + editPersonDescriptor.getTags().orElse(null) + "}";
+                + editPersonDescriptor.getTelegramHandle().orElse(null) + ", roleTags="
+                + editPersonDescriptor.getRoleTags().orElse(null) + ", courseTags="
+                + editPersonDescriptor.getCourseTags().orElse(null) + ", generalTags="
+                + editPersonDescriptor.getGeneralTags().orElse(null) + "}";
         assertEquals(expected, editPersonDescriptor.toString());
     }
 }
