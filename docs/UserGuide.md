@@ -15,11 +15,11 @@ CampusBridge is a **desktop app for managing contacts, optimized for use via a C
 1. Ensure you have Java `17` or above installed in your Computer.<br>
    **Mac users:** Ensure you have the precise JDK version prescribed [here](https://se-education.org/guides/tutorials/javaInstallationMac.html).
 
-1. Download the latest `.jar` file from [here](https://github.com/se-edu/addressbook-level3/releases).
+1. Download the latest `.jar` file from [here](https://github.com/AY2526S2-CS2103-F11-2/tp/releases).
 
 1. Copy the file to the folder you want to use as the _home folder_ for your CampusBridge application.
 
-1. Open a command terminal, `cd` into the folder you put the jar file in, and use the `java -jar addressbook.jar` command to run the application.<br>
+1. Open a command terminal, `cd` into the folder you put the jar file in, and use the `java -jar CampusBridge-v1.3.jar` command to run the application.<br>
    A GUI similar to the below should appear in a few seconds. Note how the app contains some sample data.<br>
    ![Ui](images/Ui.png)
 
@@ -28,7 +28,9 @@ CampusBridge is a **desktop app for managing contacts, optimized for use via a C
 
    * `list` : Lists all contacts.
 
-   * `add n/John Doe e/johnd@example.com p/98765432 h/johndoe123 t/friend` : Adds a contact named `John Doe` to CampusBridge.
+   * `add n/John Doe e/johnd@example.com p/98765432 h/johndoe123` : Adds a contact named `John Doe` to the address book.
+
+   * `tag 1 tg/friend` : Adds the general tag `friend` to the 1st contact shown in the current list.
 
    * `find n/John` : Finds all contacts whose names contain `John`.
 
@@ -429,6 +431,9 @@ _Details coming soon ..._
 
 **Q**: How do I transfer my data to another Computer?<br>
 **A**: Install the app in the other computer and overwrite the empty data file it creates with the file that contains the data of your previous CampusBridge home folder.
+
+**Q**: What happens to my data when I upgrade from v1.3 to v1.4?<br>
+**A**: CampusBridge v1.4 uses an updated storage format that may not be compatible with older versions. If your existing data cannot be read, the app will start with an empty data file. Back up your `data/addressbook.json` before upgrading.
 
 --------------------------------------------------------------------------------------------------------------------
 
