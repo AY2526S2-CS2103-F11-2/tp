@@ -270,23 +270,38 @@ Alternatively, press `F2` to list all contacts.
 
 ### Sorting persons : `sort`
 
-Sorts the list of persons by the specified field, or resets to the default order.
+Sorts the list of persons by the specified field.
 
 Format: `sort o/ORDER [r/]`
 
-* `ORDER` is case-insensitive. The supported values are:
-  * `name` — sorts persons alphabetically by name (A–Z)
-  * `email` — sorts persons alphabetically by email address
-  * `phone` — sorts persons lexicographically by phone number; persons without a phone number appear last
-  * `none` — resets the list to its default (insertion) order; the `r/` flag is not allowed with `none`
+* `ORDER` is case-insensitive. e.g. `NAME` is treated the same as `name`
 * The `r/` flag is optional. When included, the sort order is reversed.
+* `r/` cannot be used with `o/none`.
+
+**Sort fields:**
+* **`name`** — sorts persons alphabetically by name.
+  e.g. `sort o/name` produces `Alice`, `Bob`, `Charlie`
+* **`email`** — sorts persons alphabetically by email address.
+  e.g. `sort o/email` produces `alice@example.com`, `bob@example.com`
+* **`phone`** — sorts persons lexicographically by phone number. Persons without a phone number appear last.
+  e.g. `sort o/phone` produces `81234567`, `91234567`, then persons with no phone
+* **`none`** — resets the list to its default (insertion) order.
 
 Examples:
-* `sort o/name` sorts all persons alphabetically by name.
-* `sort o/name r/` sorts all persons in reverse alphabetical order by name.
-* `sort o/email` sorts all persons alphabetically by email.
-* `sort o/phone r/` sorts all persons in reverse lexicographic order by phone number.
-* `sort o/none` resets the list to its default order.
+* `sort o/name`
+  Sorts all persons alphabetically by name (A–Z).
+
+* `sort o/name r/`
+  Sorts all persons in reverse alphabetical order by name (Z–A).
+
+* `sort o/email`
+  Sorts all persons alphabetically by email address.
+
+* `sort o/phone r/`
+  Sorts all persons in reverse lexicographic order by phone number.
+
+* `sort o/none`
+  Resets the list to its default order.
 
 ### Editing a person : `edit`
 
