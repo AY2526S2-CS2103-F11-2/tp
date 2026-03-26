@@ -125,9 +125,7 @@ Non-NUS emails are still accepted, but a warning will be displayed to alert you 
 
 ### Viewing help : `help`
 
-Opens the help window with a link to this user guide, or opens the user guide directly to the section for a specific command.
-
-![help message](images/helpMessage.png)
+Opens the user guide in the browser, and optionally directly to the section for a specific command.
 
 Format: `help [COMMAND]`
 
