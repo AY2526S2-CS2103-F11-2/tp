@@ -13,14 +13,13 @@ import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
-import java.util.logging.Logger;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.logging.Logger;
 
-
-import seedu.address.commons.core.index.Index;
 import seedu.address.commons.core.LogsCenter;
+import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.CollectionUtil;
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.Messages;
@@ -42,8 +41,6 @@ public class EditCommand extends Command {
 
     public static final String COMMAND_WORD = "edit";
 
-    private static final Logger logger = LogsCenter.getLogger(EditCommand.class);
-
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Edits the details of the person identified "
             + "by the index number used in the displayed person list. "
             + "Existing values will be overwritten by the input values.\n"
@@ -61,13 +58,15 @@ public class EditCommand extends Command {
             + PREFIX_TELEGRAM_HANDLE + "johndoe123 "
             + PREFIX_ROLE_TAG + "Teammate"
             + PREFIX_COURSE_TAG + "CS2103"
-            + PREFIX_GENERAL_TAG + "Friendly";;
+            + PREFIX_GENERAL_TAG + "Friendly";
 
-    public static final String MESSAGE_EDIT_PERSON_SUCCESS = "Edited Person: %1$s";
-    public static final String MESSAGE_NOT_EDITED = "At least one field to edit must be provided.";
+    private static final Logger logger = LogsCenter.getLogger(EditCommand.class);
+
     public static final String MESSAGE_DUPLICATE_PERSON = "This person already exists in the address book.";
-    public static final String MESSAGE_UNDO_SUCCESS = "Undo edit person: %1$s";
+    public static final String MESSAGE_NOT_EDITED = "At least one field to edit must be provided.";
+    public static final String MESSAGE_EDIT_PERSON_SUCCESS = "Edited Person: %1$s";
     public static final String MESSAGE_UNDO_FAILURE = "Cannot undo edit before command execution.";
+    public static final String MESSAGE_UNDO_SUCCESS = "Undo edit person: %1$s";
 
     private final Index index;
     private final EditPersonDescriptor editPersonDescriptor;
