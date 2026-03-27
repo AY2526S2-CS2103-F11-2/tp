@@ -413,6 +413,8 @@ add
 delete
 edit
 clear
+tag
+untag
 ```
 Commands that are not listed above **cannot be undone**.
 
