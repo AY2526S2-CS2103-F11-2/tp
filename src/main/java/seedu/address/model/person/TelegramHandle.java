@@ -3,6 +3,8 @@ package seedu.address.model.person;
 import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.AppUtil.checkArgument;
 
+import java.util.Locale;
+
 /**
  * Represents a Person's Telegram handle in the address book.
  * Guarantees: immutable; is valid as declared in {@link #isValidTelegramHandle(String)}
@@ -50,11 +52,11 @@ public class TelegramHandle {
         }
 
         TelegramHandle otherTelegramHandle = (TelegramHandle) other;
-        return value.equals(otherTelegramHandle.value);
+        return value.equalsIgnoreCase(otherTelegramHandle.value);
     }
 
     @Override
     public int hashCode() {
-        return value.hashCode();
+        return value.toLowerCase(Locale.ROOT).hashCode();
     }
 }

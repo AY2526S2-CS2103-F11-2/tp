@@ -76,6 +76,20 @@ public class AddCommandTest {
     }
 
     @Test
+    public void execute_duplicateTelegramHandleDifferentCase_throwsCommandException() {
+        Person existingPerson = new PersonBuilder().withTelegramHandle("test1").build();
+        Person personWithSameTelegramHandle = new PersonBuilder(existingPerson)
+                .withEmail("different@example.com")
+                .withTelegramHandle("TEST1")
+                .build();
+
+        AddCommand addCommand = new AddCommand(personWithSameTelegramHandle);
+        ModelStub modelStub = new ModelStubWithPerson(existingPerson);
+
+        assertThrows(CommandException.class, AddCommand.MESSAGE_DUPLICATE_PERSON, () -> addCommand.execute(modelStub));
+    }
+
+    @Test
     public void equals() {
         Person amy = new PersonBuilder().withName("Amy").build();
         Person bob = new PersonBuilder().withName("Bob").build();
