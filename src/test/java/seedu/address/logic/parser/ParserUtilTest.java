@@ -242,7 +242,7 @@ public class ParserUtilTest {
 
     @Test
     public void findUnexpectedExtraInput_disallowedAtStart_returnsToken() {
-        String args = "find p/12345 n/Alice";
+        String args = " p/12345 n/Alice";
         Optional<String> result = ParserUtil.findUnexpectedExtraInput(args, DISALLOWED_PREFIXES);
         assertTrue(result.isPresent());
         assertEquals("p/12345", result.get());
