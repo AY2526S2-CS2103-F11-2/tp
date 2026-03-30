@@ -201,7 +201,43 @@ Classes used by multiple components are in the `seedu.address.commons` package.
 
 This section describes some noteworthy details on how certain features are implemented.
 
-  ### Current Undo feature
+### Add feature
+
+#### Implementation
+
+The `add` command is implemented using `AddCommandParser` and `AddCommand`.
+
+When the user enters an `add` command, `AddressBookParser` delegates the input to `AddCommandParser`. `AddCommandParser` tokenizes the input using only the prefixes supported by `add`: `n/`, `e/`, `p/`, and `h/`.
+
+The parser enforces the following rules:
+
+* `n/NAME` and `e/EMAIL` are compulsory.
+* `p/PHONE` and `h/TELEGRAM_HANDLE` are optional.
+* Values are trimmed before validation.
+* Repeated single-valued prefixes are rejected.
+* Any non-empty preamble is rejected.
+* Known prefixes belonging to other commands, such as `t/`, `tr/`, `tc/`, `tg/`, `i/`, `o/`, and `r/`, are treated as unexpected extra input in an `add` command.
+
+After tokenization, `AddCommandParser` uses `ParserUtil` to validate and convert each supplied value into the corresponding model type. It then constructs a `Person` object and returns an `AddCommand`.
+
+When `AddCommand` executes, it first checks whether the person already exists in the address book using `model.hasPerson(toAdd)`. If a duplicate is detected, the command fails.
+
+If the person is unique, the command adds the person to the model and returns a success message. If the added person's email is not an NUS-domain email, the command still succeeds but appends a warning message.
+
+`AddCommand` is undoable. Undoing an `add` removes the previously added person, unless that person no longer exists in the model.
+
+#### Duplicate detection
+
+Duplicate detection for `add` is based on `Person#isSamePerson(...)`.
+
+Two persons are considered the same person if they have:
+
+* the same email, or
+* the same non-null Telegram handle.
+
+This identity rule is used by `UniquePersonList` when adding and updating persons. As a result, the `add` command rejects contacts that duplicate either an existing email or an existing Telegram handle.
+
+### Current Undo feature
 
 #### Current Implementation
 
@@ -325,8 +361,8 @@ Use case ends.
   Steps 3a1 - 3a3 are repeated until input is valid.
   Use case resumes at step 4.
 
-* 3b. Email already exists in the contact list.
-  * 3b1. CampusBridge shows a failure message indicating that email already exists.
+* 3b. Email or Telegram handle already exists in the contact list.
+  * 3b1. CampusBridge shows a failure message indicating that the contact already exists.
 
   Use case ends.
 

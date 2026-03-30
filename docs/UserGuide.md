@@ -157,6 +157,8 @@ Adds a person to the address book.
 * Email must be unique. You cannot add two persons with the same email address.
 * Telegram handle, if provided, must be unique. You cannot add two persons with the same Telegram handle.
 * Telegram handles are treated case-insensitively for duplicate detection. For example, `handle1` and `HANDLE1` are considered the same handle.
+* Repeated prefixes for single-valued fields are not allowed. For example, `add n/Amy n/Ben e/x@example.com` is invalid.
+* Prefixes meant for other commands, such as `t/`, `tr/`, `tc/`, `tg/`, `i/`, `o/`, and `r/`, are invalid in an `add` command.
 
 <div markdown="span" class="alert alert-primary">:bulb: **Tip:**
 Parameters can be entered in any order, as long as each value is preceded by the correct prefix.
