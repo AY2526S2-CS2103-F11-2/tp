@@ -42,6 +42,21 @@ public class SortCommandParserTest {
     }
 
     @Test
+    public void parse_validArgs_caseInsensitiveEmail() {
+        assertParseSuccess(parser, " o/EMAIL", new SortCommand("email", false));
+    }
+
+    @Test
+    public void parse_validArgs_caseInsensitivePhone() {
+        assertParseSuccess(parser, " o/PHONE", new SortCommand("phone", false));
+    }
+
+    @Test
+    public void parse_validArgs_caseInsensitiveNone() {
+        assertParseSuccess(parser, " o/NONE", new SortCommand("none", false));
+    }
+
+    @Test
     public void parse_missingOrderPrefix_throwsParseException() {
         assertParseFailure(parser, "",
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, SortCommand.MESSAGE_USAGE));
