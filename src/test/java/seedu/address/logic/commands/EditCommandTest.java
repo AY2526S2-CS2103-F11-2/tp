@@ -191,6 +191,30 @@ public class EditCommandTest {
     }
 
     @Test
+    public void execute_duplicateTelegramHandleDifferentCaseUnfilteredList_failure() {
+        Person firstPersonWithTelegram = new PersonBuilder(model.getFilteredPersonList()
+                .get(INDEX_FIRST_PERSON.getZeroBased()))
+                .withTelegramHandle("test1")
+                .build();
+        Person secondPersonWithTelegram = new PersonBuilder(model.getFilteredPersonList()
+                .get(INDEX_SECOND_PERSON.getZeroBased()))
+                .withTelegramHandle("other1")
+                .build();
+
+        model.setPerson(model.getFilteredPersonList()
+                .get(INDEX_FIRST_PERSON.getZeroBased()), firstPersonWithTelegram);
+        model.setPerson(model.getFilteredPersonList()
+                .get(INDEX_SECOND_PERSON.getZeroBased()), secondPersonWithTelegram);
+
+        EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder()
+                .withTelegramHandle("TEST1")
+                .build();
+        EditCommand editCommand = new EditCommand(INDEX_SECOND_PERSON, descriptor);
+
+        assertCommandFailure(editCommand, model, EditCommand.MESSAGE_DUPLICATE_PERSON);
+    }
+
+    @Test
     public void execute_invalidPersonIndexUnfilteredList_failure() {
         Index outOfBoundIndex = Index.fromOneBased(model.getFilteredPersonList().size() + 1);
         EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder().withName(VALID_NAME_BOB).build();
