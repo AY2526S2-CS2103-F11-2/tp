@@ -26,17 +26,20 @@ public class FindCommandParser implements Parser<FindCommand> {
      * @throws ParseException if the user input does not conform the expected format
      */
     public FindCommand parse(String args) throws ParseException {
+        // ArgumentTokenizer recognizes prefixes only when preceded by whitespace.
+        // Add a leading space so first prefix at start of argument string is recognized.
+        String leadingSpacedArgs = args.startsWith(" ") ? args : " " + args;
+        assert leadingSpacedArgs.startsWith(" ") : "Input should start with a space for prefix recognition";
+
         // Check for any disallowed prefixes
-        Optional<String> unexpectedInput = ParserUtil.findUnexpectedExtraInput(" " + args,
+        Optional<String> unexpectedInput = ParserUtil.findUnexpectedExtraInput(leadingSpacedArgs,
                 NON_FIND_COMMAND_PREFIXES);
         if (unexpectedInput.isPresent()) {
             throw new ParseException(String.format(MESSAGE_UNEXPECTED_EXTRA_INPUT,
                     unexpectedInput.get()));
         }
 
-        // ArgumentTokenizer recognizes prefixes only when preceded by whitespace.
-        // Add a leading space so first prefix at start of argument string is recognized.
-        ArgumentMultimap argumentMultimap = ArgumentTokenizer.tokenize(" " + args,
+        ArgumentMultimap argumentMultimap = ArgumentTokenizer.tokenize(leadingSpacedArgs,
                 PREFIX_NAME, PREFIX_EMAIL, PREFIX_TAG);
 
         List<String> nameKeywords = parseKeywords(argumentMultimap, PREFIX_NAME);
