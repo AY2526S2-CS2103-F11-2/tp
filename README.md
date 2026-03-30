@@ -13,7 +13,7 @@
 Open a command terminal, cd into the folder you put the jar file in, and use the java -jar addressbook.jar command to run the application.
 
 * Feature list:
-Type the command in the command box and press Enter to execute it. e.g. typing help and pressing Enter will open the help window.
+Type the command in the command box and press Enter to execute it. e.g. typing help and pressing Enter will open the user guide in the browser.
 
 * Some example commands you can try:
 1. list : Lists all contacts.
@@ -25,7 +25,6 @@ Type the command in the command box and press Enter to execute it. e.g. typing h
 
 Known issues
 1. When using multiple screens, if you move the application to a secondary screen, and later switch to using only the primary screen, the GUI will open off-screen. The remedy is to delete the preferences.json file created by the application before running the application again.
-2. If you minimize the Help Window and then run the help command (or use the Help menu, or the keyboard shortcut F1) again, the original Help Window will remain minimized, and no new Help Window will appear. The remedy is to manually restore the minimized Help Window.
 
 * For the detailed documentation of this project, see the **[CampusBridge Product Website](https://ay2526s2-cs2103-f11-2.github.io/tp/)**.
 

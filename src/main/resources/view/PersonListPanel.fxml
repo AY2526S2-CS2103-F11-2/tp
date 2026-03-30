@@ -7,7 +7,7 @@
 <VBox xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
   <ListView fx:id="personListView" VBox.vgrow="ALWAYS">
     <placeholder>
-      <Label text="No contacts found. Use the add command to get started!"
+      <Label text="No contacts found."
              styleClass="placeholder-label" />
     </placeholder>
   </ListView>

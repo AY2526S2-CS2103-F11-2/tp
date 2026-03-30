@@ -23,7 +23,7 @@ CampusBridge is a **desktop app for managing contacts, optimized for use via a C
    A GUI similar to the below should appear in a few seconds. Note how the app contains some sample data.<br>
    ![Ui](images/Ui.png)
 
-1. Type the command in the command box and press Enter to execute it. e.g. typing **`help`** and pressing Enter will open the help window.<br>
+1. Type the command in the command box and press Enter to execute it. e.g. typing **`help`** and pressing Enter will open the user guide in the browser.<br>
    Some example commands you can try:
 
    * `list` : Lists all contacts.
@@ -138,8 +138,8 @@ Alternatively, press `F1` to open the user guide.
 * If `COMMAND` is not a recognised command name, an error is shown listing all valid commands.
 * If more than one word is provided (e.g. `help add clear`), an invalid command format error is shown.
 
-**Examples:**
-* `help` — opens the help window.
+Examples:
+* `help` — opens the user guide in the browser.
 * `help add` — opens the user guide at the **Adding a person** section.
 * `help sort` — opens the user guide at the **Sorting persons** section.
 
@@ -520,7 +520,6 @@ Furthermore, certain edits can cause CampusBridge to behave in unexpected ways (
 ## Known issues
 
 1. **When using multiple screens**, if you move the application to a secondary screen, and later switch to using only the primary screen, the GUI will open off-screen. The remedy is to delete the `preferences.json` file created by the application before running the application again.
-2. **If you minimize the Help Window** and then run the `help` command (or use the `Help` menu, or the keyboard shortcut `F1`) again, the original Help Window will remain minimized, and no new Help Window will appear. The remedy is to manually restore the minimized Help Window.
 
 --------------------------------------------------------------------------------------------------------------------
 

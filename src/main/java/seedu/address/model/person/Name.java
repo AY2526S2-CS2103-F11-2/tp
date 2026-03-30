@@ -14,10 +14,10 @@ public class Name {
                     + "and these characters: ( ) . - , '";
 
     /*
-     * The first character of the name must not be a whitespace,
-     * otherwise " " (a blank string) becomes a valid input.
+     * Names may include letters, numbers, spaces, and the listed punctuation
+     * characters, but cannot be blank or consist only of spaces.
      */
-    public static final String VALIDATION_REGEX = "[\\p{Alnum}][\\p{Alnum} ().,'-]*";
+    public static final String VALIDATION_REGEX = "(?=.*[\\p{Alnum}().,'-])[\\p{Alnum} ().,'-]+";
 
     public final String fullName;
 

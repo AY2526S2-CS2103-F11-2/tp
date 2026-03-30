@@ -19,7 +19,7 @@ public class CommandResult {
     /** The application should exit. */
     private final boolean exit;
 
-    /** URL to open directly in the browser, or null to show the help window. */
+    /** URL to open directly in the browser, or null if no URL to open. */
     private final String helpUrl;
 
     /**
@@ -60,7 +60,7 @@ public class CommandResult {
     }
 
     /**
-     * Returns the URL to open in the browser, or null if the help window should be shown instead.
+     * Returns the URL to open in the browser, or null if no URL to open.
      */
     public String getHelpUrl() {
         return helpUrl;

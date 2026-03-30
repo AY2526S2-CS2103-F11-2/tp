@@ -552,6 +552,126 @@ testers are expected to do more *exploratory* testing.
 
 1. _{ more test cases …​ }_
 
+### Viewing help
+
+1. Opening general help
+
+   1. Test case: `help`<br>
+      Expected: The User Guide opens in the system default browser. Status message shows `Opened user guide in browser.`
+
+   1. Alternative: Press <kbd>F1</kbd>.<br>
+      Expected: Same as above.
+
+1. Opening command-specific help
+
+   1. Test case: `help add`<br>
+      Expected: The User Guide opens in the system default browser at the `add` command section. Status message shows `Opening user guide for 'add' command.`
+
+   1. Other valid command names to try: `help list`, `help edit`, `help delete`, `help find`, `help sort`, `help tag`, `help untag`, `help cleartag`, `help clear`, `help exit`<br>
+      Expected: The User Guide opens at the respective command section. Status message names the command.
+
+1. Invalid help arguments
+
+   1. Test case: `help INVALID`<br>
+      Expected: The User Guide does not open. Error details shown in the status message.
+
+   1. Test case: `help ADD` (uppercase)<br>
+      Expected: Same as above. Command names are case-sensitive and must be lowercase.
+
+   1. Test case: `help add extra`<br>
+      Expected: Same as above. Only a single command name is accepted; extra words cause a format error.
+
+### Sorting persons
+
+1. Sorting by a valid field
+
+   1. Prerequisites: List all persons using the `list` command. Multiple persons in the list.
+
+   1. Test case: `sort o/name`<br>
+      Expected: Contact list is sorted alphabetically by name (ascending). Status message shows `Sorted by name (ascending).`
+
+   1. Test case: `sort o/name r/`<br>
+      Expected: Contact list is sorted alphabetically by name (descending). Status message shows `Sorted by name (descending).`
+
+   1. Test case: `sort o/email`<br>
+      Expected: Contact list is sorted by email address (ascending). Status message shows `Sorted by email (ascending).`
+
+   1. Test case: `sort o/phone`<br>
+      Expected: Contact list is sorted by phone number (ascending). Contacts with no phone number appear at the end of the list. Status message shows `Sorted by phone (ascending).`
+
+   1. Test case: `sort o/email r/`<br>
+      Expected: Contact list is sorted by email address (descending). Status message shows `Sorted by email (descending).`
+
+1. Resetting sort order
+
+   1. Test case: `sort o/none`<br>
+      Expected: Contact list reverts to the default (insertion) order. Status message shows `Sort order reset to default.`
+
+   1. Test case: `sort o/none r/`<br>
+      Expected: Sort order is not reset. Error details shown in the status message indicating that `r/` cannot be used with `o/none`.
+
+1. Invalid sort commands
+
+   1. Test case: `sort`<br>
+      Expected: List is not sorted. Error details shown in the status message.
+
+   1. Test case: `sort o/INVALID`<br>
+      Expected: List is not sorted. Error details shown in the status message indicating the unsupported order value.
+
+   1. Test case: `sort o/NAME` (uppercase)<br>
+      Expected: List is sorted by name. Order values are case-insensitive.
+
+   1. Test case: `sort o/name r/value`<br>
+      Expected: List is not sorted. Error details shown in the status message indicating that `r/` does not accept a value.
+
+   1. Test case: `sort o/name o/email`<br>
+      Expected: List is not sorted. Error details shown in the status message indicating duplicate `o/` prefix.
+
+### Navigating command history
+
+1. Navigating to previous commands
+
+   1. Prerequisites: Execute at least two commands, e.g. `list` then `help`.
+
+   1. Press the <kbd>↑</kbd> (Up) arrow key while the command box is focused.<br>
+      Expected: The most recently executed command (`help`) appears in the command box.
+
+   1. Press <kbd>↑</kbd> again.<br>
+      Expected: The earlier command (`list`) appears in the command box.
+
+   1. Press <kbd>↑</kbd> when already at the oldest command.<br>
+      Expected: Nothing happens. Navigation stops at the oldest entry.
+
+1. Navigating forward through history
+
+   1. Prerequisites: Navigate back through history using <kbd>↑</kbd> as above.
+
+   1. Press the <kbd>↓</kbd> (Down) arrow key.<br>
+      Expected: The next more recent command appears in the command box.
+
+   1. Press <kbd>↓</kbd> until past the most recent command.<br>
+      Expected: The command box is cleared (shows an empty input field), ready for a new command.
+
+   1. Press <kbd>↓</kbd> when already at the empty new-command position.<br>
+      Expected: Nothing happens.
+
+1. Empty commands and history
+
+   1. Prerequisites: Clear the command box and press Enter without typing anything.
+
+   1. Press <kbd>↑</kbd>.<br>
+      Expected: The last non-empty command appears. The empty submission was not added to history.
+
+1. Clearing the command box
+
+   1. While the command box contains any text, press the <kbd>Delete</kbd> key.<br>
+      Expected: The command box is cleared immediately. This does not affect command history.
+
+1. History is session-only
+
+   1. Execute several commands, then close and relaunch the app.<br>
+      Expected: Press <kbd>↑</kbd> — no history is available. History is not persisted across sessions.
+
 ### Saving data
 
 1. Dealing with missing/corrupted data files

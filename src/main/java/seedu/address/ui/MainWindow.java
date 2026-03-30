@@ -124,8 +124,8 @@ public class MainWindow extends UiPart<Stage> {
          * not work when the focus is in them because the key event is consumed by
          * the TextInputControl(s).
          *
-         * For now, we add following event filter to capture such key events and open
-         * help window purposely so to support accelerators even when focus is
+         * For now, we add following event filter to capture such key events and
+         * trigger the help action to support accelerators even when focus is
          * in CommandBox or ResultDisplay.
          */
         getRoot().addEventFilter(KeyEvent.KEY_PRESSED, event -> {

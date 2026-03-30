@@ -20,7 +20,7 @@ public class HelpCommand extends Command {
             + "Example: " + COMMAND_WORD + "\n"
             + "Example: " + COMMAND_WORD + " add";
 
-    public static final String SHOWING_HELP_MESSAGE = "Opened help window.";
+    public static final String SHOWING_HELP_MESSAGE = "Opened user guide in browser.";
     public static final String SHOWING_HELP_COMMAND_MESSAGE = "Opening user guide for '%s' command.";
 
     /**
@@ -32,7 +32,7 @@ public class HelpCommand extends Command {
             Map.entry("list", "#listing-all-persons--list"),
             Map.entry("sort", "#sorting-persons--sort"),
             Map.entry("edit", "#editing-a-person--edit"),
-            Map.entry("find", "#locating-persons-by-nameemail--find"),
+            Map.entry("find", "#locating-persons-by-nameemailtag--find"),
             Map.entry("delete", "#deleting-a-person--delete"),
             Map.entry("clear", "#clearing-all-entries--clear"),
             Map.entry("exit", "#exiting-the-program--exit"),
@@ -60,7 +60,7 @@ public class HelpCommand extends Command {
     private final String targetCommand;
 
     /**
-     * Creates a HelpCommand that shows the general help window.
+     * Creates a HelpCommand that opens the user guide in the system default browser.
      */
     public HelpCommand() {
         this.targetCommand = null;
