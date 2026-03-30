@@ -1,6 +1,7 @@
 package seedu.address.logic.parser;
 
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
+import static seedu.address.logic.Messages.MESSAGE_UNEXPECTED_EXTRA_INPUT;
 import static seedu.address.logic.parser.CliSyntax.NON_FIND_COMMAND_PREFIXES;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
@@ -18,9 +19,6 @@ import seedu.address.model.person.NameEmailTagPredicate;
  * Parses input arguments and creates a new FindCommand object
  */
 public class FindCommandParser implements Parser<FindCommand> {
-
-    private static final String MESSAGE_UNEXPECTED_EXTRA_INPUT =
-            "Unexpected extra inputs in find command: '%s'\n%s";
 
     /**
      * Parses the given {@code String} of arguments in the context of the FindCommand
