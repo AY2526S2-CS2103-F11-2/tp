@@ -40,8 +40,7 @@ public class DeleteCommandParser implements Parser<DeleteCommand> {
             Email email = ParserUtil.parseEmail(argMultimap.getValue(PREFIX_EMAIL).get());
             return new DeleteCommand(email);
         } catch (ParseException pe) {
-            throw new ParseException(
-                    String.format(pe.getMessage(), DeleteCommand.MESSAGE_USAGE), pe);
+            throw new ParseException(String.format(pe.getMessage()), pe);
         }
     }
 
