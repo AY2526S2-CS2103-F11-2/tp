@@ -535,6 +535,115 @@ testers are expected to do more *exploratory* testing.
 
 1. _{ more test cases …​ }_
 
+### Sorting contacts
+
+1. Sorting by a single field
+
+   1. Prerequisites: List all persons using the `list` command. Multiple persons in the list.
+
+   1. Test case: `sort o/name`<br>
+      Expected: Contacts sorted alphabetically by name (ascending). Success message shown.
+
+   1. Test case: `sort o/email`<br>
+      Expected: Contacts sorted by email address (ascending). Success message shown.
+
+   1. Test case: `sort o/phone`<br>
+      Expected: Contacts sorted by phone number (ascending). Contacts without a phone number appear last. Success message shown.
+
+1. Sorting in descending order
+
+   1. Test case: `sort o/name r/`<br>
+      Expected: Contacts sorted alphabetically by name (descending). Success message shown.
+
+   1. Test case: `sort o/phone r/`<br>
+      Expected: Contacts sorted by phone number (descending). Contacts without a phone number appear last.
+
+1. Resetting sort order
+
+   1. Prerequisites: Apply a sort, e.g. `sort o/name r/`.
+
+   1. Test case: `sort o/none`<br>
+      Expected: Contacts returned to their original insertion order. Reset message shown.
+
+1. Invalid sort commands (each tested individually)
+
+   1. Test case: `sort` (missing `o/` prefix)<br>
+      Expected: Error message with command usage shown.
+
+   1. Test case: `sort o/` (empty order value)<br>
+      Expected: Error message with command usage shown.
+
+   1. Test case: `sort o/address` (invalid order value)<br>
+      Expected: Error message listing valid order values: `email`, `name`, `phone`, `none`.
+
+   1. Test case: `sort o/none r/` (reverse flag combined with `none`)<br>
+      Expected: Error message indicating `r/` is incompatible with `none`.
+
+   1. Test case: `sort o/name r/yes` (reverse flag followed by a value)<br>
+      Expected: Error message indicating the `r/` flag must have no value.
+
+   1. Test case: `sort o/name o/email` (duplicate `o/` prefix)<br>
+      Expected: Error message indicating duplicate prefixes are not allowed.
+
+### Viewing help
+
+1. Opening the general help window
+
+   1. Test case: `help`<br>
+      Expected: Help window opens showing the user guide URL. Informational message shown in the result display.
+
+1. Opening command-specific help
+
+   1. Test case: `help add`<br>
+      Expected: Help window opens at the `add` section of the user guide. Message indicates which section was opened.
+
+   1. Test case: `help sort`<br>
+      Expected: Help window opens at the `sort` section of the user guide.
+
+   1. Test case: `help help`<br>
+      Expected: Help window opens at the `help` section of the user guide.
+
+1. Invalid help commands (each tested individually)
+
+   1. Test case: `help unknown` (unrecognised command name)<br>
+      Expected: Error message listing all valid command names.
+
+   1. Test case: `help ADD` (uppercase command name)<br>
+      Expected: Error message listing all valid command names (command names are case-sensitive).
+
+   1. Test case: `help add clear` (multiple words)<br>
+      Expected: Error message with command usage shown.
+
+### Navigating command history
+
+1. Cycling through past commands
+
+   1. Prerequisites: Enter at least three commands in sequence, e.g. `list`, `sort o/name`, `help`.
+
+   1. Press the **Up arrow** key in the command box.<br>
+      Expected: The command box fills with the most recently entered command (`help`).
+
+   1. Press **Up** again.<br>
+      Expected: The command box shows the previous command (`sort o/name`).
+
+   1. Press **Down**.<br>
+      Expected: The command box shows the next command in history (`help`).
+
+1. Navigating beyond history bounds
+
+   1. Press **Up** repeatedly past the oldest command in history.<br>
+      Expected: The command box stays at the oldest command; it does not wrap around.
+
+   1. Press **Down** past the most recent command.<br>
+      Expected: The command box clears (returns to empty input).
+
+1. History is not affected by invalid commands
+
+   1. Enter a valid command (e.g. `list`), then an invalid command (e.g. `badcommand`).
+
+   1. Press **Up** once.<br>
+      Expected: The invalid command `badcommand` is shown (all submitted input, valid or not, is recorded).
+
 ### Deleting a person
 
 1. Deleting a person while all persons are being shown
