@@ -32,7 +32,7 @@ public class HelpCommand extends Command {
             Map.entry("list", "#listing-all-persons--list"),
             Map.entry("sort", "#sorting-persons--sort"),
             Map.entry("edit", "#editing-a-person--edit"),
-            Map.entry("find", "#locating-persons-by-nameemail--find"),
+            Map.entry("find", "#locating-persons-by-nameemailtag--find"),
             Map.entry("delete", "#deleting-a-person--delete"),
             Map.entry("clear", "#clearing-all-entries--clear"),
             Map.entry("exit", "#exiting-the-program--exit"),
