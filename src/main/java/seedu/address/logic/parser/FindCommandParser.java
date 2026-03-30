@@ -27,7 +27,8 @@ public class FindCommandParser implements Parser<FindCommand> {
      */
     public FindCommand parse(String args) throws ParseException {
         // Check for any disallowed prefixes
-        Optional<String> unexpectedInput = ParserUtil.findUnexpectedExtraInput(args, NON_FIND_COMMAND_PREFIXES);
+        Optional<String> unexpectedInput = ParserUtil.findUnexpectedExtraInput(" " + args,
+                NON_FIND_COMMAND_PREFIXES);
         if (unexpectedInput.isPresent()) {
             throw new ParseException(String.format(MESSAGE_UNEXPECTED_EXTRA_INPUT,
                     unexpectedInput.get()));
