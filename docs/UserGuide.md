@@ -391,6 +391,10 @@ Finds persons whose names, emails, or tags match the given keywords.
   e.g. `n/Alex David` will match `Alex Yeoh` or `David Li`
 * Different fields are combined using **AND**.
   e.g. `n/Alex e/gmail` will match persons whose name contains `Alex` **and** email contains `gmail`
+* Repeated same-field prefixes are allowed.
+  e.g. `find n/Alex n/David` behaves the same as `find n/Alex David`.
+* Empty prefixes are not allowed.
+  e.g. `find n/Alex e/` is invalid.
 
 **Examples:**
 * `find n/John`<br/>
