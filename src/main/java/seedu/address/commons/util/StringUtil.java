@@ -65,4 +65,57 @@ public class StringUtil {
             return false;
         }
     }
+
+    /**
+     * Computes the Levenshtein distance between two strings.
+     *
+     * <p>The Levenshtein distance is the minimum number of single-character edits
+     * (insertions, deletions, or substitutions) required to transform one string
+     * into the other.</p>
+     *
+     * <p>This implementation is case-insensitive and uses a dynamic programming
+     * approach with O(n × m) time and space complexity, where n and m are the
+     * lengths of the input strings.</p>
+     *
+     * @param a the first string
+     * @param b the second string
+     * @return the Levenshtein distance between {@code a} and {@code b}
+     * @throws NullPointerException if either input string is {@code null}
+     */
+    public static int levenshteinDistance(String a, String b) {
+        requireNonNull(a);
+        requireNonNull(b);
+
+        int n = a.length();
+        int m = b.length();
+
+        int[][] dpMatrix = new int[n + 1][m + 1];
+
+        // first row (steps to transform "" → b[0..j])
+        for (int j = 0; j <= m; j++) {
+            dpMatrix[0][j] = j;
+        }
+
+        // first column (steps to transform "" → a[0..i])
+        for (int i = 0; i <= n; i++) {
+            dpMatrix[i][0] = i;
+        }
+
+        // Fill up the matrix using dynamic programming
+        for (int i = 1; i <= n; i++) {
+            for (int j = 1; j <= m; j++) {
+                char chA = Character.toLowerCase(a.charAt(i - 1));
+                char chB = Character.toLowerCase(b.charAt(j - 1));
+
+                int cost = (chA == chB) ? 0 : 1;
+                dpMatrix[i][j] = Math.min(
+                        dpMatrix[i - 1][j] + 1, // deletion
+                        Math.min(dpMatrix[i][j - 1] + 1, // insertion
+                                dpMatrix[i - 1][j - 1] + cost) // substitution/match
+                );
+            }
+        }
+
+        return dpMatrix[n][m];
+    }
 }
