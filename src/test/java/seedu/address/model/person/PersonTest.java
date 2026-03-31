@@ -224,4 +224,18 @@ public class PersonTest {
         // person should NOT be affected
         assertFalse(updated.getTags().isEmpty());
     }
+
+    @Test
+    public void isSamePerson_sameTelegramHandleDifferentCase_returnsTrue() {
+        Person first = new PersonBuilder(ALICE)
+                .withEmail("first@example.com")
+                .withTelegramHandle("test1")
+                .build();
+        Person second = new PersonBuilder(ALICE)
+                .withEmail("second@example.com")
+                .withTelegramHandle("TEST1")
+                .build();
+
+        assertTrue(first.isSamePerson(second));
+    }
 }

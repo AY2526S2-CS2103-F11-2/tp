@@ -64,4 +64,23 @@ public class AddCommandIntegrationTest {
         assertCommandFailure(new AddCommand(personWithSameTelegramHandle), model,
                 AddCommand.MESSAGE_DUPLICATE_PERSON);
     }
+
+    @Test
+    public void execute_duplicateTelegramHandleDifferentCase_throwsCommandException() {
+        Person existingPerson = new PersonBuilder()
+                .withName("Telegram Existing")
+                .withEmail("telegramexisting@example.com")
+                .withTelegramHandle("test1")
+                .build();
+        model.addPerson(existingPerson);
+
+        Person personWithSameTelegramHandle = new PersonBuilder()
+                .withName("Telegram Duplicate")
+                .withEmail("different@example.com")
+                .withTelegramHandle("TEST1")
+                .build();
+
+        assertCommandFailure(new AddCommand(personWithSameTelegramHandle), model,
+                AddCommand.MESSAGE_DUPLICATE_PERSON);
+    }
 }

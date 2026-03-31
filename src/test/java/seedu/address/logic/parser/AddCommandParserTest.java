@@ -1,6 +1,7 @@
 package seedu.address.logic.parser;
 
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
+import static seedu.address.logic.Messages.MESSAGE_UNEXPECTED_EXTRA_INPUT;
 import static seedu.address.logic.commands.CommandTestUtil.EMAIL_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.EMAIL_DESC_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_EMAIL_DESC;
@@ -197,15 +198,19 @@ public class AddCommandParserTest {
     public void parse_knownNonAddPrefixes_failure() {
         assertParseFailure(parser,
                 NAME_DESC_BOB + EMAIL_DESC_BOB + " " + PREFIX_ROLE_TAG + "tutor",
-                "Invalid command format! \nUnexpected extra input in add command: 'tr/tutor'.");
+                String.format(MESSAGE_UNEXPECTED_EXTRA_INPUT, "tr/tutor"));
 
         assertParseFailure(parser,
                 NAME_DESC_BOB + EMAIL_DESC_BOB + " " + PREFIX_INDEX + "3",
-                "Invalid command format! \nUnexpected extra input in add command: 'i/3'.");
+                String.format(MESSAGE_UNEXPECTED_EXTRA_INPUT, "i/3"));
 
         assertParseFailure(parser,
                 NAME_DESC_BOB + EMAIL_DESC_BOB + " " + PREFIX_TAG + "friend",
-                "Invalid command format! \nUnexpected extra input in add command: 't/friend'.");
+                String.format(MESSAGE_UNEXPECTED_EXTRA_INPUT, "t/friend"));
+
+        assertParseFailure(parser,
+                " " + PREFIX_TAG + "friend" + NAME_DESC_BOB + EMAIL_DESC_BOB,
+                String.format(MESSAGE_UNEXPECTED_EXTRA_INPUT, "t/friend"));
     }
 
     @Test
@@ -232,13 +237,13 @@ public class AddCommandParserTest {
     public void parse_multipleKnownNonAddPrefixes_reportsEarliestPrefix() {
         assertParseFailure(parser,
                 NAME_DESC_BOB + EMAIL_DESC_BOB + " " + PREFIX_INDEX + "3 " + PREFIX_ROLE_TAG + "tutor",
-                "Invalid command format! \nUnexpected extra input in add command: 'i/3'.");
+                String.format(MESSAGE_UNEXPECTED_EXTRA_INPUT, "i/3"));
     }
 
     @Test
     public void parse_multipleKnownNonAddPrefixes_replacesWithEarlierPrefix() {
         assertParseFailure(parser,
                 NAME_DESC_BOB + EMAIL_DESC_BOB + " " + PREFIX_ROLE_TAG + "tutor " + PREFIX_INDEX + "3",
-                "Invalid command format! \nUnexpected extra input in add command: 'tr/tutor'.");
+                String.format(MESSAGE_UNEXPECTED_EXTRA_INPUT, "tr/tutor"));
     }
 }

@@ -1,6 +1,7 @@
 package seedu.address.logic.parser;
 
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
+import static seedu.address.logic.Messages.MESSAGE_UNEXPECTED_EXTRA_INPUT;
 import static seedu.address.logic.parser.CliSyntax.ADD_COMMAND_PREFIXES;
 import static seedu.address.logic.parser.CliSyntax.NON_ADD_COMMAND_PREFIXES;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
@@ -24,21 +25,21 @@ import seedu.address.model.person.TelegramHandle;
  */
 public class AddCommandParser implements Parser<AddCommand> {
 
-    private static final String MESSAGE_UNEXPECTED_EXTRA_INPUT =
-            "Invalid command format! \nUnexpected extra input in add command: '%s'.";
-
     /**
      * Parses the given {@code String} of arguments in the context of the AddCommand
      * and returns an AddCommand object for execution.
      * @throws ParseException if the user input does not conform the expected format
      */
     public AddCommand parse(String args) throws ParseException {
-        Optional<String> unexpectedInput = findUnexpectedExtraInput(args);
+        String leadingSpacedArgs = args.startsWith(" ") ? args : " " + args;
+
+        Optional<String> unexpectedInput = ParserUtil
+                .findUnexpectedExtraInput(leadingSpacedArgs, NON_ADD_COMMAND_PREFIXES);
         if (unexpectedInput.isPresent()) {
             throw new ParseException(String.format(MESSAGE_UNEXPECTED_EXTRA_INPUT, unexpectedInput.get()));
         }
 
-        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, ADD_COMMAND_PREFIXES);
+        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(leadingSpacedArgs, ADD_COMMAND_PREFIXES);
 
         if (!arePrefixesPresent(argMultimap, PREFIX_NAME, PREFIX_EMAIL)
                 || !argMultimap.getPreamble().isEmpty()) {
@@ -68,37 +69,5 @@ public class AddCommandParser implements Parser<AddCommand> {
      */
     private static boolean arePrefixesPresent(ArgumentMultimap argumentMultimap, Prefix... prefixes) {
         return Stream.of(prefixes).allMatch(prefix -> argumentMultimap.getValue(prefix).isPresent());
-    }
-
-    /**
-     * Returns the first non-add prefixed token in input order, if any.
-     * A prefix is only recognized when preceded by whitespace, matching ArgumentTokenizer behavior.
-     */
-    private static Optional<String> findUnexpectedExtraInput(String args) {
-        int earliestPosition = -1;
-        String unexpectedToken = null;
-
-        for (Prefix prefix : NON_ADD_COMMAND_PREFIXES) {
-            int position = findPrefixPosition(args, prefix);
-            if (position != -1 && (earliestPosition == -1 || position < earliestPosition)) {
-                earliestPosition = position;
-                unexpectedToken = extractToken(args, position);
-            }
-        }
-
-        return Optional.ofNullable(unexpectedToken);
-    }
-
-    private static int findPrefixPosition(String args, Prefix prefix) {
-        int prefixIndex = args.indexOf(" " + prefix.getPrefix());
-        return prefixIndex == -1 ? -1 : prefixIndex + 1;
-    }
-
-    private static String extractToken(String args, int startPosition) {
-        int endPosition = args.indexOf(' ', startPosition);
-        if (endPosition == -1) {
-            return args.substring(startPosition);
-        }
-        return args.substring(startPosition, endPosition);
     }
 }

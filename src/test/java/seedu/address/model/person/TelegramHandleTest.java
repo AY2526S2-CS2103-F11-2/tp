@@ -57,10 +57,12 @@ public class TelegramHandleTest {
     public void equals() {
         TelegramHandle first = new TelegramHandle("alice123");
         TelegramHandle second = new TelegramHandle("alice123");
+        TelegramHandle sameHandleDifferentCase = new TelegramHandle("ALICE123");
         TelegramHandle third = new TelegramHandle("bob123");
 
         assertTrue(first.equals(first));
         assertTrue(first.equals(second));
+        assertTrue(first.equals(sameHandleDifferentCase));
         assertFalse(first.equals(null));
         assertFalse(first.equals(1));
         assertFalse(first.equals(third));
@@ -70,6 +72,13 @@ public class TelegramHandleTest {
     public void hashCode_sameValue_sameHashCode() {
         TelegramHandle first = new TelegramHandle("alice123");
         TelegramHandle second = new TelegramHandle("alice123");
+        assertEquals(first.hashCode(), second.hashCode());
+    }
+
+    @Test
+    public void hashCode_sameValueIgnoringCase_sameHashCode() {
+        TelegramHandle first = new TelegramHandle("alice123");
+        TelegramHandle second = new TelegramHandle("ALICE123");
         assertEquals(first.hashCode(), second.hashCode());
     }
 }

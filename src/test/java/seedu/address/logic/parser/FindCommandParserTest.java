@@ -90,6 +90,28 @@ public class FindCommandParserTest {
     }
 
     @Test
+    public void parse_validMultipleNamesNoStandalonePunctuation_returnsFindCommand() {
+        List<String> names = List.of("Bob", "C.", "Prim");
+
+        FindCommand expectedFindCommand =
+                new FindCommand(new NameEmailTagPredicate(names, List.of(), List.of()));
+
+        assertParseSuccess(parser, "n/Bob C. Prim", expectedFindCommand);
+        assertParseSuccess(parser, "n/Bob n/C. n/Prim", expectedFindCommand);
+    }
+
+    @Test
+    public void parse_validMultipleNamesWithStandalonePunctuation_returnsFindCommand() {
+        List<String> names = List.of("Bob", "Prim");
+
+        FindCommand expectedFindCommand =
+                new FindCommand(new NameEmailTagPredicate(names, List.of(), List.of()));
+
+        assertParseSuccess(parser, "n/Bob . Prim", expectedFindCommand);
+        assertParseSuccess(parser, "n/Bob n/. n/Prim", expectedFindCommand);
+    }
+
+    @Test
     public void parse_validSingleEmailPrefix_returnsFindCommand() {
         List<String> emails = List.of("gmail");
 
