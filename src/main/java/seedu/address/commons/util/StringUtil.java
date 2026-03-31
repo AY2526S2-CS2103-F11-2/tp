@@ -82,7 +82,7 @@ public class StringUtil {
      * @return the Levenshtein distance between {@code a} and {@code b}
      * @throws NullPointerException if either input string is {@code null}
      */
-    public static int levenshteinDistance(String a, String b) {
+    static int levenshteinDistance(String a, String b) {
         requireNonNull(a);
         requireNonNull(b);
 

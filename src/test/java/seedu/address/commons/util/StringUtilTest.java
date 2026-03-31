@@ -1,5 +1,6 @@
 package seedu.address.commons.util;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.testutil.Assert.assertThrows;
@@ -140,4 +141,71 @@ public class StringUtilTest {
         assertThrows(NullPointerException.class, () -> StringUtil.getDetails(null));
     }
 
+
+    //---------------- Tests for levenshteinDistance --------------------------------------
+
+    @Test
+    public void levenshteinDistance_identicalStrings_returnsZero() {
+        assertEquals(0, StringUtil.levenshteinDistance("a", "a"));
+        assertEquals(0, StringUtil.levenshteinDistance("test", "test"));
+        assertEquals(0, StringUtil.levenshteinDistance("kitten", "kitten"));
+    }
+
+    @Test
+    public void levenshteinDistance_emptyStrings_returnsCorrectDistance() {
+        assertEquals(0, StringUtil.levenshteinDistance("", ""));
+        assertEquals(4, StringUtil.levenshteinDistance("", "test"));
+        assertEquals(6, StringUtil.levenshteinDistance("", "kitten"));
+    }
+
+    @Test
+    public void levenshteinDistance_differentStrings_returnsCorrectDistance() {
+        // 1 substitution
+        assertEquals(1, StringUtil.levenshteinDistance("cat", "cut"));
+
+        // 1 insertion
+        assertEquals(1, StringUtil.levenshteinDistance("cat", "cats"));
+
+        // 1 deletion
+        assertEquals(1, StringUtil.levenshteinDistance("cats", "cat"));
+
+        // multiple of same operation (3 substitutions)
+        assertEquals(3, StringUtil.levenshteinDistance("kitten", "sitting"));
+
+        // Mix of operations: Example from https://www.youtube.com/watch?v=We3YDTzNXEk
+        // 2 substitutions, 1 deletion
+        assertEquals(3, StringUtil.levenshteinDistance("abcdef", "azced"));
+
+        // incremental differences
+        assertEquals(3, StringUtil.levenshteinDistance("abc", "axcde"));
+
+        // More realistic real-world examples
+        assertEquals(2, StringUtil.levenshteinDistance("robert", "rupert"));
+        assertEquals(1, StringUtil.levenshteinDistance("email", "e-mail"));
+    }
+
+    @Test
+    public void levenshteinDistance_caseInsensitiveComparison_returnsCorrectDistance() {
+        // identical strings
+        assertEquals(0, StringUtil.levenshteinDistance("Test", "test"));
+        assertEquals(0, StringUtil.levenshteinDistance("Kitten", "kitten"));
+
+        // different strings
+        assertEquals(3, StringUtil.levenshteinDistance("Kitten", "SITTING"));
+    }
+
+    @Test
+    public void levenshteinDistance_symmetryProperty_holds() {
+        assertEquals(
+                StringUtil.levenshteinDistance("kitten", "sitting"),
+                StringUtil.levenshteinDistance("sitting", "kitten")
+        );
+    }
+
+    @Test
+    public void levenshteinDistance_nullGiven_throwsNullPointerException() {
+        assertThrows(NullPointerException.class, () -> StringUtil.levenshteinDistance(null, "abc"));
+        assertThrows(NullPointerException.class, () -> StringUtil.levenshteinDistance("abc", null));
+        assertThrows(NullPointerException.class, () -> StringUtil.levenshteinDistance(null, null));
+    }
 }
