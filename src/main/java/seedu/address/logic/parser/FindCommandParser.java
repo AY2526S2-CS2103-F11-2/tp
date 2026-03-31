@@ -43,7 +43,7 @@ public class FindCommandParser implements Parser<FindCommand> {
         ArgumentMultimap argumentMultimap = ArgumentTokenizer.tokenize(leadingSpacedArgs,
                 PREFIX_NAME, PREFIX_EMAIL, PREFIX_TAG);
 
-        // Check for any prefixes with no value eg. "find n/john e/ t/
+        // Check for any prefixes with no value eg. find n/john e/ t/
         Optional<String> emptyPrefix = findEmptyPrefixValues(argumentMultimap,
                 PREFIX_NAME, PREFIX_EMAIL, PREFIX_TAG);
         if (emptyPrefix.isPresent()) {
