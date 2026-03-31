@@ -2,11 +2,13 @@ package seedu.address.logic.parser;
 
 import static java.util.Objects.requireNonNull;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.StringUtil;
@@ -23,7 +25,7 @@ import seedu.address.model.tag.TagType;
  */
 public class ParserUtil {
 
-    public static final String MESSAGE_INVALID_INDEX = "Index is not a non-zero unsigned integer.";
+    public static final String MESSAGE_INVALID_INDEX = "Index must be a positive integer (1, 2, 3...).";
 
     /**
      * Parses {@code oneBasedIndex} into an {@code Index} and returns it. Leading and trailing whitespaces will be
@@ -190,6 +192,29 @@ public class ParserUtil {
                     if (value.trim().isEmpty()) {
                         return Optional.of(prefix.getPrefix());
                     }
+                }
+            }
+        }
+
+        return Optional.empty();
+    }
+
+    /**
+     * Returns the first prefixed token that is NOT in the allowed prefixes list.
+     */
+    public static Optional<String> findInvalidPrefixInput(String args, Prefix[] allowedPrefixes) {
+        Set<String> allowedPrefixSet = Arrays.stream(allowedPrefixes)
+                .map(prefix -> prefix.getPrefix().toLowerCase(Locale.ROOT))
+                .collect(Collectors.toSet());
+
+        // Split into tokens and check each one
+        String[] tokens = args.split("\\s+");
+        for (String token : tokens) {
+            int slashIndex = token.indexOf('/');
+            if (slashIndex != -1) {
+                String prefix = token.substring(0, slashIndex + 1).toLowerCase(Locale.ROOT);
+                if (!allowedPrefixSet.contains(prefix)) {
+                    return Optional.of(token);
                 }
             }
         }

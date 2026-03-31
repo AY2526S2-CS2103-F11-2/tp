@@ -171,7 +171,9 @@ public class TagCommandTest {
         tags.add(new Tag("friend", TagType.GENERAL));
 
         TagCommand tagCommand = new TagCommand(outOfBoundIndex, tags);
-        assertCommandFailure(tagCommand, model, Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+        String expected = String.format(Messages.MESSAGE_PERSON_NOT_FOUND_DISPLAYED_INDEX,
+                outOfBoundIndex.getOneBased());
+        assertCommandFailure(tagCommand, model, expected);
     }
 
     @Test
