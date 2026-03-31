@@ -1,6 +1,7 @@
 package seedu.address.logic.commands;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.Messages.MESSAGE_SORT_RESET;
@@ -54,7 +55,7 @@ public class SortCommandTest {
         assertNotEquals(sortByNameAsc, 1);
 
         // null -> returns false
-        assertNotEquals(null, sortByNameAsc);
+        assertFalse(sortByNameAsc.equals(null));
     }
 
     @Test
