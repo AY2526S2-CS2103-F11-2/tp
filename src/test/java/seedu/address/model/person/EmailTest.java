@@ -126,4 +126,33 @@ public class EmailTest {
         assertFalse(email.containsIgnoreCase("gmail"));
         assertFalse(email.containsIgnoreCase("@domain.comm"));
     }
+
+    @Test
+    public void isNusDomain_nusStudentEmail_returnsTrue() {
+        assertTrue(new Email("alice@u.nus.edu").isNusDomain());
+        assertTrue(new Email("e1234567@u.nus.edu").isNusDomain());
+    }
+
+    @Test
+    public void isNusDomain_nusStaffEmail_returnsTrue() {
+        assertTrue(new Email("prof@nus.edu.sg").isNusDomain());
+    }
+
+    @Test
+    public void isNusDomain_nusSubdomainEmail_returnsTrue() {
+        assertTrue(new Email("tanwm2@comp.nus.edu.sg").isNusDomain());
+        assertTrue(new Email("john@soc.nus.edu.sg").isNusDomain());
+    }
+
+    @Test
+    public void isNusDomain_nonNusEmail_returnsFalse() {
+        assertFalse(new Email("alice@gmail.com").isNusDomain());
+        assertFalse(new Email("bob@example.com").isNusDomain());
+    }
+
+    @Test
+    public void isNusDomain_fakeNusEmail_returnsFalse() {
+        assertFalse(new Email("scam@fakenus.edu.sg").isNusDomain());
+        assertFalse(new Email("fake@notnus.edu.sg").isNusDomain());
+    }
 }
