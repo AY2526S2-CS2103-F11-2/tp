@@ -221,4 +221,24 @@ public class ParserUtil {
 
         return Optional.empty();
     }
+
+    /**
+     * Validates that all given prefix values are empty (no text after the prefix).
+     * This is used for commands like cleartag where only the prefix should be provided
+     * without any values.
+     *
+     * @param argMultimap The ArgumentMultimap containing the tokenized arguments
+     * @param prefixes    The prefixes to check for empty values
+     * @return Optional containing the first prefix that has a non-empty value, if any
+     */
+    public static Optional<String> validateEmptyPrefixValues(ArgumentMultimap argMultimap, Prefix... prefixes) {
+        for (Prefix prefix : prefixes) {
+            String value = argMultimap.getValue(prefix).orElse("");
+            if (!value.isEmpty()) {
+                // found a prefix with a non-empty value
+                return Optional.of(prefix.getPrefix() + value);
+            }
+        }
+        return Optional.empty();
+    }
 }
