@@ -50,13 +50,7 @@ public class EditCommandTest {
 
         String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_PERSON_SUCCESS, Messages.format(editedPerson))
                 + "\n" + Messages.MESSAGE_NON_NUS_EMAIL;
-        try {
-            CommandResult result = editCommand.execute(model);
-            System.out.println("Expected: " + expectedMessage);
-            System.out.println("Actual:   " + result.getFeedbackToUser());
-        } catch (Exception e) {
-            System.out.println("Exception: " + e.getMessage());
-        }
+
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
         expectedModel.setPerson(model.getFilteredPersonList().get(0), editedPerson);
 
