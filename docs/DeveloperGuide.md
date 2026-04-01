@@ -439,13 +439,10 @@ Use case ends.
 Use case ends.
 
 **Extensions:**
-* 1a. Input does not follow the specified format.
-    * 1a1. CampusBridge shows an error message indicating the invalid format.
-    * 1a2. CampusBridge requests the user to re-enter input.
-    * 1a3. User enters a new input.
+* 1a. User provides extra arguments.
+    * 1a1. CampusBridge shows an error message indicating that no arguments are expected.
 
-  Steps 1a1 - 1a3 are repeated until input is valid.
-  Use case resumes at step 2.
+  Use case ends.
 
 * 2a. No contacts exist in the list.
   * 2a1. CampusBridge informs the user that the contact list is empty.
