@@ -592,6 +592,36 @@ testers are expected to do more *exploratory* testing.
 
 1. _{ more test cases …​ }_
 
+### Viewing help
+
+1. Opening general help
+
+    1. Test case: `help`<br>
+       Expected: The User Guide opens in the system default browser. Status message shows `Opened user guide in browser.`
+
+    1. Alternative: Press <kbd>F1</kbd>.<br>
+       Expected: Same as above.
+
+1. Opening command-specific help
+
+    1. Test case: `help add`<br>
+       Expected: The User Guide opens in the system default browser at the `add` command section. Status message shows `Opening user guide for 'add' command.`
+
+    1. Other valid command names to try: `help list`, `help edit`, `help delete`, `help find`, `help sort`, `help tag`, `help untag`, `help cleartag`, `help clear`, `help exit`<br>
+       Expected: The User Guide opens at the respective command section. Status message names the command.
+
+1. Invalid help arguments
+
+    1. Test case: `help INVALID`<br>
+       Expected: The User Guide does not open. Error details shown in the status message.
+
+    1. Test case: `help ADD` (uppercase)<br>
+       Expected: Same as above. Command names are case-sensitive and must be lowercase.
+
+    1. Test case: `help add extra`<br>
+       Expected: Same as above. Only a single command name is accepted; extra words cause a format error.
+
+
 ### Adding a person
 
 1. Adding a person with all fields
@@ -738,35 +768,6 @@ testers are expected to do more *exploratory* testing.
       Expected: Similar to previous.
 
 1. _{ more test cases …​ }_
-
-### Viewing help
-
-1. Opening general help
-
-   1. Test case: `help`<br>
-      Expected: The User Guide opens in the system default browser. Status message shows `Opened user guide in browser.`
-
-   1. Alternative: Press <kbd>F1</kbd>.<br>
-      Expected: Same as above.
-
-1. Opening command-specific help
-
-   1. Test case: `help add`<br>
-      Expected: The User Guide opens in the system default browser at the `add` command section. Status message shows `Opening user guide for 'add' command.`
-
-   1. Other valid command names to try: `help list`, `help edit`, `help delete`, `help find`, `help sort`, `help tag`, `help untag`, `help cleartag`, `help clear`, `help exit`<br>
-      Expected: The User Guide opens at the respective command section. Status message names the command.
-
-1. Invalid help arguments
-
-   1. Test case: `help INVALID`<br>
-      Expected: The User Guide does not open. Error details shown in the status message.
-
-   1. Test case: `help ADD` (uppercase)<br>
-      Expected: Same as above. Command names are case-sensitive and must be lowercase.
-
-   1. Test case: `help add extra`<br>
-      Expected: Same as above. Only a single command name is accepted; extra words cause a format error.
 
 ### Sorting persons
 
