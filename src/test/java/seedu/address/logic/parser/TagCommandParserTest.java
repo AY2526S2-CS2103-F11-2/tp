@@ -113,6 +113,14 @@ public class TagCommandParserTest {
                 new TagCommand(index, expectedTags));
     }
 
+    // ---------------- FAILURE CASES - COMMAND FORMAT VALIDATION ----------------
+    @Test
+    public void parse_invalidCommandFormat_failure() {
+        assertParseFailure(parser,
+                " tg/" + VALID_GENERAL_TAG + 1,
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, TagCommand.MESSAGE_USAGE));
+    }
+
     // ---------------- FAILURE CASES - INDEX VALIDATION ----------------
     @Test
     public void parse_missingIndex_failure() {
@@ -227,9 +235,7 @@ public class TagCommandParserTest {
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, TagCommand.MESSAGE_USAGE));
     }
 
-
     // ---------------- EMPTY AND WHITESPACE INPUT TESTS ----------------
-
     @Test
     public void parse_emptyInput_throwsParseException() {
         assertParseFailure(parser,

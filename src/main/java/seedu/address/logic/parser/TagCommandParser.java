@@ -6,6 +6,7 @@ import static seedu.address.logic.Messages.MESSAGE_UNEXPECTED_EXTRA_INPUT;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_COURSE_TAG;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_GENERAL_TAG;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ROLE_TAG;
+import static seedu.address.logic.parser.CliSyntax.TAG_COMMAND_PREFIXES;
 
 import java.util.HashSet;
 import java.util.Optional;
@@ -29,15 +30,13 @@ public class TagCommandParser implements Parser<TagCommand> {
      * @throws ParseException if the user input does not conform the expected format.
      */
     public TagCommand parse(String args) throws ParseException {
-        Prefix[] allowedPrefixes = {PREFIX_ROLE_TAG, PREFIX_COURSE_TAG, PREFIX_GENERAL_TAG};
-
         // check for any prefix that's not in the allowed list
-        Optional<String> invalidPrefix = ParserUtil.findInvalidPrefixInput(args, allowedPrefixes);
+        Optional<String> invalidPrefix = ParserUtil.findInvalidPrefixInput(args, TAG_COMMAND_PREFIXES);
         if (invalidPrefix.isPresent()) {
             throw new ParseException(String.format(MESSAGE_UNEXPECTED_EXTRA_INPUT, invalidPrefix.get()));
         }
 
-        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, allowedPrefixes);
+        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, TAG_COMMAND_PREFIXES);
 
         String preamble = argMultimap.getPreamble().trim();
         if (preamble.isEmpty() || preamble.contains(" ")) {
@@ -51,7 +50,7 @@ public class TagCommandParser implements Parser<TagCommand> {
             throw new ParseException(pe.getMessage());
         }
 
-        Optional<String> emptyPrefix = ParserUtil.findEmptyPrefixValues(argMultimap, allowedPrefixes);
+        Optional<String> emptyPrefix = ParserUtil.findEmptyPrefixValues(argMultimap, TAG_COMMAND_PREFIXES);
         if (emptyPrefix.isPresent()) {
             throw new ParseException(String.format(MESSAGE_INVALID_PREFIX_WITH_NO_INPUT, emptyPrefix.get()));
         }
