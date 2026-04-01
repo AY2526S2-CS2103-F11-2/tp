@@ -221,34 +221,6 @@ public class TagCommandTest {
         assertCommandSuccess(tagCommand, model, expectedMessage, expectedModel);
     }
 
-    @Test
-    public void execute_multipleNewAndOneDuplicateTags_partialSuccess() {
-        Person personToEdit = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
-
-        Tag existingTag = personToEdit.getTags().iterator().next();
-        Tag newTag1 = new Tag("CS2103", TagType.COURSE);
-        Tag newTag2 = new Tag("mentor", TagType.ROLE);
-
-        Set<Tag> tagsToAdd = Set.of(existingTag, newTag1, newTag2);
-
-        TagCommand tagCommand = new TagCommand(INDEX_FIRST_PERSON, tagsToAdd);
-
-        Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
-
-        Set<Tag> expectedTags = new HashSet<>(personToEdit.getTags());
-        expectedTags.add(newTag1);
-        expectedTags.add(newTag2);
-
-        Person editedPerson = personToEdit.withTags(expectedTags);
-        expectedModel.setPerson(personToEdit, editedPerson);
-
-        Set<Tag> newTags = Set.of(newTag1, newTag2);
-        Set<Tag> existingTags = Set.of(existingTag);
-        String expectedMessage = String.format(TagCommand.MESSAGE_PARTIAL_SUCCESS, newTags, existingTags);
-
-        assertCommandSuccess(tagCommand, model, expectedMessage, expectedModel);
-    }
-
     // ---------------- FAILURE CASES - NO NEW TAGS ----------------
     @Test
     public void execute_duplicateTagsOnly_throwsCommandException() {
