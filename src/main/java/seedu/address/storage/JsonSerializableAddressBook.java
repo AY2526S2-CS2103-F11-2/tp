@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 
 import seedu.address.commons.exceptions.IllegalValueException;
+import seedu.address.logic.Messages;
 import seedu.address.model.AddressBook;
 import seedu.address.model.ReadOnlyAddressBook;
 import seedu.address.model.person.Person;
@@ -19,12 +20,11 @@ import seedu.address.model.person.Person;
 @JsonRootName(value = "addressbook")
 class JsonSerializableAddressBook {
 
-    public static final String MESSAGE_DUPLICATE_EMAIL =
-            "Persons list contains duplicate email(s).";
+    public static final String MESSAGE_DUPLICATE_EMAIL = Messages.MESSAGE_DUPLICATE_EMAIL_IN_STORAGE;
     public static final String MESSAGE_DUPLICATE_TELEGRAM_HANDLE =
-            "Persons list contains duplicate Telegram handle(s).";
+            Messages.MESSAGE_DUPLICATE_TELEGRAM_HANDLE_IN_STORAGE;
     public static final String MESSAGE_DUPLICATE_EMAIL_AND_TELEGRAM_HANDLE =
-            "Persons list contains duplicate email(s) and Telegram handle(s).";
+            Messages.MESSAGE_DUPLICATE_EMAIL_AND_TELEGRAM_HANDLE_IN_STORAGE;
 
     private final List<JsonAdaptedPerson> persons = new ArrayList<>();
 

@@ -44,15 +44,11 @@ public class EditCommand extends Command {
             + PREFIX_PHONE + "91234567 "
             + PREFIX_TELEGRAM_HANDLE + "johndoe123";
 
-
-    public static final String MESSAGE_DUPLICATE_EMAIL =
-            "A person with this email already exists in the address book.";
-    public static final String MESSAGE_DUPLICATE_TELEGRAM_HANDLE =
-            "A person with this Telegram handle already exists in the address book.";
-    public static final String MESSAGE_DUPLICATE_EMAIL_AND_TELEGRAM_HANDLE =
-            "A person with this email and Telegram handle already exists in the address book.";
-    public static final String MESSAGE_NOT_EDITED = "At least one field to edit must be provided.";
     public static final String MESSAGE_EDIT_PERSON_SUCCESS = "Edited Person: %1$s";
+    public static final String MESSAGE_DUPLICATE_EMAIL = Messages.MESSAGE_DUPLICATE_EMAIL + ".";
+    public static final String MESSAGE_DUPLICATE_TELEGRAM_HANDLE = Messages.MESSAGE_DUPLICATE_TELEGRAM_HANDLE + ".";
+    public static final String MESSAGE_DUPLICATE_EMAIL_AND_TELEGRAM_HANDLE =
+            Messages.MESSAGE_DUPLICATE_EMAIL_AND_TELEGRAM_HANDLE + ".";public static final String MESSAGE_NOT_EDITED = "At least one field to edit must be provided.";
     public static final String MESSAGE_UNDO_FAILURE = "Cannot undo edit before command execution.";
     public static final String MESSAGE_UNDO_SUCCESS = "Undo edit person: %1$s";
 
