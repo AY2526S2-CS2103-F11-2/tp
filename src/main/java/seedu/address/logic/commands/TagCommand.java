@@ -97,7 +97,6 @@ public class TagCommand extends Command {
         updatedPerson = editedPerson;
 
         model.setPerson(personToAddTag, editedPerson);
-        model.updateFilteredPersonList(Model.PREDICATE_SHOW_ALL_PERSONS);
 
         if (existingTagsFromInput.isEmpty()) {
             return new CommandResult(String.format(MESSAGE_SUCCESS, newTags));
@@ -120,7 +119,6 @@ public class TagCommand extends Command {
         }
 
         model.setPerson(updatedPerson, originalPerson);
-        model.updateFilteredPersonList(Model.PREDICATE_SHOW_ALL_PERSONS);
         return new CommandResult(String.format(MESSAGE_UNDO_SUCCESS, Messages.format(originalPerson)));
     }
 

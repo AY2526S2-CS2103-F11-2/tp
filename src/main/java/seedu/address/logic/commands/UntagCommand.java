@@ -81,7 +81,6 @@ public class UntagCommand extends Command {
         updatedPerson = editedPerson;
 
         model.setPerson(personToRemoveTag, editedPerson);
-        model.updateFilteredPersonList(Model.PREDICATE_SHOW_ALL_PERSONS);
 
         // partial success
         if (!result.notFoundTags.isEmpty()) {
@@ -105,7 +104,6 @@ public class UntagCommand extends Command {
         }
 
         model.setPerson(updatedPerson, originalPerson);
-        model.updateFilteredPersonList(Model.PREDICATE_SHOW_ALL_PERSONS);
         return new CommandResult(String.format(MESSAGE_UNDO_SUCCESS, Messages.format(originalPerson)));
     }
 

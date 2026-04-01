@@ -87,7 +87,6 @@ public class ClearTagCommand extends Command {
         updatedPerson = editedPerson;
 
         model.setPerson(personToClearTag, editedPerson);
-        model.updateFilteredPersonList(Model.PREDICATE_SHOW_ALL_PERSONS);
 
         return new CommandResult(String.format(MESSAGE_SUCCESS, typeToClear, removedTags));
     }
@@ -105,7 +104,6 @@ public class ClearTagCommand extends Command {
         }
 
         model.setPerson(updatedPerson, originalPerson);
-        model.updateFilteredPersonList(Model.PREDICATE_SHOW_ALL_PERSONS);
         return new CommandResult(String.format(MESSAGE_UNDO_SUCCESS, typeToClear, Messages.format(originalPerson)));
     }
 
