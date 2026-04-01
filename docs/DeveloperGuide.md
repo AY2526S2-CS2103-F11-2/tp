@@ -391,7 +391,7 @@ Use case ends.
 
 **MSS:**
 1. User <ins>requests to list contacts (UC04)</ins>.
-2. User requests to delete a contact in the list.
+2. User requests to delete a contact, providing the contact's index.
 3. CampusBridge validates the input.
 4. CampusBridge deletes the contact and updates the contact list.
 5. CampusBridge shows a success message.
@@ -399,6 +399,10 @@ Use case ends.
 Use case ends.
 
 **Extensions:**
+* 2a. User provides an email address instead of an index.
+
+  Use case resumes at step 3.
+
 * 3a. Target contact identifier does not exist.
     * 3a1. CampusBridge shows an error message indicating the contact does not exist.
 
