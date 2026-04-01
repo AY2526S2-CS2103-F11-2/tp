@@ -61,7 +61,6 @@ public class CommandTestUtil {
     public static final String ROLE_TAG_DESC_TEAMMATE = " " + PREFIX_ROLE_TAG + VALID_ROLE_TAG_TEAMMATE;
 
     // Course tags
-    public static final String VALID_COURSE_TAG_CS2101 = "CS2101";
     public static final String VALID_COURSE_TAG_CS2103 = "CS2103";
     public static final String COURSE_TAG_DESC_CS2103 = " " + PREFIX_COURSE_TAG + VALID_COURSE_TAG_CS2103;
 
@@ -82,18 +81,12 @@ public class CommandTestUtil {
                 .withPhone(VALID_PHONE_AMY)
                 .withEmail(VALID_EMAIL_AMY)
                 .withTelegramHandle(VALID_TELEGRAM_HANDLE_AMY)
-                .withRoleTags(VALID_ROLE_TAG_TEAMMATE)
-                .withCourseTags(VALID_COURSE_TAG_CS2103)
-                .withGeneralTags(VALID_GENERAL_TAG_FRIEND)
                 .build();
         DESC_BOB = new EditPersonDescriptorBuilder()
                 .withName(VALID_NAME_BOB)
                 .withPhone(VALID_PHONE_BOB)
                 .withEmail(VALID_EMAIL_BOB)
                 .withTelegramHandle(VALID_TELEGRAM_HANDLE_BOB)
-                .withRoleTags(VALID_ROLE_TAG_TEAMMATE)
-                .withCourseTags(VALID_COURSE_TAG_CS2103)
-                .withGeneralTags(VALID_GENERAL_TAG_HUSBAND, VALID_GENERAL_TAG_FRIEND)
                 .build();
     }
 

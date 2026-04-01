@@ -1,6 +1,7 @@
 package seedu.address.logic.parser;
 
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
+import static seedu.address.logic.Messages.MESSAGE_INVALID_KEYWORD_WITH_ONLY_SPECIAL_CHARACTERS;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_PREFIX_WITH_NO_INPUT;
 import static seedu.address.logic.Messages.MESSAGE_UNEXPECTED_EXTRA_INPUT;
 import static seedu.address.logic.parser.CliSyntax.NON_FIND_COMMAND_PREFIXES;
@@ -8,7 +9,7 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -71,21 +72,43 @@ public class FindCommandParser implements Parser<FindCommand> {
      * from the given {@code ArgumentMultimap}.
      *
      * <p>All values corresponding to the prefix are split by whitespace into individual
-     * keywords. Blank or empty keywords are discarded.</p>
+     * keywords. Keywords are validated to ensure they contain at least one alphanumeric
+     * character. Keywords that contain only special characters (punctuation) are rejected.</p>
      *
      * <p>For example, if the input contains {@code n/alice bob n/charlie}, this method
-     * returns a list containing {@code ["alice", "bob", "charlie"]}.</p>
+     * returns a list containing {@code ["alice", "bob", "charlie"]}.
+     * However, {@code n/!@# alice} would throw a ParseException for the invalid keyword.</p>
      *
      * @param argumentMultimap The {@code ArgumentMultimap} containing parsed arguments.
      * @param prefix The {@code Prefix} whose associated values are to be processed.
-     * @return A list of non-blank keywords extracted from the specified prefix.
+     * @return A list of valid keywords extracted from the specified prefix.
+     * @throws ParseException if any keyword contains only special characters (no alphanumeric characters)
      */
-    private static List<String> parseKeywords(ArgumentMultimap argumentMultimap, Prefix prefix) {
-        return argumentMultimap.getAllValues(prefix)
-                .stream()
-                .flatMap(keyword -> Arrays.stream(keyword.split("\\s+")))
-                .filter(s -> s.matches(".*[a-zA-Z0-9].*")) // filter out standalone punctuation
-                .filter(keyword -> !keyword.isBlank()) // filter out empty strings
-                .toList();
+    private static List<String> parseKeywords(ArgumentMultimap argumentMultimap, Prefix prefix)
+            throws ParseException {
+        List<String> validKeywords = new ArrayList<>();
+
+        for (String value : argumentMultimap.getAllValues(prefix)) {
+            String[] tokens = value.split("\\s+");
+            for (String token : tokens) {
+                if (token.isBlank()) {
+                    // Skip blank tokens (from multiple spaces)
+                    continue;
+                }
+
+                // Check if token contains only punctuation (no alphanumeric characters)
+                if (!token.matches(".*[a-zA-Z0-9].*")) {
+                    throw new ParseException(String.format(
+                            MESSAGE_INVALID_KEYWORD_WITH_ONLY_SPECIAL_CHARACTERS,
+                            prefix.getPrefix(),
+                            token));
+                }
+
+                validKeywords.add(token);
+            }
+        }
+
+        // Return an unmodifiable copy of the valid keywords list
+        return List.copyOf(validKeywords);
     }
 }

@@ -28,14 +28,14 @@ public class ClearTagCommand extends Command {
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Clears all tags of the specified type from the person identified by the index number "
             + "used in the displayed person list.\n"
-            + "Parameters: INDEX (must be a positive integer) "
-            + "[" + PREFIX_ROLE_TAG + "] or "
-            + "[" + PREFIX_COURSE_TAG + "] or "
-            + "[" + PREFIX_GENERAL_TAG + "]\n"
+            + "Parameters: INDEX " + PREFIX_ROLE_TAG + " or "
+            + "INDEX " + PREFIX_COURSE_TAG + " or "
+            + "INDEX " + PREFIX_GENERAL_TAG + "\n"
+            + "Note: INDEX (must be a positive integer).\n"
             + "Example: " + COMMAND_WORD + " 1 " + PREFIX_ROLE_TAG;
 
     public static final String MESSAGE_SUCCESS = "All %1$s tags removed: %2$s";
-    public static final String MESSAGE_NO_TAGS_FOUND = "No %1$s tags found to clear";
+    public static final String MESSAGE_NO_TAGS_FOUND = "No %1$s tags found to clear.";
     public static final String MESSAGE_UNDO_SUCCESS = "Undo clear %1$s tags for: %2$s";
     public static final String MESSAGE_UNDO_FAILURE = "Cannot undo clear tag before command execution.";
 
@@ -62,7 +62,9 @@ public class ClearTagCommand extends Command {
         List<Person> lastShownList = model.getFilteredPersonList();
 
         if (index.getZeroBased() >= lastShownList.size()) {
-            throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+            throw new CommandException(
+                    String.format(Messages.MESSAGE_PERSON_NOT_FOUND_DISPLAYED_INDEX, index.getOneBased())
+            );
         }
 
         Person personToClearTag = lastShownList.get(index.getZeroBased());

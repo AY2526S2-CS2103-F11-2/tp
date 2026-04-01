@@ -64,6 +64,17 @@ public class FindCommandTest {
     }
 
     @Test
+    public void execute_misspelledNameKeywords_onePersonFound() {
+        String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 1);
+        NameEmailTagPredicate predicate =
+                new NameEmailTagPredicate(List.of("Ellie"), List.of(), List.of());
+        FindCommand command = new FindCommand(predicate);
+        expectedModel.updateFilteredPersonList(predicate);
+        assertCommandSuccess(command, model, expectedMessage, expectedModel);
+        assertEquals(List.of(ELLE), model.getFilteredPersonList());
+    }
+
+    @Test
     public void execute_emailKeywords_onePersonFound() {
         String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 1);
         NameEmailTagPredicate predicate =

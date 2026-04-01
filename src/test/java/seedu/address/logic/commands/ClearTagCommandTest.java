@@ -141,7 +141,9 @@ public class ClearTagCommandTest {
         Index outOfBoundIndex = Index.fromOneBased(model.getFilteredPersonList().size() + 1);
         ClearTagCommand clearTagCommand = new ClearTagCommand(outOfBoundIndex, TagType.GENERAL);
 
-        assertCommandFailure(clearTagCommand, model, Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+        String expected = String.format(Messages.MESSAGE_PERSON_NOT_FOUND_DISPLAYED_INDEX,
+                outOfBoundIndex.getOneBased());
+        assertCommandFailure(clearTagCommand, model, expected);
     }
 
     @Test

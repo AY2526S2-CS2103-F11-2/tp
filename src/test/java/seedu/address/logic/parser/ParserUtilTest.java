@@ -454,4 +454,52 @@ public class ParserUtilTest {
         assertTrue(result.isPresent());
         assertEquals("n/alice", result.get());
     }
+
+    @Test
+    public void validateEmptyPrefixValues_noPrefixes_returnsNonEmptyOptional() {
+        String args = "1";
+        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, AllOWED_PREFIXES);
+
+        Optional<String> result = ParserUtil.validateEmptyPrefixValues(argMultimap, AllOWED_PREFIXES);
+        assertFalse(result.isPresent());
+    }
+
+    @Test
+    public void validateEmptyPrefixValues_allPrefixesEmpty_returnsNonEmptyOptional() {
+        String args = "1 tr/ tc/ tg/";
+        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, AllOWED_PREFIXES);
+
+        Optional<String> result = ParserUtil.validateEmptyPrefixValues(argMultimap, AllOWED_PREFIXES);
+        assertFalse(result.isPresent());
+    }
+
+    @Test
+    public void validateEmptyPrefixValues_rolePrefixWithValue_returnsRoleToken() {
+        String args = "1 tr/tutor";
+        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, AllOWED_PREFIXES);
+
+        Optional<String> result = ParserUtil.validateEmptyPrefixValues(argMultimap, AllOWED_PREFIXES);
+        assertTrue(result.isPresent());
+        assertEquals("tr/tutor", result.get());
+    }
+
+    @Test
+    public void validateEmptyPrefixValues_mixedEmptyAndNonEmpty_returnsFirstNonEmpty() {
+        String args = "1 tr/ tc/cs2103 tg/";
+        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, AllOWED_PREFIXES);
+
+        Optional<String> result = ParserUtil.validateEmptyPrefixValues(argMultimap, AllOWED_PREFIXES);
+        assertTrue(result.isPresent());
+        assertEquals("tc/cs2103", result.get());
+    }
+
+    @Test
+    public void validateEmptyPrefixValues_mixedEmptyAndNonEmptyWithMultiple_returnsFirstNonEmpty() {
+        String args = "1 tr/tutor tc/cs2103 tg/friends";
+        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, AllOWED_PREFIXES);
+
+        Optional<String> result = ParserUtil.validateEmptyPrefixValues(argMultimap, AllOWED_PREFIXES);
+        assertTrue(result.isPresent());
+        assertEquals("tr/tutor", result.get());
+    }
 }

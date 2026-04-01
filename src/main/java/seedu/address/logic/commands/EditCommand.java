@@ -1,21 +1,15 @@
 package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_COURSE_TAG;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_GENERAL_TAG;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_ROLE_TAG;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TELEGRAM_HANDLE;
 import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
 import java.util.logging.Logger;
 
 import seedu.address.commons.core.LogsCenter;
@@ -31,8 +25,7 @@ import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
 import seedu.address.model.person.TelegramHandle;
 import seedu.address.model.person.exceptions.DuplicatePersonException;
-import seedu.address.model.tag.Tag;
-import seedu.address.model.tag.TagType;
+
 
 /**
  * Edits the details of an existing person in the address book.
@@ -48,17 +41,11 @@ public class EditCommand extends Command {
             + "[" + PREFIX_NAME + "NAME] "
             + "[" + PREFIX_EMAIL + "EMAIL] "
             + "[" + PREFIX_PHONE + "PHONE] "
-            + "[" + PREFIX_TELEGRAM_HANDLE + "TELEGRAM HANDLE] "
-            + "[" + PREFIX_ROLE_TAG + "ROLE_TAG]... "
-            + "[" + PREFIX_COURSE_TAG + "COURSE_TAG]... "
-            + "[" + PREFIX_GENERAL_TAG + "GENERAL_TAG]...\n"
-            + "(Use t/ alone to clear all tags)\n" + "Example: " + COMMAND_WORD + " 1 "
+            + "[" + PREFIX_TELEGRAM_HANDLE + "TELEGRAM HANDLE] \n "
+            + "Example: " + COMMAND_WORD + " 1 "
             + PREFIX_EMAIL + "johndoe@example.com "
             + PREFIX_PHONE + "91234567 "
-            + PREFIX_TELEGRAM_HANDLE + "johndoe123 "
-            + PREFIX_ROLE_TAG + "Teammate"
-            + PREFIX_COURSE_TAG + "CS2103"
-            + PREFIX_GENERAL_TAG + "Friendly";
+            + PREFIX_TELEGRAM_HANDLE + "johndoe123";
 
 
     public static final String MESSAGE_DUPLICATE_PERSON = "This person already exists in the address book.";
@@ -152,21 +139,7 @@ public class EditCommand extends Command {
         TelegramHandle telegramHandle = editPersonDescriptor.getTelegramHandle()
                 .orElse(personToEdit.getTelegramHandle());
 
-        Set<Tag> existingTags = personToEdit.getTags();
-        Set<Tag> existingRoleTags = Tag.filterByType(existingTags, TagType.ROLE);
-        Set<Tag> existingCourseTags = Tag.filterByType(existingTags, TagType.COURSE);
-        Set<Tag> existingGeneralTags = Tag.filterByType(existingTags, TagType.GENERAL);
-
-        Set<Tag> updatedRoleTags = editPersonDescriptor.getRoleTags().orElse(existingRoleTags);
-        Set<Tag> updatedCourseTags = editPersonDescriptor.getCourseTags().orElse(existingCourseTags);
-        Set<Tag> updatedGeneralTags = editPersonDescriptor.getGeneralTags().orElse(existingGeneralTags);
-
-        Set<Tag> updatedTags = new HashSet<>();
-        updatedTags.addAll(updatedRoleTags);
-        updatedTags.addAll(updatedCourseTags);
-        updatedTags.addAll(updatedGeneralTags);
-
-        return new Person(updatedName, updatedPhone, updatedEmail, telegramHandle, updatedTags);
+        return new Person(updatedName, updatedPhone, updatedEmail, telegramHandle, personToEdit.getTags());
     }
 
     @Override
@@ -202,30 +175,23 @@ public class EditCommand extends Command {
         private Phone phone;
         private Email email;
         private TelegramHandle telegramHandle;
-        private Set<Tag> roleTags;
-        private Set<Tag> courseTags;
-        private Set<Tag> generalTags;
         public EditPersonDescriptor() {}
 
         /**
          * Copy constructor.
-         * A defensive copy of {@code tags} is used internally.
          */
         public EditPersonDescriptor(EditPersonDescriptor toCopy) {
             setName(toCopy.name);
             setPhone(toCopy.phone);
             setEmail(toCopy.email);
             setTelegramHandle(toCopy.telegramHandle);
-            setRoleTags(toCopy.roleTags);
-            setCourseTags(toCopy.courseTags);
-            setGeneralTags(toCopy.generalTags);
         }
 
         /**
          * Returns true if at least one field is edited.
          */
         public boolean isAnyFieldEdited() {
-            return CollectionUtil.isAnyNonNull(name, phone, email, telegramHandle, roleTags, courseTags, generalTags);
+            return CollectionUtil.isAnyNonNull(name, phone, email, telegramHandle);
         }
 
         public void setName(Name name) {
@@ -260,30 +226,6 @@ public class EditCommand extends Command {
             return Optional.ofNullable(telegramHandle);
         }
 
-        public void setRoleTags(Set<Tag> roleTags) {
-            this.roleTags = (roleTags != null) ? new HashSet<>(roleTags) : null;
-        }
-
-        public Optional<Set<Tag>> getRoleTags() {
-            return (roleTags != null) ? Optional.of(Collections.unmodifiableSet(roleTags)) : Optional.empty();
-        }
-
-        public void setCourseTags(Set<Tag> courseTags) {
-            this.courseTags = (courseTags != null) ? new HashSet<>(courseTags) : null;
-        }
-
-        public Optional<Set<Tag>> getCourseTags() {
-            return (courseTags != null) ? Optional.of(Collections.unmodifiableSet(courseTags)) : Optional.empty();
-        }
-
-        public void setGeneralTags(Set<Tag> generalTags) {
-            this.generalTags = (generalTags != null) ? new HashSet<>(generalTags) : null;
-        }
-
-        public Optional<Set<Tag>> getGeneralTags() {
-            return (generalTags != null) ? Optional.of(Collections.unmodifiableSet(generalTags)) : Optional.empty();
-        }
-
         @Override
         public boolean equals(Object other) {
             if (other == this) {
@@ -299,10 +241,7 @@ public class EditCommand extends Command {
             return Objects.equals(name, otherEditPersonDescriptor.name)
                     && Objects.equals(phone, otherEditPersonDescriptor.phone)
                     && Objects.equals(email, otherEditPersonDescriptor.email)
-                    && Objects.equals(telegramHandle, otherEditPersonDescriptor.telegramHandle)
-                    && Objects.equals(roleTags, otherEditPersonDescriptor.roleTags)
-                    && Objects.equals(courseTags, otherEditPersonDescriptor.courseTags)
-                    && Objects.equals(generalTags, otherEditPersonDescriptor.generalTags);
+                    && Objects.equals(telegramHandle, otherEditPersonDescriptor.telegramHandle);
         }
 
         @Override
@@ -312,9 +251,6 @@ public class EditCommand extends Command {
                     .add("phone", phone)
                     .add("email", email)
                     .add("telegramHandle", telegramHandle)
-                    .add("roleTags", roleTags)
-                    .add("courseTags", courseTags)
-                    .add("generalTags", generalTags)
                     .toString();
         }
 

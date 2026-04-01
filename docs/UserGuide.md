@@ -242,17 +242,20 @@ Adds one or more tags to an existing person in the address book.
 
 **Format:** `tag INDEX [tr/ROLE_TAG]…​ [tc/COURSE_TAG]…​ [tg/GENERAL_TAG]…​`
 
-* Adds tags to the person at the specified `INDEX`.
-* The index refers to the index number shown in the displayed person list.
-* Multiple tags (of different or same types) can be added in a single command.
-* Existing tags will be preserved. New tags are appended.
-* Tag matching is **case-insensitive**. e.g. `friends` and `FRIENDS` are considered the same.
-* Duplicate tags will not be added again.
-
-**Constraints:**
 * The index **must be a positive integer** 1, 2, 3, …​
 * Tag names must be **alphanumeric** (no space or symbols).
 * At least one of the optional fields must be provided.
+* Each tag must have a value after its prefix (e.g. tg/ alone is not allowed).
+* Multiple tags (of different or same types) can be added in a single command.
+* Duplicate tags in the command will be ignored.
+
+**Behavior:**
+* Adds tags to the person at the specified `INDEX`.
+* The index refers to the index number shown in the displayed person list.
+* Existing tags will be preserved. New tags are appended.
+* Tag matching is **case-insensitive**. (e.g. `friends` and `FRIENDS` are considered the same).
+* If some tags already exist, only new ones are added. A message will show which tags were added and skipped.
+* If all tags already exist, an error message will be shown and no changes will be made.
 
 <div markdown="span" class="alert alert-primary">:bulb: **Tip:**
 Obtain the index by using: `list` command to display all persons or `find` command to filter the persons.
@@ -265,8 +268,9 @@ Adds the `friends` general tag to the 1st person in the displayed list.
 * `tag 2 tr/tutor tc/cs2103 tg/helpful`<br/>
 Adds the `tutor` role tag, `cs2103` course tag and `helpful` general tag to the 2nd person in the displayed list.
 
-* `tag 3 tg/friends tg/groupmates`<br/>
-Adds both `friends` and `groupmates` general tags to the 3rd person in the displayed list.
+* `tag 3 tc/cs2101 tg/friends`<br/>
+Adds the `friends` general tag to the 3rd person in the displayed list and shows `cs2101` course tag already exists.
+![result for 'tag 3 tc/cs2101 tg/friends'](images/tagPartialSuccessResult.png)
 
 ### Untagging a person : `untag`
 
@@ -274,22 +278,21 @@ Removes one or more tags from an existing person in the address book.
 
 **Format:** `untag INDEX [tr/ROLE_TAG]…​ [tc/COURSE_TAG]…​ [tg/GENERAL_TAG]…​`
 
-* Removes the specified tags from the person at the given `INDEX`.
-* The index refers to the index number shown in the displayed person list.
-* Multiple tags (of different or same types) can be removed in a single command.
-* Only tags currently assigned to the person will be removed.
-* Existing tags that are not specified will remain unchanged.
-* Tag matching is **case-insensitive**. e.g. `friends` and `FRIENDS` are considered the same.
-* Duplicate tags in the command will be ignored.
-
-**Partial removal behavior:**
-* If some tags exist and others don't, the existing ones will be removed and a message will show which tags were not found.
-* If none of the specified tags exist, an error message will be shown and no changes will be made.
-
-**Constraints:**
 * The index **must be a positive integer** 1, 2, 3, …​
 * Tag names must be **alphanumeric** (no space or symbols).
 * At least one of the optional fields must be provided.
+* Each tag must have a value after its prefix (e.g. tg/ alone is not allowed).
+* Multiple tags (of different or same types) can be removed in a single command.
+* Duplicate tags in the command will be ignored.
+
+**Behavior:**
+* Removes the specified tags from the person at the given `INDEX`.
+* The index refers to the index number shown in the displayed person list.
+* Only tags currently assigned to the person will be removed.
+* Existing tags that are not specified will remain unchanged.
+* Tag matching is **case-insensitive**. e.g. `friends` and `FRIENDS` are considered the same.
+* If some tags exist and others don't, the existing ones will be removed. A message will show which tags were not found.
+* If none of the specified tags exist, an error message will be shown and no changes will be made.
 
 <div markdown="span" class="alert alert-primary">:bulb: **Tip:**
 Obtain the index by using: `list` command to display all persons or `find` command to filter the persons.
@@ -305,20 +308,21 @@ Removes the `tutor` role tag, `cs2103` course tag and `classmates` general tag f
 * `untag 3 tc/cs2103 tc/cs2109`<br/>
 Removes both `cs2103` and `cs2109` course tags from the 3rd person in the list.
 
-### Clearing tags from a person : `cleartag`
+### Clearing tags of a specific type from a person : `cleartag`
 
 Clears all tags of a specific type from an existing person in the address book.
 
-**Format:** `cleartag INDEX [tr/] or [tc/] or [tg/]`
+**Format:** `cleartag INDEX tr/ or cleartag INDEX tc/ or cleartag INDEX tg/`
 
+* The index **must be a positive integer** 1, 2, 3, …​
+* **Exactly one tag type prefix** must be provided (without any tag names).
+* Only one tag type can be cleared at a time.
+
+**Behavior:**
 * Clears all tags of the specified type from the person at the given `INDEX`.
 * The index refers to the index number shown in the displayed person list.
-* Only one tag type can be cleared at a time.
 * Only tags of the specified type will be removed. Tags of other types remain unchanged.
-
-**Constraints:**
-* The index **must be a positive integer** 1, 2, 3, …​
-* **Exactly one tag type prefix** must be provided.
+* If the person has no tags of the specified type, an error message will be shown.
 
 <div markdown="span" class="alert alert-primary">:bulb: **Tip:**
 Obtain the index by using: `list` command to display all persons or `find` command to filter the persons.
@@ -381,40 +385,58 @@ Finds persons whose names, emails, or tags match the given keywords.
 **Format:** `find [n/NAME [MORE_NAMES]] [e/EMAIL [MORE_EMAILS]] [t/TAG [MORE_TAGS]]`
 
 * At least one of `n/`, `e/`, or `t/` must be present.
-* The search is case-insensitive for all fields. e.g. `hans` will match `Hans`
-* The order of keywords does not matter. e.g. `Hans Bo` will match `Bo Hans`
+* The search is case-insensitive for all fields. e.g. `alex` will match `Alex`.
+* The order of keywords does not matter. e.g. `Yeoh Alex` will match `Alex Yeoh`.
+* Keywords consisting **only of special characters** are not allowed (e.g., `.`, `#`, `!@#`). If you provide such a keyword, an error message will be shown.
+* Keywords containing both letters and special characters are valid (e.g., `"Dr."`, `"J."`), but special characters are ignored during name processing.
 
 **Matching behavior:**
-* **Name** and **email** use substring matching.
-  e.g. `Jo` will match `John` and `Alice Johnson`
+* **Name keywords** use both exact substring matching and fuzzy matching (typo-tolerant):
+  * Exact match: `Jo` will match `John` and `Alice Johnson`.
+  * Fuzzy match: `jon` will also match `John` (handles typos like missing or swapped letters).
+  * The fuzzy matching threshold is calculated based on keyword length, allowing ~1 edit for short keywords and scaling up for longer keywords.
+  * Special characters in names are ignored during processing. e.g. searching for `"Robert"` will match names like `"Robert-Smith"` or `"O'Robert"`.
+* **Email keywords** use exact substring matching.
+  e.g. `gmail` will match `john@gmail.com` and `alice.gmail@example.com`.
 * **Tags** use exact matching.
-  e.g. `cs2103` will match tag `cs2103` but not `cs210`
+  e.g. `cs2103` will match tag `cs2103` but not `cs210`.
 * Multiple keywords within the same field are combined using **OR**.
-  e.g. `n/Alex David` will match `Alex Yeoh` or `David Li`
+  e.g. `n/Alex David` will match `Alex Yeoh` or `David Li`.
 * Different fields are combined using **AND**.
-  e.g. `n/Alex e/gmail` will match persons whose name contains `Alex` **and** email contains `gmail`
+  e.g. `n/Alex e/gmail` will match persons whose name matches `Alex` **and** email contains `gmail`.
+* Repeated same-field prefixes are allowed.
+  e.g. `find n/Alex n/David` behaves the same as `find n/Alex David`.
+* Empty prefixes are not allowed.
+  e.g. `find n/Alex e/` is invalid.
 
 **Examples:**
 * `find n/John`<br/>
-Returns all persons whose names contain `John`
+Returns all persons whose names **match** `John` (with fuzzy matching support).
+
+* `find n/jon`<br/>
+Returns all persons whose names **match** `jon` (with fuzzy matching support).
+![result for 'find jon'](images/findJonResult.png)
+
+* `find n/alice david`<br/>
+Returns persons whose name **matches** `alice` **or** `david` (with fuzzy matching support).
 
 * `find e/gmail`<br/>
-Returns all persons whose emails contain `gmail`
+Returns all persons whose emails **contain** `gmail`.
 
 * `find t/friends`<br/>
-Returns all persons tagged with `friends`
+Returns all persons tagged with `friends`.
 
 * `find n/alex e/u.nus.edu`<br/>
-Returns persons whose name contains `alex` **and** email contains `u.nus.edu`
+Returns persons whose name **matches** `alex` **and** email **contains** `u.nus.edu`.
 
 * `find n/alex t/friends`<br/>
-Returns persons whose name contains `alex` **and** are tagged with `friends`
+Returns persons whose name **matches** `alex` **and** are tagged with `friends`.
 
 * `find n/alex e/nus t/friends`<br/>
-Returns persons whose name contains `alex` **and** email contains `nus` **and** are tagged with `friends`
+Returns persons whose name **matches** `alex` **and** email **contains** `nus` **and** are tagged with `friends`.
 
 * `find n/alex david`<br/>
-Returns persons whose name contains `alex` **or** `david`
+Returns persons whose name **matches** `alex` **or** `david`.
 ![result for 'find alex david'](images/findAlexDavidResult.png)
 
 ### Undoing the last action : `undo`
@@ -506,6 +528,10 @@ CampusBridge data are saved automatically as a JSON file `[JAR file location]/da
 If your changes to the data file makes its format invalid, CampusBridge will discard all data and start with an empty data file at the next run. Hence, it is recommended to take a backup of the file before editing it.<br>
 Furthermore, certain edits can cause CampusBridge to behave in unexpected ways (e.g., if a value entered is outside of the acceptable range). Therefore, edit the data file only if you are confident that you can update it correctly.
 </div>
+
+### Clearing tags of multiple types from a person [coming in v2.0]
+
+_Details coming soon …_
 
 --------------------------------------------------------------------------------------------------------------------
 

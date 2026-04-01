@@ -1,12 +1,14 @@
 package seedu.address.logic.parser;
 
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
-import static seedu.address.logic.Messages.MESSAGE_INVALID_PREFIX_WITH_EXTRA_INPUT;
+import static seedu.address.logic.Messages.MESSAGE_PREFIX_SHOULD_NOT_HAVE_VALUE;
+import static seedu.address.logic.Messages.MESSAGE_UNEXPECTED_EXTRA_INPUT;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_COURSE_TAG;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_GENERAL_TAG;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ROLE_TAG;
+import static seedu.address.logic.parser.CliSyntax.TAG_COMMAND_PREFIXES;
 
-import java.util.List;
+import java.util.Optional;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.logic.commands.ClearTagCommand;
@@ -25,65 +27,57 @@ public class ClearTagCommandParser implements Parser<ClearTagCommand> {
      * @throws ParseException if the user input does not conform the expected format.
      */
     public ClearTagCommand parse(String args) throws ParseException {
+        // check for any prefix that's not in the allowed list
+        Optional<String> invalidPrefix = ParserUtil.findInvalidPrefixInput(args, TAG_COMMAND_PREFIXES);
+        if (invalidPrefix.isPresent()) {
+            throw new ParseException(String.format(MESSAGE_UNEXPECTED_EXTRA_INPUT, invalidPrefix.get()));
+        }
+
         ArgumentMultimap argMultimap =
-                ArgumentTokenizer.tokenize(args, PREFIX_ROLE_TAG, PREFIX_COURSE_TAG, PREFIX_GENERAL_TAG);
+                ArgumentTokenizer.tokenize(args, TAG_COMMAND_PREFIXES);
+
+        String preamble = argMultimap.getPreamble().trim();
+        if (preamble.isEmpty() || preamble.contains(" ")) {
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, ClearTagCommand.MESSAGE_USAGE));
+        }
 
         Index index;
-
         try {
-            index = ParserUtil.parseIndex(argMultimap.getPreamble());
+            index = ParserUtil.parseIndex(preamble);
         } catch (ParseException pe) {
-            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, ClearTagCommand.MESSAGE_USAGE), pe);
+            throw new ParseException(pe.getMessage());
         }
 
-        argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_ROLE_TAG, PREFIX_COURSE_TAG, PREFIX_GENERAL_TAG);
-        List<String> roleValues = argMultimap.getAllValues(CliSyntax.PREFIX_ROLE_TAG);
-        List<String> courseValues = argMultimap.getAllValues(CliSyntax.PREFIX_COURSE_TAG);
-        List<String> generalValues = argMultimap.getAllValues(CliSyntax.PREFIX_GENERAL_TAG);
+        // validate that all prefixes have empty values (no tag names)
+        // this catches cases like "tr/test" which should be invalid
+        Optional<String> nonEmptyPrefix = ParserUtil.validateEmptyPrefixValues(argMultimap, TAG_COMMAND_PREFIXES);
+        if (nonEmptyPrefix.isPresent()) {
+            throw new ParseException(String.format(MESSAGE_PREFIX_SHOULD_NOT_HAVE_VALUE, nonEmptyPrefix.get()));
+        }
 
-        TagType typeToClear = null;
-        int totalPrefixes = 0;
+        argMultimap.verifyNoDuplicatePrefixesFor(TAG_COMMAND_PREFIXES);
 
-        if (!roleValues.isEmpty()) {
-            validateNoValue(roleValues);
-            typeToClear = TagType.ROLE;
-            totalPrefixes++;
-        }
-        if (!courseValues.isEmpty()) {
-            validateNoValue(courseValues);
-            typeToClear = TagType.COURSE;
-            totalPrefixes++;
-        }
-        if (!generalValues.isEmpty()) {
-            validateNoValue(generalValues);
-            typeToClear = TagType.GENERAL;
-            totalPrefixes++;
-        }
+        boolean isClearRole = argMultimap.getValue(PREFIX_ROLE_TAG).isPresent();
+        boolean isClearCourse = argMultimap.getValue(PREFIX_COURSE_TAG).isPresent();
+        boolean isClearGeneral = argMultimap.getValue(PREFIX_GENERAL_TAG).isPresent();
+
+        // count how many tag types are specified
+        int totalPrefixes = (isClearRole ? 1 : 0) + (isClearCourse ? 1 : 0) + (isClearGeneral ? 1 : 0);
 
         if (totalPrefixes != 1) {
             throw new ParseException(
                     String.format(MESSAGE_INVALID_COMMAND_FORMAT, ClearTagCommand.MESSAGE_USAGE));
         }
 
-        return new ClearTagCommand(index, typeToClear);
-    }
-
-    /**
-     * Validates that the given list of prefix values contains no preceding values.
-     * <p>
-     * This is used for commands where prefixes act as flags (e.g. {@code tr/}, {@code tc/}, {@code tg/})
-     * and should not be followed by any user input. If any value is present after a prefix,
-     * a {@link ParseException} will be thrown.
-     *
-     * @param values The list of values associated with a specific prefix.
-     * @throws ParseException if any value in the list is non-empty.
-     */
-    private void validateNoValue(List<String> values) throws ParseException {
-        for (String value : values) {
-            if (!value.isEmpty()) {
-                throw new ParseException(
-                        String.format(MESSAGE_INVALID_PREFIX_WITH_EXTRA_INPUT, ClearTagCommand.MESSAGE_USAGE));
-            }
+        TagType typeToClear;
+        if (isClearRole) {
+            typeToClear = TagType.ROLE;
+        } else if (isClearCourse) {
+            typeToClear = TagType.COURSE;
+        } else {
+            typeToClear = TagType.GENERAL;
         }
+
+        return new ClearTagCommand(index, typeToClear);
     }
 }

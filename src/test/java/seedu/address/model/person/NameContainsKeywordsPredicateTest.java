@@ -58,12 +58,16 @@ public class NameContainsKeywordsPredicateTest {
         assertTrue(predicate.test(new PersonBuilder().withName("Alice Bob").build()));
 
         // Partial match across words should still work
-        predicate = new NameContainsKeywordsPredicate(Collections.singletonList("lice B"));
+        predicate = new NameContainsKeywordsPredicate(List.of("Alice", "B"));
         assertTrue(predicate.test(new PersonBuilder().withName("Alice Bob").build()));
 
         // Mixed-case keywords
         predicate = new NameContainsKeywordsPredicate(Arrays.asList("aLIce", "bOB"));
         assertTrue(predicate.test(new PersonBuilder().withName("Alice Bob").build()));
+
+        // Test fuzzy match success (within threshold)
+        predicate = new NameContainsKeywordsPredicate(List.of("Olivero")); // 1 edit away from Oliviero
+        assertTrue(predicate.test(new PersonBuilder().withName("Oliviero").build()));
     }
 
     @Test
@@ -85,6 +89,10 @@ public class NameContainsKeywordsPredicateTest {
                 Arrays.asList("12345", "alice@email.com", "Main", "Street"));
         assertFalse(predicate.test(new PersonBuilder().withName("Alice").withPhone("12345")
                 .withEmail("alice@email.com").build()));
+
+        // Test fuzzy match failure (outside threshold)
+        predicate = new NameContainsKeywordsPredicate(List.of("Alicia")); // 2 edits away from "Alice"
+        assertFalse(predicate.test(new PersonBuilder().withName("Alice").build()));
     }
 
     @Test

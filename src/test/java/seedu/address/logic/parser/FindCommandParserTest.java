@@ -1,6 +1,7 @@
 package seedu.address.logic.parser;
 
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
+import static seedu.address.logic.Messages.MESSAGE_INVALID_KEYWORD_WITH_ONLY_SPECIAL_CHARACTERS;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_PREFIX_WITH_NO_INPUT;
 import static seedu.address.logic.Messages.MESSAGE_UNEXPECTED_EXTRA_INPUT;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseFailure;
@@ -64,7 +65,13 @@ public class FindCommandParserTest {
     @Test
     public void parse_disallowedPrefix_throwsParseException() {
         assertParseFailure(parser, "n/alice tc/cs2103",
-                String.format(MESSAGE_UNEXPECTED_EXTRA_INPUT, "tc/cs2103", FindCommand.MESSAGE_USAGE));
+                String.format(MESSAGE_UNEXPECTED_EXTRA_INPUT, "tc/cs2103"));
+    }
+
+    @Test
+    public void parse_validMultipleNamesWithStandaloneSpecialCharacters_throwsParseException() {
+        assertParseFailure(parser, "n/bob . prim",
+                String.format(MESSAGE_INVALID_KEYWORD_WITH_ONLY_SPECIAL_CHARACTERS, "n/", "."));
     }
 
     @Test
@@ -90,7 +97,7 @@ public class FindCommandParserTest {
     }
 
     @Test
-    public void parse_validMultipleNamesNoStandalonePunctuation_returnsFindCommand() {
+    public void parse_validMultipleNamesNoStandaloneSpecialCharacters_returnsFindCommand() {
         List<String> names = List.of("Bob", "C.", "Prim");
 
         FindCommand expectedFindCommand =
@@ -98,17 +105,6 @@ public class FindCommandParserTest {
 
         assertParseSuccess(parser, "n/Bob C. Prim", expectedFindCommand);
         assertParseSuccess(parser, "n/Bob n/C. n/Prim", expectedFindCommand);
-    }
-
-    @Test
-    public void parse_validMultipleNamesWithStandalonePunctuation_returnsFindCommand() {
-        List<String> names = List.of("Bob", "Prim");
-
-        FindCommand expectedFindCommand =
-                new FindCommand(new NameEmailTagPredicate(names, List.of(), List.of()));
-
-        assertParseSuccess(parser, "n/Bob . Prim", expectedFindCommand);
-        assertParseSuccess(parser, "n/Bob n/. n/Prim", expectedFindCommand);
     }
 
     @Test

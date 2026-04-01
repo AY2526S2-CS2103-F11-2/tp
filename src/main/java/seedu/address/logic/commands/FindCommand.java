@@ -15,7 +15,20 @@ import seedu.address.model.person.Person;
 /**
  * Finds and lists all persons in the address book whose names, emails, and/or tags
  * match the specified keywords.
- * Keyword matching is case-insensitive.
+ *
+ * <p>Matching behaviors by field:
+ * <ul>
+ *   <li><b>Name keywords:</b> Uses both exact substring matching and fuzzy matching to handle typos.
+ *       Fuzzy matching uses Levenshtein distance with a dynamic threshold based on keyword length.</li>
+ *   <li><b>Email keywords:</b> Uses exact substring matching.</li>
+ *   <li><b>Tags:</b> Uses exact matching.</li>
+ * </ul>
+ * </p>
+ *
+ * <p>All matching is case-insensitive and performed on individual tokens (for names, split by whitespace).
+ * Logic combination: OR within each field (any keyword matches), AND across fields (all fields must match).</p>
+ *
+ * @see seedu.address.model.person.NameContainsKeywordsPredicate for name matching details
  */
 public class FindCommand extends Command {
 
@@ -23,6 +36,8 @@ public class FindCommand extends Command {
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Finds all persons whose names, emails, or tags "
             + "match the specified keywords (case-insensitive) and displays them as a list with index numbers.\n"
+            + "Matching behavior: Names use fuzzy matching (handles typos), emails use substring matching, "
+            + "tags use exact matching.\n"
             + "The search uses OR logic within the same field (e.g. multiple name keywords) as well as AND logic "
             + "across different fields (name, email, tags).\n"
             + "Parameters: [" + PREFIX_NAME + "NAME [MORE_NAMES]] [" + PREFIX_EMAIL + "EMAIL [MORE_EMAILS]] ["

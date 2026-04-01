@@ -90,6 +90,13 @@ public class NameEmailTagPredicateTest {
     }
 
     @Test
+    public void test_nameFuzzyMatch_returnsTrue() {
+        NameEmailTagPredicate predicate = new NameEmailTagPredicate(
+                List.of("Alie"), List.of(), List.of());
+        assertTrue(predicate.test(ALICE));
+    }
+
+    @Test
     public void test_emailOnlyMatch_returnsTrue() {
         NameEmailTagPredicate predicate = new NameEmailTagPredicate(
                 List.of(), List.of("example.com"), List.of());
@@ -112,30 +119,6 @@ public class NameEmailTagPredicateTest {
 
         assertTrue(predicate.test(ALICE));
         assertTrue(predicate.test(BENSON));
-    }
-
-    @Test
-    public void test_emptyNameKeywords_returnsTrue() {
-        NameEmailTagPredicate predicate = new NameEmailTagPredicate(
-                List.of(), List.of("example.com"), List.of("friends"));
-
-        assertTrue(predicate.test(ALICE));
-    }
-
-    @Test
-    public void test_emptyEmailKeywords_returnsTrue() {
-        NameEmailTagPredicate predicate = new NameEmailTagPredicate(
-                List.of("Alice"), List.of(), List.of("friends"));
-
-        assertTrue(predicate.test(ALICE));
-    }
-
-    @Test
-    public void test_emptyTags_returnsTrue() {
-        NameEmailTagPredicate predicate = new NameEmailTagPredicate(
-                List.of("Alice"), List.of("example.com"), List.of());
-
-        assertTrue(predicate.test(ALICE));
     }
 
     @Test
