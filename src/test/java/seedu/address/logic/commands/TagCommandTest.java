@@ -36,6 +36,7 @@ public class TagCommandTest {
 
     private Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
 
+    // ---------------- CONSTRUCTOR TESTS ----------------
     @Test
     public void constructor_nullIndex_throwsNullPointerException() {
         Set<Tag> tagsToAdd = new HashSet<>();
@@ -49,6 +50,7 @@ public class TagCommandTest {
         assertThrows(NullPointerException.class, () -> new TagCommand(INDEX_FIRST_PERSON, null));
     }
 
+    // ---------------- SUCCESS CASES - SINGLE TAG ----------------
     @Test
     public void execute_validIndexAddSingleTag_success() {
         Person personToEdit = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
@@ -94,29 +96,6 @@ public class TagCommandTest {
     }
 
     @Test
-    public void execute_validIndexAddMultipleTags_success() {
-        Person personToEdit = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
-
-        Set<Tag> tagsToAdd = new HashSet<>();
-        tagsToAdd.add(new Tag("tutor", TagType.ROLE));
-        tagsToAdd.add(new Tag("CS2103", TagType.COURSE));
-        tagsToAdd.add(new Tag("friends", TagType.GENERAL));
-
-        TagCommand tagCommand = new TagCommand(INDEX_FIRST_PERSON, tagsToAdd);
-
-        Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
-
-        Set<Tag> expectedTags = new HashSet<>(personToEdit.getTags());
-        expectedTags.addAll(tagsToAdd);
-
-        Person editedPerson = personToEdit.withTags(expectedTags);
-
-        expectedModel.setPerson(personToEdit, editedPerson);
-        String expectedMessage = String.format(TagCommand.MESSAGE_SUCCESS, tagsToAdd);
-        assertCommandSuccess(tagCommand, model, expectedMessage, expectedModel);
-    }
-
-    @Test
     public void execute_validIndexAddTagToPersonWithNoTags_success() {
         // INDEX_THIRD_PERSON: a person with no tags
         Person personWithoutTags = model.getFilteredPersonList().get(INDEX_THIRD_PERSON.getZeroBased());
@@ -138,6 +117,30 @@ public class TagCommandTest {
         assertCommandSuccess(tagCommand, model, expectedMessage, expectedModel);
     }
 
+    // ---------------- SUCCESS CASES - MULTIPLE TAGS ----------------
+    @Test
+    public void execute_validIndexAddMultipleTags_success() {
+        Person personToEdit = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+
+        Set<Tag> tagsToAdd = new HashSet<>();
+        tagsToAdd.add(new Tag("tutor", TagType.ROLE));
+        tagsToAdd.add(new Tag("CS2103", TagType.COURSE));
+        tagsToAdd.add(new Tag("groupmates", TagType.GENERAL));
+
+        TagCommand tagCommand = new TagCommand(INDEX_FIRST_PERSON, tagsToAdd);
+
+        Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
+
+        Set<Tag> expectedTags = new HashSet<>(personToEdit.getTags());
+        expectedTags.addAll(tagsToAdd);
+
+        Person editedPerson = personToEdit.withTags(expectedTags);
+
+        expectedModel.setPerson(personToEdit, editedPerson);
+        String expectedMessage = String.format(TagCommand.MESSAGE_SUCCESS, tagsToAdd);
+        assertCommandSuccess(tagCommand, model, expectedMessage, expectedModel);
+    }
+
     @Test
     public void execute_sameTagNameDifferentTypes_success() {
         Person personToEdit = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
@@ -145,7 +148,9 @@ public class TagCommandTest {
         Tag roleTag = new Tag("mentor", TagType.ROLE);
         Tag generalTag = new Tag("mentor", TagType.GENERAL);
 
-        Set<Tag> tagsToAdd = Set.of(roleTag, generalTag);
+        Set<Tag> tagsToAdd = new HashSet<>();
+        tagsToAdd.add(roleTag);
+        tagsToAdd.add(generalTag);
 
         TagCommand tagCommand = new TagCommand(INDEX_FIRST_PERSON, tagsToAdd);
 
@@ -163,35 +168,9 @@ public class TagCommandTest {
                 expectedModel);
     }
 
+    // ---------------- PARTIAL SUCCESS CASES ----------------
     @Test
-    public void execute_invalidIndex_throwsCommandException() {
-        Index outOfBoundIndex = Index.fromOneBased(model.getFilteredPersonList().size() + 1);
-
-        Set<Tag> tags = new HashSet<>();
-        tags.add(new Tag("friend", TagType.GENERAL));
-
-        TagCommand tagCommand = new TagCommand(outOfBoundIndex, tags);
-        assertCommandFailure(tagCommand, model, Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
-    }
-
-    @Test
-    public void execute_duplicateTags_noDuplicatesAdded() {
-        Person personToEdit = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
-
-        Set<Tag> tags = new HashSet<>(personToEdit.getTags()); // same tags
-
-        TagCommand tagCommand = new TagCommand(INDEX_FIRST_PERSON, tags);
-
-        Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
-
-        // should remain unchanged
-        assertCommandSuccess(tagCommand, model,
-                String.format(TagCommand.MESSAGE_SUCCESS, tags),
-                expectedModel);
-    }
-
-    @Test
-    public void execute_mixedNewAndDuplicateTags_success() {
+    public void execute_mixedNewAndDuplicateTags_partialSuccess() {
         Person personToEdit = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
 
         Tag existingTag = personToEdit.getTags().iterator().next();
@@ -207,10 +186,77 @@ public class TagCommandTest {
         expectedTags.add(newTag); // only new tag added
 
         Person editedPerson = personToEdit.withTags(expectedTags);
-
         expectedModel.setPerson(personToEdit, editedPerson);
-        String expectedMessage = String.format(TagCommand.MESSAGE_SUCCESS, tagsToAdd);
+
+        Set<Tag> newTags = Set.of(newTag);
+        Set<Tag> existingTags = Set.of(existingTag);
+        String expectedMessage = String.format(TagCommand.MESSAGE_PARTIAL_SUCCESS, newTags, existingTags);
+
         assertCommandSuccess(tagCommand, model, expectedMessage, expectedModel);
+    }
+
+    @Test
+    public void execute_mixedNewAndMultipleDuplicateTags_partialSuccess() {
+        Person personToEdit = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+
+        Set<Tag> existingTags = new HashSet<>(personToEdit.getTags());
+        Tag newTag = new Tag("mentor", TagType.ROLE);
+
+        Set<Tag> tagsToAdd = new HashSet<>(existingTags);
+        tagsToAdd.add(newTag);
+
+        TagCommand tagCommand = new TagCommand(INDEX_FIRST_PERSON, tagsToAdd);
+
+        Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
+
+        Set<Tag> expectedTags = new HashSet<>(personToEdit.getTags());
+        expectedTags.add(newTag);
+
+        Person editedPerson = personToEdit.withTags(expectedTags);
+        expectedModel.setPerson(personToEdit, editedPerson);
+
+        Set<Tag> newTags = Set.of(newTag);
+        String expectedMessage = String.format(TagCommand.MESSAGE_PARTIAL_SUCCESS, newTags, existingTags);
+
+        assertCommandSuccess(tagCommand, model, expectedMessage, expectedModel);
+    }
+
+    // ---------------- FAILURE CASES - NO NEW TAGS ----------------
+    @Test
+    public void execute_duplicateTagsOnly_throwsCommandException() {
+        Person personToEdit = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+
+        Tag existingTag = personToEdit.getTags().iterator().next();
+        Set<Tag> tagsToAdd = Set.of(existingTag);
+
+        TagCommand tagCommand = new TagCommand(INDEX_FIRST_PERSON, tagsToAdd);
+
+        assertCommandFailure(tagCommand, model, TagCommand.MESSAGE_NO_NEW_TAGS);
+    }
+
+    @Test
+    public void execute_duplicateTagsMultipleOnly_throwsCommandException() {
+        Person personToEdit = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+
+        Set<Tag> tagsToAdd = new HashSet<>(personToEdit.getTags());
+
+        TagCommand tagCommand = new TagCommand(INDEX_FIRST_PERSON, tagsToAdd);
+
+        assertCommandFailure(tagCommand, model, TagCommand.MESSAGE_NO_NEW_TAGS);
+    }
+
+    // ---------------- FAILURE CASES - INVALID INDEX ----------------
+    @Test
+    public void execute_invalidIndex_throwsCommandException() {
+        Index outOfBoundIndex = Index.fromOneBased(model.getFilteredPersonList().size() + 1);
+
+        Set<Tag> tags = new HashSet<>();
+        tags.add(new Tag("friend", TagType.GENERAL));
+
+        TagCommand tagCommand = new TagCommand(outOfBoundIndex, tags);
+        String expected = String.format(Messages.MESSAGE_PERSON_NOT_FOUND_DISPLAYED_INDEX,
+                outOfBoundIndex.getOneBased());
+        assertCommandFailure(tagCommand, model, expected);
     }
 
     @Test

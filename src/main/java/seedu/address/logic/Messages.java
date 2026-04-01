@@ -31,7 +31,9 @@ public class Messages {
     public static final String MESSAGE_PERSON_NOT_FOUND_DISPLAYED_EMAIL =
                 "No person found with email: %1$s.\nTip: Use 'list' to view all persons or 'find' to find the persons.";
     public static final String MESSAGE_INVALID_PREFIX_WITH_EXTRA_INPUT =
-                "Invalid command format! \nThe prefix should not be followed by any values. \n%1$s";
+                "Invalid command format! \nInvalid command: empty value for prefix %s \n%1$s";
+    public static final String MESSAGE_INVALID_PREFIX_WITH_NO_INPUT =
+            "Invalid command format! \nEmpty value provided for prefix: %s";
     public static final String MESSAGE_NON_NUS_EMAIL = "Warning: Email is not an NUS domain.";
     public static final String MESSAGE_UNEXPECTED_EXTRA_INPUT =
             "Invalid command format! \nUnexpected extra input detected: '%s'.";

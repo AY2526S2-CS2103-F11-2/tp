@@ -1,6 +1,7 @@
 package seedu.address.logic.parser;
 
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
+import static seedu.address.logic.Messages.MESSAGE_INVALID_PREFIX_WITH_NO_INPUT;
 import static seedu.address.logic.Messages.MESSAGE_UNEXPECTED_EXTRA_INPUT;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseFailure;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseSuccess;
@@ -23,23 +24,29 @@ public class FindCommandParserTest {
 
     @Test
     public void parse_emptyNameArg_throwsParseException() {
-        assertParseFailure(parser, "n/", String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
+        assertParseFailure(parser, "n/", String.format(MESSAGE_INVALID_PREFIX_WITH_NO_INPUT, "n/"));
     }
 
     @Test
     public void parse_emptyEmailArg_throwsParseException() {
-        assertParseFailure(parser, "e/", String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
+        assertParseFailure(parser, "e/", String.format(MESSAGE_INVALID_PREFIX_WITH_NO_INPUT, "e/"));
     }
 
     @Test
     public void parse_emptyTagsArg_throwsParseException() {
-        assertParseFailure(parser, "t/", String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
+        assertParseFailure(parser, "t/", String.format(MESSAGE_INVALID_PREFIX_WITH_NO_INPUT, "t/"));
     }
 
     @Test
-    public void parse_emptyNameEmailTagArgs_throwsParseException() {
-        assertParseFailure(parser, "n/ e/ t/",
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
+    public void parse_nameNotEmptyEmailOrTagEmpty_throwsParseException() {
+        assertParseFailure(parser, "n/john e/",
+                String.format(MESSAGE_INVALID_PREFIX_WITH_NO_INPUT, "e/"));
+
+        assertParseFailure(parser, "n/john t/",
+                String.format(MESSAGE_INVALID_PREFIX_WITH_NO_INPUT, "t/"));
+
+        assertParseFailure(parser, "e/john@unus.edu t/",
+                String.format(MESSAGE_INVALID_PREFIX_WITH_NO_INPUT, "t/"));
     }
 
     @Test
@@ -80,6 +87,28 @@ public class FindCommandParserTest {
         assertParseSuccess(parser, "n/Alice Bob", expectedFindCommand);
         assertParseSuccess(parser, "n/Alice n/Bob", expectedFindCommand);
         assertParseSuccess(parser, "n/Alice \t \t \tBob", expectedFindCommand);
+    }
+
+    @Test
+    public void parse_validMultipleNamesNoStandalonePunctuation_returnsFindCommand() {
+        List<String> names = List.of("Bob", "C.", "Prim");
+
+        FindCommand expectedFindCommand =
+                new FindCommand(new NameEmailTagPredicate(names, List.of(), List.of()));
+
+        assertParseSuccess(parser, "n/Bob C. Prim", expectedFindCommand);
+        assertParseSuccess(parser, "n/Bob n/C. n/Prim", expectedFindCommand);
+    }
+
+    @Test
+    public void parse_validMultipleNamesWithStandalonePunctuation_returnsFindCommand() {
+        List<String> names = List.of("Bob", "Prim");
+
+        FindCommand expectedFindCommand =
+                new FindCommand(new NameEmailTagPredicate(names, List.of(), List.of()));
+
+        assertParseSuccess(parser, "n/Bob . Prim", expectedFindCommand);
+        assertParseSuccess(parser, "n/Bob n/. n/Prim", expectedFindCommand);
     }
 
     @Test

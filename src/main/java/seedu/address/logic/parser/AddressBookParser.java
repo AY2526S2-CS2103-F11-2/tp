@@ -89,6 +89,9 @@ public class AddressBookParser {
             return new TagCommandParser().parse(arguments);
 
         case UndoCommand.COMMAND_WORD:
+            if (!arguments.trim().isEmpty()) {
+                throw new ParseException(UndoCommand.MESSAGE_NO_PARAMETER);
+            }
             return new UndoCommand();
 
         case UntagCommand.COMMAND_WORD:

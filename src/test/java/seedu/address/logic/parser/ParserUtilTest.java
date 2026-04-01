@@ -3,8 +3,12 @@ package seedu.address.logic.parser;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_COURSE_TAG;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_GENERAL_TAG;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_INDEX;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_ROLE_TAG;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TELEGRAM_HANDLE;
 import static seedu.address.logic.parser.ParserUtil.MESSAGE_INVALID_INDEX;
 import static seedu.address.testutil.Assert.assertThrows;
@@ -43,6 +47,7 @@ public class ParserUtilTest {
     private static final String WHITESPACE = " \t\r\n";
 
     private static final Prefix[] DISALLOWED_PREFIXES = {PREFIX_PHONE, PREFIX_TELEGRAM_HANDLE, PREFIX_INDEX};
+    private static final Prefix[] AllOWED_PREFIXES = {PREFIX_ROLE_TAG, PREFIX_COURSE_TAG, PREFIX_GENERAL_TAG};
 
     @Test
     public void parseIndex_invalidInput_throwsParseException() {
@@ -374,5 +379,79 @@ public class ParserUtilTest {
         Optional<String> result = ParserUtil.findUnexpectedExtraInput(args, DISALLOWED_PREFIXES);
         assertTrue(result.isPresent());
         assertEquals("p/123", result.get());
+    }
+
+    @Test
+    public void findEmptyPrefixValues_noEmptyPrefixValues_returnsEmptyOptional() {
+        String args = " n/Alice p/12345";
+        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, PREFIX_NAME, PREFIX_PHONE);
+        Optional<String> result = ParserUtil.findEmptyPrefixValues(argMultimap, PREFIX_NAME, PREFIX_PHONE);
+
+        assertTrue(result.isEmpty());
+    }
+
+    @Test
+    public void findEmptyPrefixValues_oneEmptyPrefixValue_returnsNonEmptyOptional() {
+        String args = " p/";
+        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, PREFIX_NAME, PREFIX_PHONE);
+        Optional<String> result = ParserUtil.findEmptyPrefixValues(argMultimap, PREFIX_NAME, PREFIX_PHONE);
+
+        assertTrue(result.isPresent());
+        assertEquals(PREFIX_PHONE.getPrefix(), result.get());
+    }
+
+    @Test
+    public void findEmptyPrefixValues_mixOfEmptyAndNonPrefixValue_returnsNonEmptyOptional() {
+        String args = " n/john p/";
+        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, PREFIX_NAME, PREFIX_PHONE);
+        Optional<String> result = ParserUtil.findEmptyPrefixValues(argMultimap, PREFIX_NAME, PREFIX_PHONE);
+
+        assertTrue(result.isPresent());
+        assertEquals(PREFIX_PHONE.getPrefix(), result.get());
+    }
+
+    @Test
+    public void findInvalidPrefixInput_noPrefixes_returnsNonEmptyOptional() {
+        String args = "1";
+        Optional<String> result = ParserUtil.findInvalidPrefixInput(args, AllOWED_PREFIXES);
+        assertFalse(result.isPresent());
+    }
+
+    @Test
+    public void findInvalidPrefixInput_onlyAllowedPrefixes_returnsNonEmptyOptional() {
+        String args = "1 tr/tutor tc/cs2103 tg/friends";
+        Optional<String> result = ParserUtil.findInvalidPrefixInput(args, AllOWED_PREFIXES);
+        assertFalse(result.isPresent());
+    }
+
+    @Test
+    public void findInvalidPrefixInput_mixedAllowedAndAllowed_returnsNonEmptyOptional() {
+        String args = "1 tr/TUTOR tc/CS2103 tg/FRIENDS";
+        Optional<String> result = ParserUtil.findInvalidPrefixInput(args, AllOWED_PREFIXES);
+        assertFalse(result.isPresent());
+    }
+
+    @Test
+    public void findInvalidPrefixInput_singleInvalidPrefix_returnsInvalidToken() {
+        String args = "1 n/alice";
+        Optional<String> result = ParserUtil.findInvalidPrefixInput(args, AllOWED_PREFIXES);
+        assertTrue(result.isPresent());
+        assertEquals("n/alice", result.get());
+    }
+
+    @Test
+    public void findInvalidPrefixInput_multipleInvalidPrefixes_returnsFirstInvalidToken() {
+        String args = "1 n/alice p/12345678 e/test@example.com";
+        Optional<String> result = ParserUtil.findInvalidPrefixInput(args, AllOWED_PREFIXES);
+        assertTrue(result.isPresent());
+        assertEquals("n/alice", result.get());
+    }
+
+    @Test
+    public void findInvalidPrefixInput_mixedAllowedAndInvalid_returnsFirstInvalidToken() {
+        String args = "1 tr/tutor n/alice tg/friends";
+        Optional<String> result = ParserUtil.findInvalidPrefixInput(args, AllOWED_PREFIXES);
+        assertTrue(result.isPresent());
+        assertEquals("n/alice", result.get());
     }
 }
