@@ -59,93 +59,75 @@ public class UniquePersonListTest {
     }
 
     @Test
-    public void hasEmailConflict_nullPerson_throwsNullPointerException() {
-        assertThrows(NullPointerException.class, () -> uniquePersonList.hasEmailConflict(null));
+    public void getDuplicateConflict_nullPerson_throwsNullPointerException() {
+        assertThrows(NullPointerException.class, () -> uniquePersonList.getDuplicateConflict(null));
     }
 
     @Test
-    public void hasEmailConflict_personWithSameEmail_returnsTrue() {
+    public void getDuplicateConflict_personWithSameEmail_returnsEmail() {
         uniquePersonList.add(ALICE);
         Person editedAlice = new PersonBuilder(ALICE).withRoleTags(VALID_ROLE_TAG_TEAMMATE).build();
-        assertTrue(uniquePersonList.hasEmailConflict(editedAlice));
+
+        assertEquals(DuplicateConflict.EMAIL, uniquePersonList.getDuplicateConflict(editedAlice));
     }
 
     @Test
-    public void hasEmailConflict_personWithDifferentEmail_returnsFalse() {
-        uniquePersonList.add(ALICE);
-        assertFalse(uniquePersonList.hasEmailConflict(BOB));
-    }
-
-    @Test
-    public void hasTelegramHandleConflict_nullPerson_throwsNullPointerException() {
-        assertThrows(NullPointerException.class, () -> uniquePersonList.hasTelegramHandleConflict(null));
-    }
-
-    @Test
-    public void hasTelegramHandleConflict_personWithSameTelegramHandle_returnsTrue() {
+    public void getDuplicateConflict_personWithSameTelegramHandle_returnsTelegramHandle() {
         Person aliceWithTelegram = new PersonBuilder(ALICE).withTelegramHandle("alice123").build();
         Person editedAlice = new PersonBuilder(aliceWithTelegram).withEmail(VALID_EMAIL_BOB).build();
 
         uniquePersonList.add(aliceWithTelegram);
-        assertTrue(uniquePersonList.hasTelegramHandleConflict(editedAlice));
+
+        assertEquals(DuplicateConflict.TELEGRAM_HANDLE, uniquePersonList.getDuplicateConflict(editedAlice));
     }
 
     @Test
-    public void hasTelegramHandleConflict_personWithDifferentTelegramHandle_returnsFalse() {
+    public void getDuplicateConflict_personWithSameEmailAndTelegramHandle_returnsBoth() {
         Person aliceWithTelegram = new PersonBuilder(ALICE).withTelegramHandle("alice123").build();
-        Person bobWithTelegram = new PersonBuilder(BOB).withTelegramHandle("bob123").build();
+        Person duplicateAlice = new PersonBuilder(aliceWithTelegram).build();
 
         uniquePersonList.add(aliceWithTelegram);
-        assertFalse(uniquePersonList.hasTelegramHandleConflict(bobWithTelegram));
+
+        assertEquals(DuplicateConflict.EMAIL_AND_TELEGRAM_HANDLE,
+                uniquePersonList.getDuplicateConflict(duplicateAlice));
     }
 
     @Test
-    public void hasEmailConflictExcluding_nullTarget_throwsNullPointerException() {
-        assertThrows(NullPointerException.class, () -> uniquePersonList.hasEmailConflictExcluding(null, ALICE));
-    }
-
-    @Test
-    public void hasEmailConflictExcluding_nullPerson_throwsNullPointerException() {
-        assertThrows(NullPointerException.class, () -> uniquePersonList.hasEmailConflictExcluding(ALICE, null));
-    }
-
-    @Test
-    public void hasEmailConflictExcluding_sameTarget_returnsFalse() {
+    public void getDuplicateConflict_personWithDifferentEmailAndTelegramHandle_returnsNone() {
         uniquePersonList.add(ALICE);
-        assertFalse(uniquePersonList.hasEmailConflictExcluding(ALICE, ALICE));
+
+        assertEquals(DuplicateConflict.NONE, uniquePersonList.getDuplicateConflict(BOB));
     }
 
     @Test
-    public void hasEmailConflictExcluding_otherPersonWithSameEmail_returnsTrue() {
+    public void getDuplicateConflictExcluding_nullTarget_throwsNullPointerException() {
+        assertThrows(NullPointerException.class, () -> uniquePersonList.getDuplicateConflictExcluding(null, ALICE));
+    }
+
+    @Test
+    public void getDuplicateConflictExcluding_nullPerson_throwsNullPointerException() {
+        assertThrows(NullPointerException.class, () -> uniquePersonList.getDuplicateConflictExcluding(ALICE, null));
+    }
+
+    @Test
+    public void getDuplicateConflictExcluding_sameTarget_returnsNone() {
+        uniquePersonList.add(ALICE);
+
+        assertEquals(DuplicateConflict.NONE, uniquePersonList.getDuplicateConflictExcluding(ALICE, ALICE));
+    }
+
+    @Test
+    public void getDuplicateConflictExcluding_otherPersonWithSameEmail_returnsEmail() {
         uniquePersonList.add(ALICE);
         uniquePersonList.add(BOB);
 
         Person editedBob = new PersonBuilder(BOB).withEmail(ALICE.getEmail().value).build();
-        assertTrue(uniquePersonList.hasEmailConflictExcluding(BOB, editedBob));
+
+        assertEquals(DuplicateConflict.EMAIL, uniquePersonList.getDuplicateConflictExcluding(BOB, editedBob));
     }
 
     @Test
-    public void hasTelegramHandleConflictExcluding_nullTarget_throwsNullPointerException() {
-        assertThrows(NullPointerException.class, () ->
-                uniquePersonList.hasTelegramHandleConflictExcluding(null, ALICE));
-    }
-
-    @Test
-    public void hasTelegramHandleConflictExcluding_nullPerson_throwsNullPointerException() {
-        assertThrows(NullPointerException.class, () ->
-                uniquePersonList.hasTelegramHandleConflictExcluding(ALICE, null));
-    }
-
-    @Test
-    public void hasTelegramHandleConflictExcluding_sameTarget_returnsFalse() {
-        Person aliceWithTelegram = new PersonBuilder(ALICE).withTelegramHandle("alice123").build();
-        uniquePersonList.add(aliceWithTelegram);
-
-        assertFalse(uniquePersonList.hasTelegramHandleConflictExcluding(aliceWithTelegram, aliceWithTelegram));
-    }
-
-    @Test
-    public void hasTelegramHandleConflictExcluding_otherPersonWithSameTelegramHandle_returnsTrue() {
+    public void getDuplicateConflictExcluding_otherPersonWithSameTelegramHandle_returnsTelegramHandle() {
         Person aliceWithTelegram = new PersonBuilder(ALICE).withTelegramHandle("alice123").build();
         Person bobWithTelegram = new PersonBuilder(BOB).withTelegramHandle("bob123").build();
         Person editedBob = new PersonBuilder(bobWithTelegram).withTelegramHandle("alice123").build();
@@ -153,7 +135,8 @@ public class UniquePersonListTest {
         uniquePersonList.add(aliceWithTelegram);
         uniquePersonList.add(bobWithTelegram);
 
-        assertTrue(uniquePersonList.hasTelegramHandleConflictExcluding(bobWithTelegram, editedBob));
+        assertEquals(DuplicateConflict.TELEGRAM_HANDLE,
+                uniquePersonList.getDuplicateConflictExcluding(bobWithTelegram, editedBob));
     }
 
     @Test

@@ -6,6 +6,7 @@ import java.util.function.Predicate;
 
 import javafx.collections.ObservableList;
 import seedu.address.commons.core.GuiSettings;
+import seedu.address.model.person.DuplicateConflict;
 import seedu.address.model.person.Person;
 
 /**
@@ -59,24 +60,14 @@ public interface Model {
     boolean hasPerson(Person person);
 
     /**
-     * Returns true if a person with the same email as {@code person} exists in the address book.
+     * Returns the duplicate conflict type for {@code person}.
      */
-    boolean hasEmailConflict(Person person);
+    DuplicateConflict getDuplicateConflict(Person person);
 
     /**
-     * Returns true if another person, excluding {@code target}, has the same email as {@code person}.
+     * Returns the duplicate conflict type for {@code person}, excluding {@code target}.
      */
-    boolean hasEmailConflictExcluding(Person target, Person person);
-
-    /**
-     * Returns true if a person with the same telegram handle as {@code person} exists in the address book.
-     */
-    boolean hasTelegramHandleConflict(Person person);
-
-    /**
-     * Returns true if another person, excluding {@code target}, has the same telegram handle as {@code person}.
-     */
-    boolean hasTelegramHandleConflictExcluding(Person target, Person person);
+    DuplicateConflict getDuplicateConflictExcluding(Person target, Person person);
 
     /**
      * Deletes the given person.

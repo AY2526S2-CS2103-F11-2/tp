@@ -6,6 +6,7 @@ import java.util.List;
 
 import javafx.collections.ObservableList;
 import seedu.address.commons.util.ToStringBuilder;
+import seedu.address.model.person.DuplicateConflict;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.UniquePersonList;
 
@@ -68,37 +69,20 @@ public class AddressBook implements ReadOnlyAddressBook {
     }
 
     /**
-     * Returns true if a person with the same email as {@code person} exists in the address book.
+     * Returns the duplicate conflict type for {@code person}.
      */
-    public boolean hasEmailConflict(Person person) {
+    public DuplicateConflict getDuplicateConflict(Person person) {
         requireNonNull(person);
-        return persons.hasEmailConflict(person);
+        return persons.getDuplicateConflict(person);
     }
 
     /**
-     * Returns true if a person with the same telegram handle as {@code person} exists in the address book.
+     * Returns the duplicate conflict type for {@code person}, excluding {@code target}.
      */
-    public boolean hasTelegramHandleConflict(Person person) {
-        requireNonNull(person);
-        return persons.hasTelegramHandleConflict(person);
-    }
-
-    /**
-     * Returns true if another person, excluding {@code target}, has the same email as {@code person}.
-     */
-    public boolean hasEmailConflictExcluding(Person target, Person person) {
+    public DuplicateConflict getDuplicateConflictExcluding(Person target, Person person) {
         requireNonNull(target);
         requireNonNull(person);
-        return persons.hasEmailConflictExcluding(target, person);
-    }
-
-    /**
-     * Returns true if another person, excluding {@code target}, has the same telegram handle as {@code person}.
-     */
-    public boolean hasTelegramHandleConflictExcluding(Person target, Person person) {
-        requireNonNull(target);
-        requireNonNull(person);
-        return persons.hasTelegramHandleConflictExcluding(target, person);
+        return persons.getDuplicateConflictExcluding(target, person);
     }
 
     /**

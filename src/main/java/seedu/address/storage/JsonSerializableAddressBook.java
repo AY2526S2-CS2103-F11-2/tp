@@ -12,6 +12,7 @@ import seedu.address.commons.exceptions.IllegalValueException;
 import seedu.address.logic.Messages;
 import seedu.address.model.AddressBook;
 import seedu.address.model.ReadOnlyAddressBook;
+import seedu.address.model.person.DuplicateConflict;
 import seedu.address.model.person.Person;
 
 /**
@@ -54,16 +55,15 @@ class JsonSerializableAddressBook {
         AddressBook addressBook = new AddressBook();
         for (JsonAdaptedPerson jsonAdaptedPerson : persons) {
             Person person = jsonAdaptedPerson.toModelType();
-            boolean hasDuplicateEmail = addressBook.hasEmailConflict(person);
-            boolean hasDuplicateTelegramHandle = addressBook.hasTelegramHandleConflict(person);
+            DuplicateConflict duplicateConflict = addressBook.getDuplicateConflict(person);
 
-            if (hasDuplicateEmail && hasDuplicateTelegramHandle) {
+            if (duplicateConflict == DuplicateConflict.EMAIL_AND_TELEGRAM_HANDLE) {
                 throw new IllegalValueException(MESSAGE_DUPLICATE_EMAIL_AND_TELEGRAM_HANDLE);
             }
-            if (hasDuplicateEmail) {
+            if (duplicateConflict == DuplicateConflict.EMAIL) {
                 throw new IllegalValueException(MESSAGE_DUPLICATE_EMAIL);
             }
-            if (hasDuplicateTelegramHandle) {
+            if (duplicateConflict == DuplicateConflict.TELEGRAM_HANDLE) {
                 throw new IllegalValueException(MESSAGE_DUPLICATE_TELEGRAM_HANDLE);
             }
             addressBook.addPerson(person);

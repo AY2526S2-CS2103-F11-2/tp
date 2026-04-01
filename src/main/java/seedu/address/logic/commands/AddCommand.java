@@ -10,6 +10,7 @@ import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
+import seedu.address.model.person.DuplicateConflict;
 import seedu.address.model.person.Person;
 
 /**
@@ -53,16 +54,15 @@ public class AddCommand extends Command {
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
 
-        boolean hasDuplicateEmail = model.hasEmailConflict(toAdd);
-        boolean hasDuplicateTelegramHandle = model.hasTelegramHandleConflict(toAdd);
+        DuplicateConflict duplicateConflict = model.getDuplicateConflict(toAdd);
 
-        if (hasDuplicateEmail && hasDuplicateTelegramHandle) {
+        if (duplicateConflict == DuplicateConflict.EMAIL_AND_TELEGRAM_HANDLE) {
             throw new CommandException(MESSAGE_DUPLICATE_EMAIL_AND_TELEGRAM_HANDLE);
         }
-        if (hasDuplicateEmail) {
+        if (duplicateConflict == DuplicateConflict.EMAIL) {
             throw new CommandException(MESSAGE_DUPLICATE_EMAIL);
         }
-        if (hasDuplicateTelegramHandle) {
+        if (duplicateConflict == DuplicateConflict.TELEGRAM_HANDLE) {
             throw new CommandException(MESSAGE_DUPLICATE_TELEGRAM_HANDLE);
         }
 

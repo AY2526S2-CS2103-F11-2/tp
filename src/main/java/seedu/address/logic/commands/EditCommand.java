@@ -18,6 +18,7 @@ import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
+import seedu.address.model.person.DuplicateConflict;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
@@ -83,16 +84,15 @@ public class EditCommand extends Command {
         Person personToEdit = lastShownList.get(index.getZeroBased());
         Person editedPerson = createEditedPerson(personToEdit, editPersonDescriptor);
 
-        boolean hasDuplicateEmail = model.hasEmailConflictExcluding(personToEdit, editedPerson);
-        boolean hasDuplicateTelegramHandle = model.hasTelegramHandleConflictExcluding(personToEdit, editedPerson);
+        DuplicateConflict duplicateConflict = model.getDuplicateConflictExcluding(personToEdit, editedPerson);
 
-        if (hasDuplicateEmail && hasDuplicateTelegramHandle) {
+        if (duplicateConflict == DuplicateConflict.EMAIL_AND_TELEGRAM_HANDLE) {
             throw new CommandException(MESSAGE_DUPLICATE_EMAIL_AND_TELEGRAM_HANDLE);
         }
-        if (hasDuplicateEmail) {
+        if (duplicateConflict == DuplicateConflict.EMAIL) {
             throw new CommandException(MESSAGE_DUPLICATE_EMAIL);
         }
-        if (hasDuplicateTelegramHandle) {
+        if (duplicateConflict == DuplicateConflict.TELEGRAM_HANDLE) {
             throw new CommandException(MESSAGE_DUPLICATE_TELEGRAM_HANDLE);
         }
 
@@ -121,16 +121,15 @@ public class EditCommand extends Command {
             throw new CommandException(MESSAGE_UNDO_FAILURE);
         }
 
-        boolean hasDuplicateEmail = model.hasEmailConflictExcluding(updatedPerson, originalPerson);
-        boolean hasDuplicateTelegramHandle = model.hasTelegramHandleConflictExcluding(updatedPerson, originalPerson);
+        DuplicateConflict duplicateConflict = model.getDuplicateConflictExcluding(updatedPerson, originalPerson);
 
-        if (hasDuplicateEmail && hasDuplicateTelegramHandle) {
+        if (duplicateConflict == DuplicateConflict.EMAIL_AND_TELEGRAM_HANDLE) {
             throw new CommandException(MESSAGE_DUPLICATE_EMAIL_AND_TELEGRAM_HANDLE);
         }
-        if (hasDuplicateEmail) {
+        if (duplicateConflict == DuplicateConflict.EMAIL) {
             throw new CommandException(MESSAGE_DUPLICATE_EMAIL);
         }
-        if (hasDuplicateTelegramHandle) {
+        if (duplicateConflict == DuplicateConflict.TELEGRAM_HANDLE) {
             throw new CommandException(MESSAGE_DUPLICATE_TELEGRAM_HANDLE);
         }
 

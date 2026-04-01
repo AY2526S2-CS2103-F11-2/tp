@@ -29,6 +29,7 @@ import seedu.address.model.ModelManager;
 import seedu.address.model.ReadOnlyAddressBook;
 import seedu.address.model.ReadOnlyUserPrefs;
 import seedu.address.model.UserPrefs;
+import seedu.address.model.person.DuplicateConflict;
 import seedu.address.model.person.Person;
 import seedu.address.testutil.PersonBuilder;
 import seedu.address.testutil.TypicalPersons;
@@ -240,26 +241,6 @@ public class AddCommandTest {
         }
 
         @Override
-        public boolean hasEmailConflict(Person person) {
-            throw new AssertionError("This method should not be called.");
-        }
-
-        @Override
-        public boolean hasTelegramHandleConflict(Person person) {
-            throw new AssertionError("This method should not be called.");
-        }
-
-        @Override
-        public boolean hasEmailConflictExcluding(Person target, Person person) {
-            throw new AssertionError("This method should not be called.");
-        }
-
-        @Override
-        public boolean hasTelegramHandleConflictExcluding(Person target, Person person) {
-            throw new AssertionError("This method should not be called.");
-        }
-
-        @Override
         public void deletePerson(Person target) {
             throw new AssertionError("This method should not be called.");
         }
@@ -283,6 +264,16 @@ public class AddCommandTest {
         public void updateSortedPersonList(Comparator<Person> comparator) {
             throw new AssertionError("This method should not be called.");
         }
+
+        @Override
+        public DuplicateConflict getDuplicateConflict(Person person) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public DuplicateConflict getDuplicateConflictExcluding(Person target, Person person) {
+            throw new AssertionError("This method should not be called.");
+        }
     }
 
 
@@ -304,15 +295,22 @@ public class AddCommandTest {
         }
 
         @Override
-        public boolean hasEmailConflict(Person person) {
+        public DuplicateConflict getDuplicateConflict(Person person) {
             requireNonNull(person);
-            return this.person.hasSameEmail(person);
-        }
 
-        @Override
-        public boolean hasTelegramHandleConflict(Person person) {
-            requireNonNull(person);
-            return this.person.hasSameTelegramHandle(person);
+            boolean hasDuplicateEmail = this.person.hasSameEmail(person);
+            boolean hasDuplicateTelegramHandle = this.person.hasSameTelegramHandle(person);
+
+            if (hasDuplicateEmail && hasDuplicateTelegramHandle) {
+                return DuplicateConflict.EMAIL_AND_TELEGRAM_HANDLE;
+            }
+            if (hasDuplicateEmail) {
+                return DuplicateConflict.EMAIL;
+            }
+            if (hasDuplicateTelegramHandle) {
+                return DuplicateConflict.TELEGRAM_HANDLE;
+            }
+            return DuplicateConflict.NONE;
         }
     }
 
@@ -329,15 +327,24 @@ public class AddCommandTest {
         }
 
         @Override
-        public boolean hasEmailConflict(Person person) {
+        public DuplicateConflict getDuplicateConflict(Person person) {
             requireNonNull(person);
-            return personsAdded.stream().anyMatch(existingPerson -> existingPerson.hasSameEmail(person));
-        }
 
-        @Override
-        public boolean hasTelegramHandleConflict(Person person) {
-            requireNonNull(person);
-            return personsAdded.stream().anyMatch(existingPerson -> existingPerson.hasSameTelegramHandle(person));
+            boolean hasDuplicateEmail = personsAdded.stream()
+                    .anyMatch(existingPerson -> existingPerson.hasSameEmail(person));
+            boolean hasDuplicateTelegramHandle = personsAdded.stream()
+                    .anyMatch(existingPerson -> existingPerson.hasSameTelegramHandle(person));
+
+            if (hasDuplicateEmail && hasDuplicateTelegramHandle) {
+                return DuplicateConflict.EMAIL_AND_TELEGRAM_HANDLE;
+            }
+            if (hasDuplicateEmail) {
+                return DuplicateConflict.EMAIL;
+            }
+            if (hasDuplicateTelegramHandle) {
+                return DuplicateConflict.TELEGRAM_HANDLE;
+            }
+            return DuplicateConflict.NONE;
         }
 
         @Override

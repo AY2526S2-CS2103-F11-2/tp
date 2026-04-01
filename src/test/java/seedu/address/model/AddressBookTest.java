@@ -18,6 +18,7 @@ import org.junit.jupiter.api.Test;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import seedu.address.model.person.DuplicateConflict;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.exceptions.DuplicatePersonException;
 import seedu.address.testutil.PersonBuilder;
@@ -104,92 +105,64 @@ public class AddressBookTest {
     }
 
     @Test
-    public void hasEmailConflict_nullPerson_throwsNullPointerException() {
-        assertThrows(NullPointerException.class, () -> addressBook.hasEmailConflict(null));
+    public void getDuplicateConflict_nullPerson_throwsNullPointerException() {
+        assertThrows(NullPointerException.class, () -> addressBook.getDuplicateConflict(null));
     }
 
     @Test
-    public void hasEmailConflictExcluding_nullTarget_throwsNullPointerException() {
-        assertThrows(NullPointerException.class, () -> addressBook.hasEmailConflictExcluding(null, ALICE));
-    }
-
-    @Test
-    public void hasEmailConflictExcluding_nullPerson_throwsNullPointerException() {
-        assertThrows(NullPointerException.class, () -> addressBook.hasEmailConflictExcluding(ALICE, null));
-    }
-
-    @Test
-    public void hasEmailConflict_personWithSameEmailInAddressBook_returnsTrue() {
+    public void getDuplicateConflict_personWithSameEmailInAddressBook_returnsEmail() {
         addressBook.addPerson(ALICE);
         Person editedAlice = new PersonBuilder(ALICE).withRoleTags(VALID_ROLE_TAG_TEAMMATE).build();
-        assertTrue(addressBook.hasEmailConflict(editedAlice));
+
+        assertEquals(DuplicateConflict.EMAIL, addressBook.getDuplicateConflict(editedAlice));
     }
 
     @Test
-    public void hasEmailConflict_personWithDifferentEmailInAddressBook_returnsFalse() {
-        addressBook.addPerson(ALICE);
-        assertFalse(addressBook.hasEmailConflict(BOB));
-    }
-
-    @Test
-    public void hasEmailConflictExcluding_sameTarget_returnsFalse() {
-        addressBook.addPerson(ALICE);
-        assertFalse(addressBook.hasEmailConflictExcluding(ALICE, ALICE));
-    }
-
-    @Test
-    public void hasEmailConflictExcluding_otherPersonWithSameEmail_returnsTrue() {
-        addressBook.addPerson(ALICE);
-        addressBook.addPerson(BOB);
-
-        Person editedBob = new PersonBuilder(BOB).withEmail(ALICE.getEmail().value).build();
-        assertTrue(addressBook.hasEmailConflictExcluding(BOB, editedBob));
-    }
-
-    @Test
-    public void hasTelegramHandleConflict_nullPerson_throwsNullPointerException() {
-        assertThrows(NullPointerException.class, () -> addressBook.hasTelegramHandleConflict(null));
-    }
-
-    @Test
-    public void hasTelegramHandleConflictExcluding_nullTarget_throwsNullPointerException() {
-        assertThrows(NullPointerException.class, () -> addressBook.hasTelegramHandleConflictExcluding(null, ALICE));
-    }
-
-    @Test
-    public void hasTelegramHandleConflictExcluding_nullPerson_throwsNullPointerException() {
-        assertThrows(NullPointerException.class, () ->
-                addressBook.hasTelegramHandleConflictExcluding(ALICE, null));
-    }
-
-    @Test
-    public void hasTelegramHandleConflict_personWithSameTelegramHandleInAddressBook_returnsTrue() {
+    public void getDuplicateConflict_personWithSameTelegramHandleInAddressBook_returnsTelegramHandle() {
         Person aliceWithTelegram = new PersonBuilder(ALICE).withTelegramHandle("alice123").build();
         Person editedAlice = new PersonBuilder(aliceWithTelegram).withEmail("different@example.com").build();
 
         addressBook.addPerson(aliceWithTelegram);
-        assertTrue(addressBook.hasTelegramHandleConflict(editedAlice));
+
+        assertEquals(DuplicateConflict.TELEGRAM_HANDLE, addressBook.getDuplicateConflict(editedAlice));
     }
 
     @Test
-    public void hasTelegramHandleConflict_personWithDifferentTelegramHandleInAddressBook_returnsFalse() {
-        Person aliceWithTelegram = new PersonBuilder(ALICE).withTelegramHandle("alice123").build();
-        Person bobWithTelegram = new PersonBuilder(BOB).withTelegramHandle("bob123").build();
+    public void getDuplicateConflict_personWithDifferentEmailAndTelegramHandle_returnsNone() {
+        addressBook.addPerson(ALICE);
 
-        addressBook.addPerson(aliceWithTelegram);
-        assertFalse(addressBook.hasTelegramHandleConflict(bobWithTelegram));
+        assertEquals(DuplicateConflict.NONE, addressBook.getDuplicateConflict(BOB));
     }
 
     @Test
-    public void hasTelegramHandleConflictExcluding_sameTarget_returnsFalse() {
-        Person aliceWithTelegram = new PersonBuilder(ALICE).withTelegramHandle("alice123").build();
-        addressBook.addPerson(aliceWithTelegram);
-
-        assertFalse(addressBook.hasTelegramHandleConflictExcluding(aliceWithTelegram, aliceWithTelegram));
+    public void getDuplicateConflictExcluding_nullTarget_throwsNullPointerException() {
+        assertThrows(NullPointerException.class, () -> addressBook.getDuplicateConflictExcluding(null, ALICE));
     }
 
     @Test
-    public void hasTelegramHandleConflictExcluding_otherPersonWithSameTelegramHandle_returnsTrue() {
+    public void getDuplicateConflictExcluding_nullPerson_throwsNullPointerException() {
+        assertThrows(NullPointerException.class, () -> addressBook.getDuplicateConflictExcluding(ALICE, null));
+    }
+
+    @Test
+    public void getDuplicateConflictExcluding_sameTarget_returnsNone() {
+        addressBook.addPerson(ALICE);
+
+        assertEquals(DuplicateConflict.NONE, addressBook.getDuplicateConflictExcluding(ALICE, ALICE));
+    }
+
+    @Test
+    public void getDuplicateConflictExcluding_otherPersonWithSameEmail_returnsEmail() {
+        addressBook.addPerson(ALICE);
+        addressBook.addPerson(BOB);
+
+        Person editedBob = new PersonBuilder(BOB).withEmail(ALICE.getEmail().value).build();
+
+        assertEquals(DuplicateConflict.EMAIL, addressBook.getDuplicateConflictExcluding(BOB, editedBob));
+    }
+
+    @Test
+    public void getDuplicateConflictExcluding_otherPersonWithSameTelegramHandle_returnsTelegramHandle() {
         Person aliceWithTelegram = new PersonBuilder(ALICE).withTelegramHandle("alice123").build();
         Person bobWithTelegram = new PersonBuilder(BOB).withTelegramHandle("bob123").build();
         Person editedBob = new PersonBuilder(bobWithTelegram).withTelegramHandle("alice123").build();
@@ -197,7 +170,8 @@ public class AddressBookTest {
         addressBook.addPerson(aliceWithTelegram);
         addressBook.addPerson(bobWithTelegram);
 
-        assertTrue(addressBook.hasTelegramHandleConflictExcluding(bobWithTelegram, editedBob));
+        assertEquals(DuplicateConflict.TELEGRAM_HANDLE,
+                addressBook.getDuplicateConflictExcluding(bobWithTelegram, editedBob));
     }
 
     @Test

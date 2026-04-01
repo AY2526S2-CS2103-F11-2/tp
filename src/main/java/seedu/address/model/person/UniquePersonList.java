@@ -37,41 +37,19 @@ public class UniquePersonList implements Iterable<Person> {
     }
 
     /**
-     * Returns true if the list contains a person with the same email as {@code toCheck}.
+     * Returns the duplicate conflict type for {@code toCheck}.
      */
-    public boolean hasEmailConflict(Person toCheck) {
+    public DuplicateConflict getDuplicateConflict(Person toCheck) {
         requireNonNull(toCheck);
-        return internalList.stream().anyMatch(existingPerson -> existingPerson.hasSameEmail(toCheck));
+        return findDuplicateConflict(toCheck, null);
     }
 
     /**
-     * Returns true if the list contains a person with the same telegram handle as {@code toCheck}.
+     * Returns the duplicate conflict type for {@code toCheck}, excluding {@code target}.
      */
-    public boolean hasTelegramHandleConflict(Person toCheck) {
-        requireNonNull(toCheck);
-        return internalList.stream().anyMatch(existingPerson -> existingPerson.hasSameTelegramHandle(toCheck));
-    }
-
-    /**
-     * Returns true if the list contains another person, excluding {@code target},
-     * with the same email as {@code toCheck}.
-     */
-    public boolean hasEmailConflictExcluding(Person target, Person toCheck) {
+    public DuplicateConflict getDuplicateConflictExcluding(Person target, Person toCheck) {
         requireAllNonNull(target, toCheck);
-        return internalList.stream()
-                .filter(existingPerson -> !existingPerson.equals(target))
-                .anyMatch(existingPerson -> existingPerson.hasSameEmail(toCheck));
-    }
-
-    /**
-     * Returns true if the list contains another person, excluding {@code target},
-     * with the same telegram handle as {@code toCheck}.
-     */
-    public boolean hasTelegramHandleConflictExcluding(Person target, Person toCheck) {
-        requireAllNonNull(target, toCheck);
-        return internalList.stream()
-                .filter(existingPerson -> !existingPerson.equals(target))
-                .anyMatch(existingPerson -> existingPerson.hasSameTelegramHandle(toCheck));
+        return findDuplicateConflict(toCheck, target);
     }
 
     /**
@@ -187,6 +165,35 @@ public class UniquePersonList implements Iterable<Person> {
     @Override
     public String toString() {
         return internalList.toString();
+    }
+
+    /**
+     * Returns the duplicate conflict type for {@code toCheck}, optionally excluding {@code targetToExclude}.
+     */
+    private DuplicateConflict findDuplicateConflict(Person toCheck, Person targetToExclude) {
+        boolean hasDuplicateEmail = false;
+        boolean hasDuplicateTelegramHandle = false;
+
+        for (Person existingPerson : internalList) {
+            if (targetToExclude != null && existingPerson.equals(targetToExclude)) {
+                continue;
+            }
+
+            hasDuplicateEmail |= existingPerson.hasSameEmail(toCheck);
+            hasDuplicateTelegramHandle |= existingPerson.hasSameTelegramHandle(toCheck);
+
+            if (hasDuplicateEmail && hasDuplicateTelegramHandle) {
+                return DuplicateConflict.EMAIL_AND_TELEGRAM_HANDLE;
+            }
+        }
+
+        if (hasDuplicateEmail) {
+            return DuplicateConflict.EMAIL;
+        }
+        if (hasDuplicateTelegramHandle) {
+            return DuplicateConflict.TELEGRAM_HANDLE;
+        }
+        return DuplicateConflict.NONE;
     }
 
     /**
