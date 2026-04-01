@@ -471,7 +471,7 @@ Use case ends.
   Steps 3a1 - 3a3 are repeated until input is valid.
   Use case resumes at step 4.
 
-* 4a. No contacts exist in the list.
+* 4a. No contacts match the search query.
     * 4a1. CampusBridge informs the user that no contacts match the search query.
 
   Use case ends.
