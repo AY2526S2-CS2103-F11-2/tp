@@ -19,6 +19,8 @@ public class JsonSerializableAddressBookTest {
     private static final Path TYPICAL_PERSONS_FILE = TEST_DATA_FOLDER.resolve("typicalPersonsAddressBook.json");
     private static final Path INVALID_PERSON_FILE = TEST_DATA_FOLDER.resolve("invalidPersonAddressBook.json");
     private static final Path DUPLICATE_EMAIL_PERSON_FILE = TEST_DATA_FOLDER.resolve("duplicateEmailAddressBook.json");
+    private static final Path DUPLICATE_EMAIL_AND_TELEGRAM_HANDLE_PERSON_FILE =
+            TEST_DATA_FOLDER.resolve("duplicateEmailAndTelegramHandleAddressBook.json");
     private static final Path DUPLICATE_TELEGRAM_HANDLE_PERSON_FILE =
             TEST_DATA_FOLDER.resolve("duplicateTelegramHandleAddressBook.json");
 
@@ -43,7 +45,7 @@ public class JsonSerializableAddressBookTest {
     public void toModelType_duplicateEmailPersons_throwsIllegalValueException() throws Exception {
         JsonSerializableAddressBook dataFromFile = JsonUtil.readJsonFile(DUPLICATE_EMAIL_PERSON_FILE,
                 JsonSerializableAddressBook.class).get();
-        assertThrows(IllegalValueException.class, JsonSerializableAddressBook.MESSAGE_DUPLICATE_PERSON,
+        assertThrows(IllegalValueException.class, JsonSerializableAddressBook.MESSAGE_DUPLICATE_EMAIL,
                 dataFromFile::toModelType);
     }
 
@@ -51,7 +53,7 @@ public class JsonSerializableAddressBookTest {
     public void toModelType_duplicateTelegramHandlePersons_throwsIllegalValueException() throws Exception {
         JsonSerializableAddressBook dataFromFile = JsonUtil.readJsonFile(DUPLICATE_TELEGRAM_HANDLE_PERSON_FILE,
                 JsonSerializableAddressBook.class).get();
-        assertThrows(IllegalValueException.class, JsonSerializableAddressBook.MESSAGE_DUPLICATE_PERSON,
+        assertThrows(IllegalValueException.class, JsonSerializableAddressBook.MESSAGE_DUPLICATE_TELEGRAM_HANDLE,
                 dataFromFile::toModelType);
     }
 
@@ -60,7 +62,17 @@ public class JsonSerializableAddressBookTest {
         JsonSerializableAddressBook dataFromFile = JsonUtil.readJsonFile(
                 TEST_DATA_FOLDER.resolve("duplicateTelegramHandleDifferentCaseAddressBook.json"),
                 JsonSerializableAddressBook.class).get();
-        assertThrows(IllegalValueException.class, JsonSerializableAddressBook.MESSAGE_DUPLICATE_PERSON,
+        assertThrows(IllegalValueException.class, JsonSerializableAddressBook.MESSAGE_DUPLICATE_TELEGRAM_HANDLE,
+                dataFromFile::toModelType);
+    }
+
+    @Test
+    public void toModelType_duplicateEmailAndTelegramHandlePersons_throwsIllegalValueException() throws Exception {
+        JsonSerializableAddressBook dataFromFile = JsonUtil.readJsonFile(
+                DUPLICATE_EMAIL_AND_TELEGRAM_HANDLE_PERSON_FILE,
+                JsonSerializableAddressBook.class).get();
+        assertThrows(IllegalValueException.class,
+                JsonSerializableAddressBook.MESSAGE_DUPLICATE_EMAIL_AND_TELEGRAM_HANDLE,
                 dataFromFile::toModelType);
     }
 }

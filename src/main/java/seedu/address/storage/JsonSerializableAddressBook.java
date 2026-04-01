@@ -19,7 +19,12 @@ import seedu.address.model.person.Person;
 @JsonRootName(value = "addressbook")
 class JsonSerializableAddressBook {
 
-    public static final String MESSAGE_DUPLICATE_PERSON = "Persons list contains duplicate person(s).";
+    public static final String MESSAGE_DUPLICATE_EMAIL =
+            "Persons list contains duplicate email(s).";
+    public static final String MESSAGE_DUPLICATE_TELEGRAM_HANDLE =
+            "Persons list contains duplicate Telegram handle(s).";
+    public static final String MESSAGE_DUPLICATE_EMAIL_AND_TELEGRAM_HANDLE =
+            "Persons list contains duplicate email(s) and Telegram handle(s).";
 
     private final List<JsonAdaptedPerson> persons = new ArrayList<>();
 
@@ -49,8 +54,17 @@ class JsonSerializableAddressBook {
         AddressBook addressBook = new AddressBook();
         for (JsonAdaptedPerson jsonAdaptedPerson : persons) {
             Person person = jsonAdaptedPerson.toModelType();
-            if (addressBook.hasPerson(person)) {
-                throw new IllegalValueException(MESSAGE_DUPLICATE_PERSON);
+            boolean hasDuplicateEmail = addressBook.hasEmailConflict(person);
+            boolean hasDuplicateTelegramHandle = addressBook.hasTelegramHandleConflict(person);
+
+            if (hasDuplicateEmail && hasDuplicateTelegramHandle) {
+                throw new IllegalValueException(MESSAGE_DUPLICATE_EMAIL_AND_TELEGRAM_HANDLE);
+            }
+            if (hasDuplicateEmail) {
+                throw new IllegalValueException(MESSAGE_DUPLICATE_EMAIL);
+            }
+            if (hasDuplicateTelegramHandle) {
+                throw new IllegalValueException(MESSAGE_DUPLICATE_TELEGRAM_HANDLE);
             }
             addressBook.addPerson(person);
         }
