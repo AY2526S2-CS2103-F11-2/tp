@@ -90,6 +90,13 @@ public class NameEmailTagPredicateTest {
     }
 
     @Test
+    public void test_nameFuzzyMatch_returnsTrue() {
+        NameEmailTagPredicate predicate = new NameEmailTagPredicate(
+                List.of("Alie"), List.of(), List.of());
+        assertTrue(predicate.test(ALICE));
+    }
+
+    @Test
     public void test_emailOnlyMatch_returnsTrue() {
         NameEmailTagPredicate predicate = new NameEmailTagPredicate(
                 List.of(), List.of("example.com"), List.of());
