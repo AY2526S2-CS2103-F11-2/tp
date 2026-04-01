@@ -8,6 +8,7 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_ROLE_TAG;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.ToStringBuilder;
@@ -35,6 +36,9 @@ public class TagCommand extends Command {
             + PREFIX_COURSE_TAG + "cs2103 " + PREFIX_GENERAL_TAG + "friends";
 
     public static final String MESSAGE_SUCCESS = "New tags added: %1$s";
+    public static final String MESSAGE_PARTIAL_SUCCESS =
+            "New tags added: %1$s\nTags already existing (no changes made): %2$s";
+    public static final String MESSAGE_NO_NEW_TAGS = "All tags already exist for this person. No changes made.";
     public static final String MESSAGE_UNDO_SUCCESS = "Undo tag operation for: %1$s";
     public static final String MESSAGE_UNDO_FAILURE = "Cannot undo tag before command execution.";
 
@@ -69,9 +73,25 @@ public class TagCommand extends Command {
         Person personToAddTag = lastShownList.get(index.getZeroBased());
         originalPerson = personToAddTag;
 
+        Set<Tag> existingTags = personToAddTag.getTags();
+        // separate tags into new and existing
+        Set<Tag> newTags = tagsToAdd.stream()
+                .filter(tag -> !existingTags.contains(tag))
+                .collect(Collectors.toSet());
+
+        Set<Tag> existingTagsFromInput = tagsToAdd.stream()
+                .filter(tag -> existingTags.contains(tag))
+                .collect(Collectors.toSet());
+
+        // no new tags to add
+        if (newTags.isEmpty()) {
+            // existingTagsFromInput should not be empty due to parser validation
+            throw new CommandException(String.format(MESSAGE_NO_NEW_TAGS));
+        }
+
         // merge existing tags with new tags
-        Set<Tag> updatedTags = new HashSet<>(personToAddTag.getTags());
-        updatedTags.addAll(tagsToAdd);
+        Set<Tag> updatedTags = new HashSet<>(existingTags);
+        updatedTags.addAll(newTags);
 
         Person editedPerson = personToAddTag.withTags(updatedTags);
         updatedPerson = editedPerson;
@@ -79,7 +99,12 @@ public class TagCommand extends Command {
         model.setPerson(personToAddTag, editedPerson);
         model.updateFilteredPersonList(Model.PREDICATE_SHOW_ALL_PERSONS);
 
-        return new CommandResult(String.format(MESSAGE_SUCCESS, tagsToAdd));
+        if (existingTagsFromInput.isEmpty()) {
+            return new CommandResult(String.format(MESSAGE_SUCCESS, newTags));
+        }
+        return new CommandResult(String.format(
+                MESSAGE_PARTIAL_SUCCESS, newTags, existingTagsFromInput
+        ));
     }
 
     @Override

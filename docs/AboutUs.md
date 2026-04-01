@@ -49,7 +49,6 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 <img src="images/calijacked.png" width="200px">
 
 [[github](http://github.com/calijacked)]
-[[portfolio](team/jack.md)]
 
 * Role: Developer
 * Responsibilities: Documentation, Git Expert, Integration
