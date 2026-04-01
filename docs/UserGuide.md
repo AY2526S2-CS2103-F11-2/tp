@@ -511,6 +511,10 @@ If your changes to the data file makes its format invalid, CampusBridge will dis
 Furthermore, certain edits can cause CampusBridge to behave in unexpected ways (e.g., if a value entered is outside of the acceptable range). Therefore, edit the data file only if you are confident that you can update it correctly.
 </div>
 
+### Clearing tags of multiple types from a person [coming in v2.0]
+
+_Details coming soon …_
+
 --------------------------------------------------------------------------------------------------------------------
 
 ## FAQ
