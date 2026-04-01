@@ -18,7 +18,7 @@ public class CliSyntax {
     public static final Prefix PREFIX_COURSE_TAG = new Prefix("tc/");
     public static final Prefix PREFIX_GENERAL_TAG = new Prefix("tg/");
 
-    public static final Prefix[] ADD_COMMAND_PREFIXES = {
+    public static final Prefix[] ADD_EDIT_COMMAND_PREFIXES = {
         PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL, PREFIX_TELEGRAM_HANDLE
     };
 

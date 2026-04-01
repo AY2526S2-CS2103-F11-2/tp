@@ -2,7 +2,7 @@ package seedu.address.logic.parser;
 
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.Messages.MESSAGE_UNEXPECTED_EXTRA_INPUT;
-import static seedu.address.logic.parser.CliSyntax.ADD_COMMAND_PREFIXES;
+import static seedu.address.logic.parser.CliSyntax.ADD_EDIT_COMMAND_PREFIXES;
 import static seedu.address.logic.parser.CliSyntax.NON_ADD_COMMAND_PREFIXES;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
@@ -39,14 +39,14 @@ public class AddCommandParser implements Parser<AddCommand> {
             throw new ParseException(String.format(MESSAGE_UNEXPECTED_EXTRA_INPUT, unexpectedInput.get()));
         }
 
-        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(leadingSpacedArgs, ADD_COMMAND_PREFIXES);
+        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(leadingSpacedArgs, ADD_EDIT_COMMAND_PREFIXES);
 
         if (!arePrefixesPresent(argMultimap, PREFIX_NAME, PREFIX_EMAIL)
                 || !argMultimap.getPreamble().isEmpty()) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
         }
 
-        argMultimap.verifyNoDuplicatePrefixesFor(ADD_COMMAND_PREFIXES);
+        argMultimap.verifyNoDuplicatePrefixesFor(ADD_EDIT_COMMAND_PREFIXES);
         Name name = ParserUtil.parseName(argMultimap.getValue(PREFIX_NAME).get());
         Phone phone = null;
         if (argMultimap.getValue(PREFIX_PHONE).isPresent()) {

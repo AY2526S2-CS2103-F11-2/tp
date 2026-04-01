@@ -1,14 +1,8 @@
 package seedu.address.logic.parser;
 
 import static java.util.Objects.requireNonNull;
-import static seedu.address.logic.Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_COURSE_TAG;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_GENERAL_TAG;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_ROLE_TAG;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_TELEGRAM_HANDLE;
+import static seedu.address.logic.Messages.MESSAGE_UNEXPECTED_EXTRA_INPUT;
+import static seedu.address.logic.parser.CliSyntax.*;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -38,13 +32,13 @@ public class EditCommandParser implements Parser<EditCommand> {
                 ArgumentTokenizer.tokenize(args, PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL,
                         PREFIX_TELEGRAM_HANDLE, PREFIX_ROLE_TAG, PREFIX_COURSE_TAG, PREFIX_GENERAL_TAG);
 
-        Index index;
-
-        try {
-            index = ParserUtil.parseIndex(argMultimap.getPreamble());
-        } catch (ParseException pe) {
-            throw new ParseException(MESSAGE_INVALID_PERSON_DISPLAYED_INDEX, pe);
+        Optional<String> invalidPrefix = ParserUtil.findInvalidPrefixInput(args, ADD_EDIT_COMMAND_PREFIXES);
+        if (invalidPrefix.isPresent()) {
+            throw new ParseException(String.format(MESSAGE_UNEXPECTED_EXTRA_INPUT, invalidPrefix.get()));
         }
+
+        Index index = ParserUtil.parseIndex(argMultimap.getPreamble());
+
 
         argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL, PREFIX_TELEGRAM_HANDLE);
 
