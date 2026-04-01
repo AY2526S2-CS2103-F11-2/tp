@@ -513,6 +513,40 @@ Use case ends.
 
   Use case ends.
 
+#### Use Case: UC07 - Navigate command history
+
+**Preconditions: Application is running and the user has entered at least one command.**
+
+**MSS:**
+1. User presses the UP arrow key in the command box.
+2. CampusBridge displays the most recently entered command in the command box.
+3. User presses the UP arrow key again to view an older command, or the DOWN arrow key to view a newer command.
+4. User presses Enter to execute the displayed command.
+5. CampusBridge executes the command and shows the result.
+
+Use case ends.
+
+**Extensions:**
+* 1a. No commands have been entered yet.
+    * 1a1. CampusBridge does not change the command box content.
+
+  Use case ends.
+
+* 3a. User presses UP when already at the oldest command in history.
+    * 3a1. CampusBridge does not change the command box content.
+
+  Use case resumes at step 3.
+
+* 3b. User presses DOWN when already at the newest position (empty input).
+    * 3b1. CampusBridge does not change the command box content.
+
+  Use case resumes at step 3.
+
+* 4a. The displayed command is invalid.
+    * 4a1. CampusBridge shows an error message indicating the invalid command.
+
+  Use case ends.
+
 
 ### Non-Functional Requirements
 
