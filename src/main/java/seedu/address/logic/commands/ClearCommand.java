@@ -12,6 +12,7 @@ import seedu.address.model.Model;
 public class ClearCommand extends Command {
 
     public static final String COMMAND_WORD = "clear";
+    public static final String MESSAGE_NO_PARAMETER = "Clear command does not take in any parameter.";
     public static final String MESSAGE_SUCCESS = "Address book has been cleared!";
     public static final String MESSAGE_UNDO_SUCCESS = "Undo clear address book.";
     public static final String MESSAGE_UNDO_FAILURE = "Cannot undo clear before command execution.";

@@ -62,8 +62,8 @@ CampusBridge is a **desktop app for managing contacts, optimized for use via a C
 * Parameters can be in any order.<br>
   e.g. if the command specifies `n/NAME p/PHONE_NUMBER`, `p/PHONE_NUMBER n/NAME` is also acceptable.
 
-* Extraneous parameters for commands that do not take in parameters (such as `list`, `exit` and `clear`) will be ignored.<br>
-  e.g. if the command specifies `list 123`, it will be interpreted as `list`.
+* Commands that do not take parameters (such as `list`, `exit` and `clear`) will show an error if extra arguments are provided.<br>
+  e.g. `list 123` will result in an error instead of being interpreted as `list`.
 
 * Prefixes are case-insensitive.<br>
   e.g. n/NAME and N/NAME are treated the same way.
@@ -341,6 +341,8 @@ Shows a list of all persons in the address book.
 
 **Format:** `list`
 
+* Does not accept any additional arguments. Extra text after `list` will result in an error.
+
 Alternatively, press `F2` to list all contacts.
 
 ### Sorting persons : `sort`
@@ -508,11 +510,15 @@ Clears all entries from the address book.
 
 **Format:** `clear`
 
+* Does not accept any additional arguments. Extra text after `clear` will result in an error.
+
 ### Exiting the program : `exit`
 
 Exits the program.
 
 **Format:** `exit`
+
+* Does not accept any additional arguments. Extra text after `exit` will result in an error.
 
 Alternatively, press `F3` to exit the application.
 

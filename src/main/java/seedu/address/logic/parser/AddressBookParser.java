@@ -68,15 +68,24 @@ public class AddressBookParser {
             return new DeleteCommandParser().parse(arguments);
 
         case ClearCommand.COMMAND_WORD:
+            if (!arguments.trim().isEmpty()) {
+                throw new ParseException(ClearCommand.MESSAGE_NO_PARAMETER);
+            }
             return new ClearCommand();
 
         case FindCommand.COMMAND_WORD:
             return new FindCommandParser().parse(arguments);
 
         case ListCommand.COMMAND_WORD:
+            if (!arguments.trim().isEmpty()) {
+                throw new ParseException(ListCommand.MESSAGE_NO_PARAMETER);
+            }
             return new ListCommand();
 
         case ExitCommand.COMMAND_WORD:
+            if (!arguments.trim().isEmpty()) {
+                throw new ParseException(ExitCommand.MESSAGE_NO_PARAMETER);
+            }
             return new ExitCommand();
 
         case HelpCommand.COMMAND_WORD:
