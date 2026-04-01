@@ -156,6 +156,7 @@ Adds a person to the address book.
 * If no Telegram handle is provided, the contact will be created without one.
 * Email must be unique. You cannot add two persons with the same email address.
 * Telegram handle, if provided, must be unique. You cannot add two persons with the same Telegram handle.
+* Telegram handles are treated case-insensitively for duplicate detection. For example, `handle1` and `HANDLE1` are considered the same handle.
 
 <div markdown="span" class="alert alert-primary">:bulb: **Tip:**
 Parameters can be entered in any order, as long as each value is preceded by the correct prefix.
@@ -179,6 +180,7 @@ Edits an existing person in the address book.
 * At least one of the optional fields must be provided.
 * Existing values will be updated to the input values.
 * The updated email and Telegram handle, if provided, must remain unique.
+* Telegram handles are treated case-insensitively for duplicate detection. For example, `handle1` and `HANDLE1` are considered the same handle.
 
 <div markdown="span" class="alert alert-info">:information_source: **Note:**
 If the updated email is not an NUS domain (`@u.nus.edu` or `@nus.edu.sg`), a warning message will be shown. The contact will still be updated.

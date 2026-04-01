@@ -138,7 +138,10 @@ public class AddressBookParserTest {
     @Test
     public void parseCommand_undo() throws Exception {
         assertTrue(parser.parseCommand(UndoCommand.COMMAND_WORD) instanceof UndoCommand);
-        assertTrue(parser.parseCommand(UndoCommand.COMMAND_WORD + " 1") instanceof UndoCommand);
+        assertThrows(ParseException.class, UndoCommand.MESSAGE_NO_PARAMETER, ()
+                -> parser.parseCommand(UndoCommand.COMMAND_WORD + " undo"));
+        assertThrows(ParseException.class, UndoCommand.MESSAGE_NO_PARAMETER, ()
+                -> parser.parseCommand(UndoCommand.COMMAND_WORD + " test"));
     }
 
     @Test

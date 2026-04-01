@@ -2,11 +2,13 @@ package seedu.address.logic.parser;
 
 import static java.util.Objects.requireNonNull;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.StringUtil;
@@ -23,7 +25,7 @@ import seedu.address.model.tag.TagType;
  */
 public class ParserUtil {
 
-    public static final String MESSAGE_INVALID_INDEX = "Index is not a non-zero unsigned integer.";
+    public static final String MESSAGE_INVALID_INDEX = "Index must be a positive integer (1, 2, 3...).";
 
     /**
      * Parses {@code oneBasedIndex} into an {@code Index} and returns it. Leading and trailing whitespaces will be
@@ -164,5 +166,59 @@ public class ParserUtil {
             return args.substring(startPosition);
         }
         return args.substring(startPosition, endPosition);
+    }
+
+    /**
+     * Returns a prefix from the given arguments that has an empty string as one of its values, if any.
+     *
+     * <p>This method checks the provided {@code prefixes} in order. For each prefix,
+     * it looks up all values in the given {@link ArgumentMultimap}. If any value for that prefix
+     * is empty (after trimming whitespace), that prefix is returned wrapped in an {@link Optional}.
+     * If none of the provided prefixes have empty values, an empty {@code Optional} is returned.
+     *
+     * @param argMultimap the {@link ArgumentMultimap} containing the mapping of prefixes to values
+     * @param prefixes the prefixes to check for empty values
+     * @return an {@link Optional} containing the first prefix from {@code prefixes} that has
+     *         an empty value, or {@code Optional.empty()} if none of them do
+     */
+    public static Optional<String> findEmptyPrefixValues(
+            ArgumentMultimap argMultimap,
+            Prefix... prefixes) {
+
+        for (Prefix prefix : prefixes) {
+            // Only validate if the prefix is actually present
+            if (!argMultimap.getAllValues(prefix).isEmpty()) {
+                for (String value : argMultimap.getAllValues(prefix)) {
+                    if (value.trim().isEmpty()) {
+                        return Optional.of(prefix.getPrefix());
+                    }
+                }
+            }
+        }
+
+        return Optional.empty();
+    }
+
+    /**
+     * Returns the first prefixed token that is NOT in the allowed prefixes list.
+     */
+    public static Optional<String> findInvalidPrefixInput(String args, Prefix[] allowedPrefixes) {
+        Set<String> allowedPrefixSet = Arrays.stream(allowedPrefixes)
+                .map(prefix -> prefix.getPrefix().toLowerCase(Locale.ROOT))
+                .collect(Collectors.toSet());
+
+        // Split into tokens and check each one
+        String[] tokens = args.split("\\s+");
+        for (String token : tokens) {
+            int slashIndex = token.indexOf('/');
+            if (slashIndex != -1) {
+                String prefix = token.substring(0, slashIndex + 1).toLowerCase(Locale.ROOT);
+                if (!allowedPrefixSet.contains(prefix)) {
+                    return Optional.of(token);
+                }
+            }
+        }
+
+        return Optional.empty();
     }
 }

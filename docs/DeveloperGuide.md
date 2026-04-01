@@ -9,7 +9,9 @@ title: Developer Guide
 
 ## **Acknowledgements**
 
-* {list here sources of all reused/adapted ideas, code, documentation, and third-party libraries -- include links to the original source as well}
+* Libraries used: [JavaFX](https://openjfx.io/), [Jackson](https://github.com/FasterXML/jackson), [JUnit5](https://github.com/junit-team/junit5)
+* This project is based on the AddressBook-Level3 project created by the [SE-EDU initiative](https://se-education.org).
+
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -123,8 +125,9 @@ How the parsing works:
 The `Model` component,
 
 * stores the address book data i.e., all `Person` objects (which are contained in a `UniquePersonList` object).
+* A person is considered a duplicate if another person already has the same email, or the same Telegram handle ignoring case.
 * stores the currently 'selected' `Person` objects (e.g., results of a search query) as a separate _filtered_ list which is exposed to outsiders as an unmodifiable `ObservableList<Person>` that can be 'observed' e.g. the UI can be bound to this list so that the UI automatically updates when the data in the list change.
-* stores a `UserPref` object that represents the user’s preferences. This is exposed to the outside as a `ReadOnlyUserPref` objects.
+* stores a `UserPref` object that represents the user’s preferences. This is exposed to the outside as a `ReadOnlyUserPref` object.
 * does not depend on any of the other three components (as the `Model` represents data entities of the domain, they should make sense on their own without depending on other components)
 
 <div markdown="span" class="alert alert-info">:information_source: **Note:** An alternative (arguably, a more OOP) model is given below. It has a `Tag` list in the `AddressBook`, which `Person` references. This allows `AddressBook` to only require one `Tag` object per unique tag, instead of each `Person` needing their own `Tag` objects.<br>
@@ -300,8 +303,8 @@ Use case ends.
   * 3a1. CampusBridge shows an error message indicating the invalid format.
   * 3a2. CampusBridge requests the user to re-enter input.
   * 3a3. User enters a new input.
-  
-  Steps 3a1 - 3a3 are repeated until input is valid.  
+
+  Steps 3a1 - 3a3 are repeated until input is valid.
   Use case resumes at step 4.
 
 * 3b. Email already exists in the contact list.
@@ -345,7 +348,7 @@ Use case ends.
     * 4b2. CampusBridge requests the user to re-enter input.
     * 4b3. User enters a new input.
 
-  Steps 4b1 - 4b3 are repeated until input is valid.  
+  Steps 4b1 - 4b3 are repeated until input is valid.
   Use case resumes at step 5.
 
 * 5a. Contact cannot be updated.
@@ -383,7 +386,7 @@ Use case ends.
     * 3b2. CampusBridge requests the user to re-enter input.
     * 3b3. User enters a new input.
 
-  Steps 3b1 - 3b3 are repeated until input is valid.  
+  Steps 3b1 - 3b3 are repeated until input is valid.
   Use case resumes at step 4.
 
 * 4a. Contact cannot be deleted.
@@ -414,7 +417,7 @@ Use case ends.
     * 1a2. CampusBridge requests the user to re-enter input.
     * 1a3. User enters a new input.
 
-  Steps 1a1 - 1a3 are repeated until input is valid.  
+  Steps 1a1 - 1a3 are repeated until input is valid.
   Use case resumes at step 2.
 
 * 2a. No contacts exist in the list.
@@ -441,7 +444,7 @@ Use case ends.
     * 3a2. CampusBridge requests the user to re-enter input.
     * 3a3. User enters a new input.
 
-  Steps 3a1 - 3a3 are repeated until input is valid.  
+  Steps 3a1 - 3a3 are repeated until input is valid.
   Use case resumes at step 4.
 
 * 4a. No contacts exist in the list.
@@ -474,7 +477,7 @@ Use case ends.
     * 3b2. CampusBridge requests the user to re-enter input.
     * 3b3. User enters a new input.
 
-  Steps 3b1 - 3b3 are repeated until input is valid.  
+  Steps 3b1 - 3b3 are repeated until input is valid.
   Use case resumes at step 4.
 
 * 3c. Tag already exists for contact.
@@ -534,6 +537,86 @@ testers are expected to do more *exploratory* testing.
        Expected: The most recent window size and location is retained.
 
 1. _{ more test cases …​ }_
+
+### Sorting contacts
+
+1. Sorting by a single field
+
+   1. Prerequisites: List all persons using the `list` command. Multiple persons in the list.
+
+   1. Test case: `sort o/name`<br>
+      Expected: Contacts sorted alphabetically by name (ascending). Success message shown.
+
+   1. Test case: `sort o/email`<br>
+      Expected: Contacts sorted by email address (ascending). Success message shown.
+
+   1. Test case: `sort o/phone`<br>
+      Expected: Contacts sorted by phone number (ascending). Contacts without a phone number appear last. Success message shown.
+
+1. Sorting in descending order
+
+   1. Test case: `sort o/name r/`<br>
+      Expected: Contacts sorted alphabetically by name (descending). Success message shown.
+
+   1. Test case: `sort o/phone r/`<br>
+      Expected: Contacts sorted by phone number (descending). Contacts without a phone number appear last.
+
+1. Resetting sort order
+
+   1. Prerequisites: Apply a sort, e.g. `sort o/name r/`.
+
+   1. Test case: `sort o/none`<br>
+      Expected: Contacts returned to their original insertion order. Reset message shown.
+
+1. Invalid sort commands (each tested individually)
+
+   1. Test case: `sort` (missing `o/` prefix)<br>
+      Expected: Error message with command usage shown.
+
+   1. Test case: `sort o/` (empty order value)<br>
+      Expected: Error message with command usage shown.
+
+   1. Test case: `sort o/address` (invalid order value)<br>
+      Expected: Error message listing valid order values: `email`, `name`, `phone`, `none`.
+
+   1. Test case: `sort o/none r/` (reverse flag combined with `none`)<br>
+      Expected: Error message indicating `r/` is incompatible with `none`.
+
+   1. Test case: `sort o/name r/yes` (reverse flag followed by a value)<br>
+      Expected: Error message indicating the `r/` flag must have no value.
+
+   1. Test case: `sort o/name o/email` (duplicate `o/` prefix)<br>
+      Expected: Error message indicating duplicate prefixes are not allowed.
+
+### Navigating command history
+
+1. Cycling through past commands
+
+   1. Prerequisites: Enter at least three commands in sequence, e.g. `list`, `sort o/name`, `help`.
+
+   1. Press the **Up arrow** key in the command box.<br>
+      Expected: The command box fills with the most recently entered command (`help`).
+
+   1. Press **Up** again.<br>
+      Expected: The command box shows the previous command (`sort o/name`).
+
+   1. Press **Down**.<br>
+      Expected: The command box shows the next command in history (`help`).
+
+1. Navigating beyond history bounds
+
+   1. Press **Up** repeatedly past the oldest command in history.<br>
+      Expected: The command box stays at the oldest command; it does not wrap around.
+
+   1. Press **Down** past the most recent command.<br>
+      Expected: The command box clears (returns to empty input).
+
+1. History is not affected by invalid commands
+
+   1. Enter a valid command (e.g. `list`), then an invalid command (e.g. `badcommand`).
+
+   1. Press **Up** once.<br>
+      Expected: The invalid command `badcommand` is shown (all submitted input, valid or not, is recorded).
 
 ### Deleting a person
 

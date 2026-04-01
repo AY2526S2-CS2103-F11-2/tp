@@ -1,0 +1,17 @@
+{
+  "persons" : [ {
+    "name" : "Alice Pauline",
+    "phone" : "94351253",
+    "email" : "alice@example.com",
+    "telegramHandle" : "test1",
+    "tags" : [
+      { "tagName" : "friends", "tagType" : "GENERAL" }
+    ]
+  }, {
+    "name" : "Bob Choo",
+    "phone" : "98765432",
+    "email" : "bob@example.com",
+    "telegramHandle" : "TEST1",
+    "tags" : [ ]
+  } ]
+}

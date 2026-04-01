@@ -38,6 +38,12 @@ public class HelpCommandTest {
     }
 
     @Test
+    public void equals_sameValues_returnsTrue() {
+        assertEquals(new HelpCommand(), new HelpCommand());
+        assertEquals(new HelpCommand("add"), new HelpCommand("add"));
+    }
+
+    @Test
     public void equals_notHelpCommand_returnsFalse() {
         HelpCommand cmd = new HelpCommand();
         assertFalse(cmd.equals("help"));

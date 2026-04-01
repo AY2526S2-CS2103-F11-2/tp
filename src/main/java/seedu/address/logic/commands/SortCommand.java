@@ -45,7 +45,15 @@ public class SortCommand extends Command {
         this.order = order;
         this.reverse = reverse;
         Comparator<Person> cmp = SORT_COMPARATORS.get(order);
-        this.comparator = (cmp == null) ? null : (reverse ? cmp.reversed() : cmp);
+        if (cmp == null) {
+            this.comparator = null;
+        } else if (reverse && "phone".equals(order)) {
+            this.comparator = Comparator.comparing((Person p) ->
+                    p.getPhone() != null ? p.getPhone().value : null,
+                    Comparator.nullsLast(Comparator.<String>naturalOrder().reversed()));
+        } else {
+            this.comparator = reverse ? cmp.reversed() : cmp;
+        }
     }
 
     /**

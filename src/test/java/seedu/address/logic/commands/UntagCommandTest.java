@@ -213,7 +213,9 @@ public class UntagCommandTest {
         tagsToRemove.add(new Tag("friend", TagType.GENERAL));
 
         UntagCommand untagCommand = new UntagCommand(outOfBoundIndex, tagsToRemove);
-        assertCommandFailure(untagCommand, model, Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+        String expected = String.format(Messages.MESSAGE_PERSON_NOT_FOUND_DISPLAYED_INDEX,
+                outOfBoundIndex.getOneBased());
+        assertCommandFailure(untagCommand, model, expected);
     }
 
     @Test
