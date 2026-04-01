@@ -569,7 +569,9 @@ Action | Format, Examples
 **Untag** | `untag INDEX [tr/ROLE_TAG]…​ [tc/COURSE_TAG]…​ [tg/GENERAL_TAG]…​`<br> e.g., `untag 3 tr/tutor tc/cs2103`
 **Undo** | `undo`
 
-## Keyboard shortcuts summary
+## Keyboard Shortcuts Summary
+
+### Windows / Linux
 
 Action | Shortcut
 --------|----------
@@ -577,3 +579,14 @@ Action | Shortcut
 **Exit application** | `F3`
 **Help** | `F1`
 **List all contacts** | `F2`
+
+---
+
+### macOS
+
+Action | Shortcut
+--------|----------
+**Clear input box** | `fn + Delete`
+**Exit application** | `fn + F3`
+**Help** | `fn + F1`
+**List all contacts** | `fn + F2`
