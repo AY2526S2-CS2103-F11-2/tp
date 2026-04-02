@@ -589,7 +589,7 @@ Use case ends.
 **Preconditions: Application is running**
 
 **MSS:**
-1. User <ins>requests to list contacts (UC04)</ins>.
+1. User <ins>requests to list contacts (UC08)</ins>.
 2. User requests to clear tags of a specific type.
 3. CampusBridge clear all the tags of the specific type and updates the contact list.
 4. CampusBridge shows a success message.
@@ -615,13 +615,8 @@ Use case ends.
 
   Use case ends.
 
-* 3a. Tags cannot be cleared.
-    * 3a1. CampusBridge shows an error message indicating the tags could not be cleared.
-
-  Use case ends.
-
-* 3b. Storage file cannot be written or accessed.
-    * 3b1. CampusBridge shows an error message indicating the contact list could not be saved.
+* 3a. Storage file cannot be written or accessed.
+    * 3a1. CampusBridge shows an error message indicating the contact list could not be saved.
 
   Use case ends.
 
