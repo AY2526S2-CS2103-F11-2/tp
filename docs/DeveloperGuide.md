@@ -369,6 +369,11 @@ Use case ends.
 
   Use case ends.
 
+* 3c. Telegram handle already exists in the contact list.
+  * 3c1. CampusBridge shows a failure message indicating that the Telegram handle already exists.
+
+  Use case ends.
+
 * 4a. Contact cannot be added.
     * 4a1. CampusBridge shows an error message indicating the contact could not be added.
 
@@ -425,7 +430,7 @@ Use case ends.
 
 **MSS:**
 1. User <ins>requests to list contacts (UC04)</ins>.
-2. User requests to delete a contact in the list.
+2. User requests to delete a contact, providing the contact's index.
 3. CampusBridge validates the input.
 4. CampusBridge deletes the contact and updates the contact list.
 5. CampusBridge shows a success message.
@@ -433,6 +438,10 @@ Use case ends.
 Use case ends.
 
 **Extensions:**
+* 2a. User provides an email address instead of an index.
+
+  Use case resumes at step 3.
+
 * 3a. Target contact identifier does not exist.
     * 3a1. CampusBridge shows an error message indicating the contact does not exist.
 
@@ -469,13 +478,10 @@ Use case ends.
 Use case ends.
 
 **Extensions:**
-* 1a. Input does not follow the specified format.
-    * 1a1. CampusBridge shows an error message indicating the invalid format.
-    * 1a2. CampusBridge requests the user to re-enter input.
-    * 1a3. User enters a new input.
+* 1a. User provides extra arguments.
+    * 1a1. CampusBridge shows an error message indicating that no arguments are expected.
 
-  Steps 1a1 - 1a3 are repeated until input is valid.
-  Use case resumes at step 2.
+  Use case ends.
 
 * 2a. No contacts exist in the list.
   * 2a1. CampusBridge informs the user that the contact list is empty.
@@ -504,7 +510,7 @@ Use case ends.
   Steps 3a1 - 3a3 are repeated until input is valid.
   Use case resumes at step 4.
 
-* 4a. No contacts exist in the list.
+* 4a. No contacts match the search query.
     * 4a1. CampusBridge informs the user that no contacts match the search query.
 
   Use case ends.
@@ -512,11 +518,11 @@ Use case ends.
 
 #### Use Case: UC06 - Add a tag to an existing contact
 
-**Preconditions: Application is running**
+**Preconditions: Application is running and the user has added a contact.**
 
 **MSS:**
-1. User requests to tag a contact in the list.
-2. User provides tag details for that contact.
+1. User <ins>requests to list contacts (UC04)</ins>.
+2. User requests to tag a contact, providing the contact's index and tag type.
 3. CampusBridge validates the input.
 4. CampusBridge adds the tag and updates the contact list.
 5. CampusBridge shows a success message.
@@ -549,6 +555,40 @@ Use case ends.
 
 * 4b. Storage file cannot be written or accessed.
     * 4b1. CampusBridge shows an error message indicating the contact list could not be saved.
+
+  Use case ends.
+
+#### Use Case: UC07 - Navigate command history
+
+**Preconditions: Application is running and the user has entered at least one command.**
+
+**MSS:**
+1. User presses the UP arrow key in the command box.
+2. CampusBridge displays the most recently entered command in the command box.
+3. User presses the UP arrow key again to view an older command, or the DOWN arrow key to view a newer command.
+4. User presses Enter to execute the displayed command.
+5. CampusBridge executes the command and shows the result.
+
+Use case ends.
+
+**Extensions:**
+* 1a. No commands have been entered yet.
+    * 1a1. CampusBridge does not change the command box content.
+
+  Use case ends.
+
+* 3a. User presses UP when already at the oldest command in history.
+    * 3a1. CampusBridge does not change the command box content.
+
+  Use case resumes at step 3.
+
+* 3b. User presses DOWN when already at the newest position (empty input).
+    * 3b1. CampusBridge does not change the command box content.
+
+  Use case resumes at step 3.
+
+* 4a. The displayed command is invalid.
+    * 4a1. CampusBridge shows an error message indicating the invalid command.
 
   Use case ends.
 
