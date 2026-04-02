@@ -459,9 +459,11 @@ Use case ends.
 
   Use case ends.
 
-### Untag
+### Use Case: UC05 - Remove a tag from a contact
 
-#### Use Case: UC04 - View all contacts
+### Use Case: UC06 - Clearing a specific tag from a contact
+
+#### Use Case: UC07 - View all contacts
 
 **Preconditions: Application is running**
 
@@ -486,6 +488,8 @@ Use case ends.
 
   Use case ends.
 
+
+#### Use Case: UC08 - Sorting contacts
 
 #### Use Case: UC05 - Search contacts
 
