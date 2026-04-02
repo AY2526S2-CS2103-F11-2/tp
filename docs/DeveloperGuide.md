@@ -593,6 +593,25 @@ Use case ends.
 **Preconditions: Application is running**
 
 **MSS:**
+1. User requests to sort contacts.
+2. User provides sort field (name/email/phone) and optional reverse order.
+3. CampusBridge validates the input.
+4. CampusBridge sorts the contacts based on the specified criteria.
+5. CampusBridge displays the list of contacts in the specified sorted order.
+
+Use case ends.
+
+**Extensions:**
+
+* 3a. Input does not follow the specified format.
+  * 3a1. CampusBridge shows an invalid command format error.
+  
+  Use case ends.
+
+* 3b. User specifies reset ordering in sort field.
+  * 3b1. CampusBridge resets the contact list to insertion order.
+
+  Use case resumes from step 5.
 
 #### Use Case: UC10 - Search contacts
 
