@@ -1,0 +1,41 @@
+@startuml
+!include style.puml
+show members
+
+skinparam arrowThickness 1.1
+skinparam arrowColor LOGIC_COLOR_T4
+skinparam classBackgroundColor LOGIC_COLOR
+skinparam classFontColor white
+skinparam classAttributeFontColor white
+skinparam classMethodFontColor white
+
+package Logic <<Rectangle>> {
+Class LogicManager {
+  - undoHistory : Deque<Command>
+  + execute(commandText)
+  - executeUndo() : CommandResult
+}
+
+Class "{abstract}\nCommand" as Command {
+  + execute(model : Model) : CommandResult
+  + undo(model : Model) : CommandResult
+  + isUndoable() : boolean
+}
+
+Class UndoCommand
+Class AddCommand
+Class DeleteCommand
+}
+
+package Model <<Rectangle>> {
+Class Model
+}
+
+UndoCommand --|> Command
+AddCommand --|> Command
+DeleteCommand --|> Command
+
+LogicManager -down-> Command : executes
+Command ..> Model
+
+@enduml

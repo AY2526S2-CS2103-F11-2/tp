@@ -250,28 +250,37 @@ This identity rule is used by `UniquePersonList` when adding and updating person
 
 #### Current Implementation
 
-Currently, the undo feature is implemented in each undoable commands, and is now handled by LogicManager.
+Currently, the undo feature is implemented using the Command pattern, where each undoable command encapsulates its own undo logic. The overall undo process is managed by `LogicManager`.
 
-Undoable commands, once executed, will be added in to a deque.
+When an undoable command is executed, it is added to an internal stack (`undoHistory : Deque<Command>`) maintained by `LogicManager`.
 
-When an undo command is called, the deque will peek at the first item to be out.
+When the `undo` command is invoked, `LogicManager` retrieves the most recent command from `undoHistory` using `peek()`. The `undo(Model)` method of that command is then executed to revert its effects. If the undo operation is successful, the command is removed from the stack using `pop()`.
 
-If the undo of the command is successfully executed, the deque will pop.
+This design ensures that each command is responsible for reversing its own changes, providing flexibility and adhering to the Command pattern.
 
-Here is the sequence UML diagram:![UndoSequenceDiagram-Logic.png]
-Note: Undo methods in commands now directly calls methods in Model to revert the changes.
+The following sequence diagram illustrates how the undo operation is executed:
 
-More UML diagrams are to be added in a later.
+![UndoSequenceDiagram-Logic](../images/UndoSequenceDiagram-Logic.png)
+
+The following class diagram shows the structure of the undo feature:
+
+![UndoClassDiagram](../images/UndoClassDiagram.png)
+
+The following Activity diagram illustrates the control flow of command execution in the undo feature.
+
+![UndoActivityDiagram.png](../images/UndoActivityDiagram.png)
+
+Note: Undo methods in commands directly interact with the `Model` to revert changes. Hence, we are not having an object diagram here. UI and Storage components are omitted from the diagrams as they are not directly involved in the undo mechanism.
 
 #### Design considerations:
 
 **Aspect: How undo & redo executes:**
 
-* **Alternative 1 (current choice):** Saves the entire address book.
+* **Alternative 1 :** Saves the entire address book.
   * Pros: Easy to implement.
   * Cons: May have performance issues in terms of memory usage.
 
-* **Alternative 2:** Individual command knows how to undo/redo by
+* **Alternative 2 (current choice):** Individual command knows how to undo by
   itself.
   * Pros: Will use less memory (e.g. for `delete`, just save the person being deleted).
   * Cons: We must ensure that the implementation of each individual command are correct.

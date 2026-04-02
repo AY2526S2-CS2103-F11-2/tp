@@ -1,0 +1,34 @@
+@startuml
+start
+
+:User enters command;
+
+:Parse command;
+
+if () then ([Is UndoCommand])
+  if () then ([Is undoHistory empty])
+    :Show error message;
+    stop
+  else ([Else])
+    :Retrieve command (peek);
+    :Execute command.undo(model);
+
+    if () then ([Is Undo successful])
+      :Remove command from undoHistory (pop);
+    else ([Else])
+      :Show error message;
+    endif
+  endif
+else ([Else])
+  :Execute command;
+
+  if () then ([Is Command undoable])
+    :Push command to undoHistory;
+  else([Else])
+  endif
+endif
+
+:Save to storage;
+
+stop
+@enduml
