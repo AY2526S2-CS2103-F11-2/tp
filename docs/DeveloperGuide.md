@@ -855,32 +855,41 @@ testers are expected to do more *exploratory* testing.
 ### Editing a person
 
 1. Editing a person with all fields
-    1. Prerequisites: Start with the sample data loaded. Ensure the email and Telegram handle used below do not already exist.
+    1. Prerequisites: Start with the sample data loaded. Ensure the email and Telegram handle used below do not already exist. At least one person in the list.
 
     1. Test case: `edit 1 n/John Lim e/johnlim@nus.edu.sg p/81234567 h/john_LIM`<br>
        Expected: The first contact is updated with the new details. The success message shows the edited person's details.
 
 2. Editing a person with one field
-    1. Prerequisites: Start with the sample data loaded.
+    1. Prerequisites: Start with the sample data loaded. Ensure the email and Telegram handle used below do not already exist. At least one person in the list.
 
     1. Test case: `edit 1 n/John Lim`<br>
        Expected: The first contact's name is updated. All other fields remain unchanged. The success message shows the edited person's details.
+   
+   1. Test case: `edit 1 e/johnlim@u.nus.edu`<br>
+      Expected: The first contact's email is updated. All other fields remain unchanged. The success message shows the edited person's details.
+   
+   1. Test case: `edit 1 p/12345678`<br>
+      Expected: The first contact's phone number is updated. All other fields remain unchanged. The success message shows the edited person's details.
+   
+   1. Test case: `edit 1 h/johnlimm`<br>
+      Expected: The first contact's telegram handle is updated. All other fields remain unchanged. The success message shows the edited person's details.
 
 3. Editing a person with a non-NUS email
-    1. Prerequisites: Start with the sample data loaded.
+    1. Prerequisites: Start with the sample data loaded. Ensure the email used below do not already exist. At least one person in the list.
 
     1. Test case: `edit 1 e/john@gmail.com`<br>
        Expected: The first contact's email is updated. A warning is shown indicating that the email is not an NUS domain.
 
 4. Editing a person with duplicate email or Telegram handle
-    1. Prerequisites: Start with the sample data loaded.
+    1. Prerequisites: Start with the sample data loaded. The first contact has email `johnlim@u.nus.edu` and Telegram handle `johnlimm`. At least two person in the list.
 
-    1. Test case: `edit 2 e/alex@example.com` *(use the email of the first contact)*<br>
+    1. Test case: `edit 2 e/johnlim@u.nus.edu`<br>
        Expected: No changes made. Error details shown indicating a person with this email already exists.
 
-    1. Test case: `edit 2 h/alex_yeoh` *(use the Telegram handle of the first contact)*<br>
+    1. Test case: `edit 2 h/johnlimm`<br>
        Expected: No changes made. Error details shown indicating a person with this Telegram handle already exists.
-
+   
 5. Invalid edit commands
     1. Test case: `edit`<br>
        Expected: No changes made. Invalid command format error shown.
@@ -891,8 +900,8 @@ testers are expected to do more *exploratory* testing.
     1. Test case: `edit 0 n/John Lim`<br>
        Expected: No changes made. Error details shown indicating the index should be a positive integer.
 
-    1. Test case: `edit 999 n/John Lim`<br>
-       Expected: No changes made. Error details shown indicating the index is out of range.
+    1. Test case: `edit 999 n/John Lim` (where 999 is larger than list size) <br> 
+       Expected: No changes made. Error details shown in the status message indicating no person exists at that index and tip to use `list` command.
 
     1. Test case: `edit 1 n/John Lim n/Jane Lim`<br>
        Expected: No changes made. Error details shown indicating duplicate prefixes.
