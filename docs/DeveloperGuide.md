@@ -583,10 +583,42 @@ Use case ends.
 
   Use case ends.
 
-### Use Case: UC07 - Clearing a specific tag from a contact
+
+#### Use Case: UC07 - Clearing all tags of a type from a contact
+
 **Preconditions: Application is running**
 
 **MSS:**
+1. User <ins>requests to list contacts (UC08)</ins>.
+2. User requests to clear tags of a specific type.
+3. CampusBridge clears all the tags of the specific type and updates the contact list.
+4. CampusBridge shows a success message.
+
+Use case ends.
+
+**Extensions:**
+* 2a. Target contact identifier does not exist.
+    * 2a1. CampusBridge shows an error message indicating the contact does not exist.
+
+  Use case ends.
+
+* 2b. Input does not follow the specified format.
+    * 2b1. CampusBridge shows an error message indicating the invalid format.
+    * 2b2. CampusBridge requests the user to re-enter input.
+    * 2b3. User enters a new input.
+
+  Steps 2b1 - 2b3 are repeated until input is valid.
+  Use case resumes at step 3.
+
+* 2c. No tags of specified type exist.
+    * 2c1. CampusBridge shows an error indicating no tags found to clear.
+
+  Use case ends.
+
+* 3a. Storage file cannot be written or accessed.
+    * 3a1. CampusBridge shows an error message indicating the contact list could not be saved.
+
+  Use case ends.
 
 
 #### Use Case: UC08 - Listing All Contacts
