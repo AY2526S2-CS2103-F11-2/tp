@@ -591,7 +591,7 @@ Use case ends.
 **MSS:**
 1. User <ins>requests to list contacts (UC08)</ins>.
 2. User requests to clear tags of a specific type.
-3. CampusBridge clear all the tags of the specific type and updates the contact list.
+3. CampusBridge clears all the tags of the specific type and updates the contact list.
 4. CampusBridge shows a success message.
 
 Use case ends.
