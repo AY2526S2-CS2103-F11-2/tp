@@ -705,36 +705,6 @@ testers are expected to do more *exploratory* testing.
     1. Test case: `add n/John Doe e/johndoe@example.com tg/friend`<br>
        Expected: No person is added. Error details shown in the status message indicating unexpected extra input.
 
-### Navigating command history
-
-1. Cycling through past commands
-
-   1. Prerequisites: Enter at least three commands in sequence, e.g. `list`, `sort o/name`, `help`.
-
-   1. Press the **Up arrow** key in the command box.<br>
-      Expected: The command box fills with the most recently entered command (`help`).
-
-   1. Press **Up** again.<br>
-      Expected: The command box shows the previous command (`sort o/name`).
-
-   1. Press **Down**.<br>
-      Expected: The command box shows the next command in history (`help`).
-
-1. Navigating beyond history bounds
-
-   1. Press **Up** repeatedly past the oldest command in history.<br>
-      Expected: The command box stays at the oldest command; it does not wrap around.
-
-   1. Press **Down** past the most recent command.<br>
-      Expected: The command box clears (returns to empty input).
-
-1. History is not affected by invalid commands
-
-   1. Enter a valid command (e.g. `list`), then an invalid command (e.g. `badcommand`).
-
-   1. Press **Up** once.<br>
-      Expected: The invalid command `badcommand` is shown (all submitted input, valid or not, is recorded).
-
 ### Sorting persons
 
 1. Sorting by a valid field
@@ -780,6 +750,90 @@ testers are expected to do more *exploratory* testing.
 
    1. Test case: `sort o/name o/email`<br>
       Expected: List is not sorted. Error details shown in the status message indicating duplicate `o/` prefix.
+
+### Locating persons by name/email/tag
+1. Searching by single field
+
+    1. Prerequisites: List all persons using the `list` command. At least one person should be in the list.
+
+    1. Test case: `find n/Alex`<br>
+       Expected: Contacts whose names match `Alex` (case-insensitive; supports substring and fuzzy matching) are shown.
+
+    1. Test case: `find e/nus.edu`<br>
+       Expected: Contacts with email addresses containing `nus.edu` (case-insensitive substring) are shown.
+
+    1. Test case: `find t/friends`<br>
+       Expected: Contacts with the tag `friends` (case-insensitive exact match) are shown.
+
+1. Searching by multiple keywords/fields
+
+    1. Prerequisites: List all persons using the `list` command. At least two persons should be in the list.
+
+    1. Test case: `find n/Alex David`<br>
+       Expected: Contacts whose names match `Alex` **OR** `David` are shown (i.e. matches at least one keyword).
+
+    1. Test case: `find n/Alex e/nus.edu`<br>
+       Expected: Contacts whose names match `Alex` **AND** whose email contains `nus.edu` are shown.
+
+    1. Test case: `find n/Alex e/nus.edu t/friends`<br>
+       Expected: Contacts matching all three criteria (Name AND Email AND Tag) are shown.
+
+1. Fuzzy search for names (slight typo tolerance)
+
+    1. Prerequisites: A contact with name `Alice Tan` exists.
+
+    1. Test case: `find n/alce`<br>
+       Expected: `Alice Tan` is shown in the results.
+
+    1. Test case: `find n/alicia`<br>
+       Expected: `Alice Tan` is shown in the results.
+
+    1. Test case: `find n/Tan`<br>
+       Expected: `Alice Tan` is shown in the results.
+
+1. Invalid search commands
+
+    1. Test case: `find` (no parameters)<br>
+       Expected: Error message indicating invalid command format and showing usage.
+
+    1. Test case: `find n/`<br>
+       Expected: Error message indicating empty value provided for prefix `n/`.
+
+    1. Test case: `find n/!@#`<br>
+       Expected: Error message indicating that the keyword `!@#` contains only special characters and must contain at least one alphanumeric character.
+
+    1. Test case: `find p/91234567` (unsupported prefix for find)<br>
+       Expected: Error message indicating unexpected extra input `p/91234567`.
+
+### Navigating command history
+
+1. Cycling through past commands
+
+    1. Prerequisites: Enter at least three commands in sequence, e.g. `list`, `sort o/name`, `help`.
+
+    1. Press the **Up arrow** key in the command box.<br>
+       Expected: The command box fills with the most recently entered command (`help`).
+
+    1. Press **Up** again.<br>
+       Expected: The command box shows the previous command (`sort o/name`).
+
+    1. Press **Down**.<br>
+       Expected: The command box shows the next command in history (`help`).
+
+1. Navigating beyond history bounds
+
+    1. Press **Up** repeatedly past the oldest command in history.<br>
+       Expected: The command box stays at the oldest command; it does not wrap around.
+
+    1. Press **Down** past the most recent command.<br>
+       Expected: The command box clears (returns to empty input).
+
+1. History is not affected by invalid commands
+
+    1. Enter a valid command (e.g. `list`), then an invalid command (e.g. `badcommand`).
+
+    1. Press **Up** once.<br>
+       Expected: The invalid command `badcommand` is shown (all submitted input, valid or not, is recorded).
 
 ### Saving data
 
