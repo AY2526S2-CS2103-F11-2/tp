@@ -70,13 +70,13 @@ The sections below give more details of each component.
 
 ### UI component
 
-The **API** of this component is specified in [`Ui.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/ui/Ui.java)
+The **API** of this component is specified in [`Ui.java`](https://github.com/AY2526S2-CS2103-F11-2/tp/tree/master/src/main/java/seedu/address/ui/Ui.java)
 
 ![Structure of the UI Component](images/UiClassDiagram.png)
 
 The UI consists of a `MainWindow` that is made up of parts e.g.`CommandBox`, `ResultDisplay`, `PersonListPanel`, `StatusBarFooter` etc. All these, including the `MainWindow`, inherit from the abstract `UiPart` class which captures the commonalities between classes that represent parts of the visible GUI.
 
-The `UI` component uses the JavaFx UI framework. The layout of these UI parts are defined in matching `.fxml` files that are in the `src/main/resources/view` folder. For example, the layout of the [`MainWindow`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/ui/MainWindow.java) is specified in [`MainWindow.fxml`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/resources/view/MainWindow.fxml)
+The `UI` component uses the JavaFX UI framework. The layout of these UI parts are defined in matching `.fxml` files that are in the `src/main/resources/view` folder. For example, the layout of the [`MainWindow`](https://github.com/AY2526S2-CS2103-F11-2/tp/tree/master/src/main/java/seedu/address/ui/MainWindow.java) is specified in [`MainWindow.fxml`](https://github.com/AY2526S2-CS2103-F11-2/tp/tree/master/src/main/resources/view/MainWindow.fxml)
 
 The `UI` component,
 
@@ -220,9 +220,11 @@ The parser enforces the following rules:
 
 After tokenization, `AddCommandParser` uses `ParserUtil` to validate and convert each supplied value into the corresponding model type. It then constructs a `Person` object and returns an `AddCommand`.
 
-When `AddCommand` executes, it first checks whether the person already exists in the address book using `model.hasPerson(toAdd)`. If a duplicate is detected, the command fails.
+The sequence diagram below illustrates the interactions within the `Logic` component for a typical successful `add` command.
 
-If the person is unique, the command adds the person to the model and returns a success message. If the added person's email is not an NUS-domain email, the command still succeeds but appends a warning message.
+![Interactions Inside the Logic Component for the `add n/John e/john@gmail.com` Command](images/AddSequenceDiagram.png)
+
+When `AddCommand` executes, it first checks for duplicate conflicts using `model.getDuplicateConflict(toAdd)`. If a duplicate email, duplicate Telegram handle, or both are detected, the command fails. Otherwise, the person is added to the model and a `CommandResult` is returned. If the added person's email is not an NUS-domain email, the success message also includes a warning.
 
 `AddCommand` is undoable. Undoing an `add` removes the previously added person, unless that person no longer exists in the model.
 
@@ -320,7 +322,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 | `* * *`  | regular user               | search contacts by name, email and tags                                 | quickly find someone                                                              |
 | `* * *`  | new user                   | view help details                                                       | see specific examples and parameter requirements for that command                 |
 | `* *`    | regular user               | sort contacts alphabetically                                            | browse them more easily                                                           |
-| `* *`    | new user                   | view preloaded sample modules and contacts                              | understand the app’s layout and value withoadding real data.                      |
+| `* *`    | new user                   | view preloaded sample modules and contacts                              | understand the app’s layout and value without adding real data                    |
 | `* *`    | user                       | add new tags to an existing contact                                     | keep their information updated as the semester evolves                            |
 | `* *`    | user                       | delete specific tags from a contact without deleting the entire contact | keep my contact information accurate                                              |
 | `* *`    | user                       | clear all tags from a contact                                           | reset the contact’s categorization without manually deleting every individual tag |
@@ -700,10 +702,16 @@ testers are expected to do more *exploratory* testing.
     1. Prerequisites: Add a contact using `add n/Test Person e/testperson@example.com h/test_person`.
 
     1. Test case: `add n/Another Person e/testperson@example.com`<br>
-       Expected: No person is added. Error details shown in the status message indicating that the contact already exists.
+       Expected: No person is added. Error details shown in the status message indicating that a person with this email already exists.
 
     1. Test case: `add n/Another Person e/anotherperson@example.com h/test_person`<br>
-       Expected: No person is added. Error details shown in the status message indicating that the contact already exists.
+       Expected: No person is added. Error details shown in the status message indicating that a person with this Telegram handle already exists.
+
+    1. Test case: `add n/Case Person e/caseperson@example.com h/TEST_PERSON`<br>
+       Expected: No person is added. Error details shown in the status message indicating that a person with this Telegram handle already exists.
+
+    1. Test case: `add n/Another Person e/testperson@example.com h/test_person`<br>
+       Expected: No person is added. Error details shown in the status message indicating that a person with this email and Telegram handle already exists.
 
 5. Invalid add commands
 
@@ -741,31 +749,31 @@ testers are expected to do more *exploratory* testing.
 1. Invalid delete commands
 
    1. Test case: `delete`<br>
-       Expected: No person deleted. Error details shown in the status message indicating invalid command format and command usage.
+      Expected: No person deleted. Error details shown in the status message indicating invalid command format and command usage.
 
    1. Test case: `delete i/0`<br>
-       Expected: No person deleted. Error details shown in the status message indicating index must be a positive integer (1, 2, 3...).
+      Expected: No person deleted. Error details shown in the status message indicating index must be a positive integer (1, 2, 3...).
 
    1. Test case: `delete e/invalid-email`<br>
-       Expected: No person deleted. Error details shown in the status message indicating email constraints.
+      Expected: No person deleted. Error details shown in the status message indicating email constraints.
 
    1. Test case: `delete 1` (missing prefix)<br>
        Expected: No person deleted. Error details shown in the status message indicating invalid command format and command usage.
 
    1. Test case: `delete i/1 i/2`(multiple same prefixes)<br>
-       Expected: No person deleted. Error details shown in the status message indicating multiple values specified for the following single-valued field(s): `i/`.
+      Expected: No person deleted. Error details shown in the status message indicating multiple values specified for the following single-valued field(s): `i/`.
 
    1. Test case: `delete e/alicetan@u.nus.edu i/1` (both prefixes)<br>
-       Expected: No person deleted. Error details shown in the status message indicating invalid command format and command usage.
+      Expected: No person deleted. Error details shown in the status message indicating invalid command format and command usage.
 
    1. Test case: `delete i/1 n/alice p/12345678` (multiple invalid prefixes)<br>
-       Expected: No person deleted. Error details shown in the status message invalid command format and unexpected extra input.
+      Expected: No person deleted. Error details shown in the status message invalid command format and unexpected extra input.
 
    1. Test case: `delete i/100` (where 100 is larger than list size)<br>
-       Expected: No person deleted. Error details shown in the status message indicating no person exists at that index and tip to use `list` command.
+      Expected: No person deleted. Error details shown in the status message indicating no person exists at that index and tip to use `list` command.
 
    1. Test case: `delete e/nonexistent@example.com`<br>
-       Expected: No person deleted. Error details shown in the status message indicating no person found with that email and tip to use `list` or `find` commands.
+      Expected: No person deleted. Error details shown in the status message indicating no person found with that email and tip to use `list` or `find` commands.
 
 ### Tagging a person
 
@@ -1084,6 +1092,6 @@ testers are expected to do more *exploratory* testing.
 
 1. Dealing with missing/corrupted data files
 
-   1. _{explain how to simulate a missing/corrupted file, and the expected behavior}_
+    1. _{explain how to simulate a missing/corrupted file, and the expected behavior}_
 
 1. _{ more test cases …​ }_
