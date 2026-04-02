@@ -305,36 +305,53 @@ It does so by providing a centralized, easy-to-use system to save, search, and m
 
 Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unlikely to have) - `*`
 
-| Priority | As a …​                    | I can …​                                                                 | So that I can…​                                                            |
-|----------|----------------------------|--------------------------------------------------------------------------|----------------------------------------------------------------------------|
-| `* * *`  | user                       | add a contact                                                            | store and organize important academic contact information in one place     |
-| `* * *`  | user                       | view all my contacts                                                     | quickly see everyone in one place                                          |
-| `* * *`  | user                       | delete a contact                                                         | keep my contact list accurate and organized                                |
-| `* * *`  | user                       | edit a specific contact                                                  | quickly correct mistakes in their contact information                      |
-| `* * *`  | user                       | exit the application                                                     | safely close CampusBridge when I am done using it                          |
-| `* * *`  | user                       | have my contacts saved automatically                                     | prevent losing my data when the application closes                         |
-| `* * *`  | user                       | validate my input                                                        | minimize incorrect information                                             |
-| `* * *`  | new user                   | see clear error message                                                  | understand what went wrong and correct my input without feeling confused   |
-| `* * *`  | regular user               | filter contacts by module                                                | view everyone in a specific class                                          |
-| `* * *`  | regular user               | filter contacts by role (e.g., professor, teaching assistant, classmate) | quickly find the right type of contact                                     |
-| `* * *`  | regular user               | search contacts by name or email                                         | quickly find someone                                                       |
-| `* * *`  | new user                   | type help [command] (e.g., help add)                                     | see specific examples and parameter requirements for that command          |
-| `* *`    | regular user               | sort contacts alphabetically                                             | browse them more easily                                                    |
-| `* *`    | new user                   | view preloaded sample modules and contacts                               | understand the app’s layout and value withoadding real data.               |
-| `* *`    | user                       | add new tags to an existing contact                                      | keep their information updated as the semester evolves                     |
-| `* *`    | user                       | delete specific tags from a contact without deleting the entire contact  | keep my contact information accurate                                       |
-| `* *`    | expert user                | type a command to undo my last action                                    | instantly revert an accidental deletion without stress                     |
-| `* *`    | expert user                | have keyboard shortcuts                                                  | operate the system efficiently                                             |
-| `* *`    | expert user                | quickly copy an email address                                            | paste it into Outlook or Gmail                                             |
-| `* *`    | expert user                | see colour coded for tags                                                | visually prioritize my attention                                           |
-| `* *`    | user                       | type history                                                             | see a list of my previously entered commands to recall what I just changed |
-| `* *`    | user                       | export contact data to be in a human-readable format like json           | can edit it easily                                                         |
-| `* *`    | regular user               | mark a preferred contact method                                          | know the fastest way to reach someone                                      |
-| `* *`    | frequent user              | add notes to contacts                                                    | store useful contextual information                                        |
-| `* *`    | fast typing user           | use short aliases for commands                                           | minimize keystrokes                                                        |
-| `* *`    | advanced user              | bulk add contacts at once                                                | save time when entering many contacts                                      |
-| `*`      | frequent user              | set custom reminders for prof/TA office hours                            | stay on top of opportunities for academic help                             |
-| `*`      | user desiring full control | customize the GUI theme                                                  | personalize my experience                                                  |
+#### Current version:
+
+| Priority | As a …​                    | I can …​                                                                | So that I can…​                                                                   |
+|----------|----------------------------|-------------------------------------------------------------------------|-----------------------------------------------------------------------------------|
+| `* * *`  | user                       | add a contact                                                           | store and organize important academic contact information in one place            |
+| `* * *`  | user                       | view all my contacts                                                    | quickly see everyone in one place                                                 |
+| `* * *`  | user                       | delete a contact                                                        | keep my contact list accurate and organized                                       |
+| `* * *`  | user                       | edit a specific contact                                                 | quickly correct mistakes in their contact information                             |
+| `* * *`  | user                       | exit the application                                                    | safely close CampusBridge when I am done using it                                 |
+| `* * *`  | user                       | have my contacts saved automatically                                    | prevent losing my data when the application closes                                |
+| `* * *`  | user                       | validate my input                                                       | minimize incorrect information                                                    |
+| `* * *`  | new user                   | see clear error message                                                 | understand what went wrong and correct my input without feeling confused          |
+| `* * *`  | regular user               | search contacts by name, email and tags                                 | quickly find someone                                                              |
+| `* * *`  | new user                   | view help details                                                       | see specific examples and parameter requirements for that command                 |
+| `* *`    | regular user               | sort contacts alphabetically                                            | browse them more easily                                                           |
+| `* *`    | new user                   | view preloaded sample modules and contacts                              | understand the app’s layout and value withoadding real data.                      |
+| `* *`    | user                       | add new tags to an existing contact                                     | keep their information updated as the semester evolves                            |
+| `* *`    | user                       | delete specific tags from a contact without deleting the entire contact | keep my contact information accurate                                              |
+| `* *`    | user                       | clear all tags from a contact                                           | reset the contact’s categorization without manually deleting every individual tag |
+| `* *`    | expert user                | undo my last action                                                     | instantly revert an accidental deletion without stress                            |
+| `* *`    | expert user                | have keyboard shortcuts                                                 | operate the system efficiently                                                    |
+| `* *`    | expert user                | quickly copy an email address                                           | paste it into Outlook or Gmail                                                    |
+| `* *`    | expert user                | view colour-coded tags                                                  | quickly identify and prioritize important information.                            |
+| `* *`    | regular user               | navigate command history                                                | execute or modify past commands without retyping them                             |
+| `* *`    | user                       | export contact data to be in a human-readable format like json          | can edit it easily                                                                |
+
+#### Near-future version:
+
+| Priority | As a …​                          | I can …​                                                           | So that I can…​                                                                 |
+|----------|----------------------------------|--------------------------------------------------------------------|---------------------------------------------------------------------------------|
+| `*`      | regular user                     | mark a preferred contact method                                    | know the fastest way to reach someone                                           |
+| `*`      | regular user                     | mark certain contacts as favorites                                 | keep my most important connections easily accessible at the top of my list      | 
+| `*`      | frequent user                    | add notes to contacts                                              | store useful contextual information                                             |
+| `*`      | fast typing user                 | use short aliases for commands                                     | minimize keystrokes                                                             |
+| `*`      | forgetful student                | see a list of "Available Now" contacts based on their office hours | know exactly who I want to visit for a walk-in consultation                     |
+| `*`      | regular user                     | create a personal profile                                          | tailor the application experience to my specific preferences and needs          |
+| `*`      | user                             | view a list of command history                                     | recall what I just changed                                                      |
+| `*`      | advanced user                    | bulk add contacts at once                                          | save time when entering many contacts                                           |
+| `*`      | advanced user                    | bulk delete contacts at once                                       | remove outdated or unnecessary contacts efficiently                             |
+| `*`      | advanced user                    | bulk edit contacts at once                                         | manage large contact groups with minimal effor                                  |
+| `*`      | user managing multiple semesters | toggle between “current semester” and “past semesters” views       | reference old contacts without cluttering my main screen                        |
+| `*`      | user desiring full control       | customize the GUI theme                                            | personalize my experience                                                       |
+| `*`      | regular user                     | create “sub-groups” for teammates within a module                  | manage project - specific communication efficiently                             |
+| `*`      | frequent user                    | set custom reminders for prof/TA office hours                      | stay on top of opportunities for academic help                                  |
+| `*`      | new user                         | import my existing contacts                                        | avoid manually adding them                                                      |
+| `*`      | user with many past contacts     | archive old semester contacts                                      | have my active list remain uncluttered and focused on current needs             |
+| `*`      | user                             | add my current semester’s modules by searching NUS module codes    | categorize contacts accurately and save time                                    |
 
 See the full list on [GitHub](https://github.com/AY2526S2-CS2103-F11-2/tp/issues?q=is%3Aissue%20label%3Atype.Story)
 
