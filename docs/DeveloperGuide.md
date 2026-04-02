@@ -622,14 +622,16 @@ testers are expected to do more *exploratory* testing.
 
 1. Searching by multiple keywords/fields
 
+   1. Prerequisites: List all persons using the `list` command. At least two persons should be in the list.
+
    1. Test case: `find n/Alex David`<br>
-      Expected: Contacts whose names match `Alex` **OR** `David` are shown (i.e. matches at least one keyword).
+     Expected: Contacts whose names match `Alex` **OR** `David` are shown (i.e. matches at least one keyword).
 
    1. Test case: `find n/Alex e/nus.edu`<br>
-      Expected: Contacts whose names match `Alex` **AND** whose email contains `nus.edu` are shown.
+     Expected: Contacts whose names match `Alex` **AND** whose email contains `nus.edu` are shown.
 
    1. Test case: `find n/Alex e/nus.edu t/friends`<br>
-      Expected: Contacts matching all three criteria (Name AND Email AND Tag) are shown.
+     Expected: Contacts matching all three criteria (Name AND Email AND Tag) are shown.
 
 1. Fuzzy search for names (slight typo tolerance)
 
