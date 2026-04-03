@@ -73,36 +73,25 @@ public class TagCommand extends Command {
         Person personToAddTag = lastShownList.get(index.getZeroBased());
         originalPerson = personToAddTag;
 
-        Set<Tag> existingTags = personToAddTag.getTags();
-        // separate tags into new and existing
-        Set<Tag> newTags = tagsToAdd.stream()
-                .filter(tag -> !existingTags.contains(tag))
-                .collect(Collectors.toSet());
-
-        Set<Tag> existingTagsFromInput = tagsToAdd.stream()
-                .filter(tag -> existingTags.contains(tag))
-                .collect(Collectors.toSet());
-
-        // no new tags to add
-        if (newTags.isEmpty()) {
-            // existingTagsFromInput should not be empty due to parser validation
-            throw new CommandException(String.format(MESSAGE_NO_NEW_TAGS));
+        TagDifference tagDifference = computeTagDifference(personToAddTag);
+        if (tagDifference.newTags.isEmpty()) {
+            throw new CommandException(MESSAGE_NO_NEW_TAGS);
         }
 
         // merge existing tags with new tags
-        Set<Tag> updatedTags = new HashSet<>(existingTags);
-        updatedTags.addAll(newTags);
+        Set<Tag> updatedTags = new HashSet<>(personToAddTag.getTags());
+        updatedTags.addAll(tagDifference.newTags);
 
         Person editedPerson = personToAddTag.withTags(updatedTags);
         updatedPerson = editedPerson;
 
         model.setPerson(personToAddTag, editedPerson);
 
-        if (existingTagsFromInput.isEmpty()) {
-            return new CommandResult(String.format(MESSAGE_SUCCESS, newTags));
+        if (tagDifference.existingTags.isEmpty()) {
+            return new CommandResult(String.format(MESSAGE_SUCCESS, tagDifference.newTags));
         }
         return new CommandResult(String.format(
-                MESSAGE_PARTIAL_SUCCESS, newTags, existingTagsFromInput
+                MESSAGE_PARTIAL_SUCCESS, tagDifference.newTags, tagDifference.existingTags
         ));
     }
 
@@ -144,5 +133,31 @@ public class TagCommand extends Command {
                 .add("index", index)
                 .add("tagsToAdd", tagsToAdd)
                 .toString();
+    }
+
+    /**
+     * Represents the difference between input tags and existing tags.
+     */
+    private record TagDifference(Set<Tag> newTags, Set<Tag> existingTags) {
+    }
+
+    /**
+     * Computes which tags are new and which already exist on the person.
+     *
+     * @param person the person to check existing tags against.
+     * @return a TagDifference containing new tags and existing tags from the input.
+     */
+    private TagDifference computeTagDifference(Person person) {
+        Set<Tag> existingTags = person.getTags();
+
+        Set<Tag> newTags = tagsToAdd.stream()
+                .filter(tag -> !existingTags.contains(tag))
+                .collect(Collectors.toSet());
+
+        Set<Tag> existingTagsFromInput = tagsToAdd.stream()
+                .filter(tag -> existingTags.contains(tag))
+                .collect(Collectors.toSet());
+
+        return new TagDifference(newTags, existingTagsFromInput);
     }
 }
