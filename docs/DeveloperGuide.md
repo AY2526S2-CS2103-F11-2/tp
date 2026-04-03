@@ -386,7 +386,7 @@ See the full list on [GitHub](https://github.com/AY2526S2-CS2103-F11-2/tp/issues
 
 **Extension:**
 
-* 1a. User provides an unrecognised command name. 
+* 1a. User provides an unrecognised command name.
   * 1a1. CampusBridge shows an error listing all valid commands.
   Use case ends.
 
@@ -564,7 +564,7 @@ Use case ends.
 **Extensions:**
 * 1a. Input does not follow the specified format.
   * 1a1. CampusBridge shows an invalid command format error.
-  
+
   Use case ends.
 
 * 1b. Specified contact does not exist.
@@ -574,7 +574,7 @@ Use case ends.
 
 * 1c. None of the specified tags exist on the contact.
   * 1c1. CampusBridge shows an error indicating none of the tags were found.
-  
+
   Use case ends.
 
 * 2a. Some but not all specified tags exist on the contact.
@@ -633,7 +633,7 @@ Use case ends.
 **Extensions:**
 * 1a. User provides extra arguments.
   * 1a1. CampusBridge shows an invalid command format error.
-    
+
   Use case ends.
 
 
@@ -712,12 +712,12 @@ Use case ends.
 **Extensions:**
 * 1a. No command history exists.
   * 1a1. CampusBridge does nothing.
-  
+
   Use case ends.
 
 * 2a. User requests to navigate to a more recent command.
   * 2a1. CampusBridge displays the more recent command.
-  
+
   Use case resumes at step 1.
 
 * 2b. No earlier command exists.
@@ -913,13 +913,13 @@ testers are expected to do more *exploratory* testing.
 
     1. Test case: `edit 1 n/John Lim`<br>
        Expected: The first contact's name is updated. All other fields remain unchanged. The success message shows the edited person's details.
-   
+
    1. Test case: `edit 1 e/johnlim@u.nus.edu`<br>
       Expected: The first contact's email is updated. All other fields remain unchanged. The success message shows the edited person's details.
-   
+
    1. Test case: `edit 1 p/12345678`<br>
       Expected: The first contact's phone number is updated. All other fields remain unchanged. The success message shows the edited person's details.
-   
+
    1. Test case: `edit 1 h/johnlimm`<br>
       Expected: The first contact's telegram handle is updated. All other fields remain unchanged. The success message shows the edited person's details.
 
@@ -937,7 +937,7 @@ testers are expected to do more *exploratory* testing.
 
     1. Test case: `edit 2 h/johnlimm`<br>
        Expected: No changes made. Error details shown indicating a person with this Telegram handle already exists.
-   
+
 5. Invalid edit commands
     1. Test case: `edit`<br>
        Expected: No changes made. Invalid command format error shown.
@@ -948,7 +948,7 @@ testers are expected to do more *exploratory* testing.
     1. Test case: `edit 0 n/John Lim`<br>
        Expected: No changes made. Error details shown indicating the index should be a positive integer.
 
-    1. Test case: `edit 999 n/John Lim` (where 999 is larger than list size) <br> 
+    1. Test case: `edit 999 n/John Lim` (where 999 is larger than list size) <br>
        Expected: No changes made. Error details shown in the status message indicating no person exists at that index and tip to use `list` command.
 
     1. Test case: `edit 1 n/John Lim n/Jane Lim`<br>
@@ -956,7 +956,7 @@ testers are expected to do more *exploratory* testing.
 
     1. Test case: `edit 1 n/John Lim tg/friend`<br>
        Expected: No changes made. Error details shown indicating unexpected extra input.
-   
+
 ### Deleting a person
 
 1. Deleting a person by index
@@ -1420,7 +1420,7 @@ testers are expected to do more *exploratory* testing.
 ### Saving data
 
 1. Dealing with a missing data file
-  
+
    1. Prerequisites: Locate the data file at `data/addressbook.json`. Delete it.
 
    1. Relaunch the application. Expected: The application starts with the sample contact list. A new data file is created automatically.
@@ -1428,11 +1428,11 @@ testers are expected to do more *exploratory* testing.
 1. Dealing with a corrupted data file
 
    1. Prerequisites: Locate the data file at `data/addressbook.json`. Open it in a text editor and introduce invalid content (e.g., delete a closing brace `}` or replace a field value with gibberish).
-   
+
    1. Relaunch the application. Expected: The application starts with an empty contact list. The corrupted file is not loaded to prevent data loss from bad state.
 
 1. Auto-saving after changes
 
   1. Prerequisites: Application is running.
-  
+
   1. Test case: Add a new contact, then close the application using the close button. Relaunch. Expected: The newly added contact is present.
