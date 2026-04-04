@@ -16,7 +16,7 @@ import seedu.address.commons.util.ToStringBuilder;
  *   <li><b>Exact substring matching:</b> A keyword is considered a match if it is a
  *       substring of any name token (e.g., "john" matches tokens containing "john")</li>
  *   <li><b>Fuzzy matching:</b> Additionally, keywords can fuzzy-match name tokens within
- *       a Levenshtein distance threshold to handle typos and variations</li>
+ *       a Damerau–Levenshtein distance threshold to handle typos and variations</li>
  * </ul>
  * </p>
  *
@@ -34,7 +34,7 @@ import seedu.address.commons.util.ToStringBuilder;
  * <p>Examples (with default threshold settings):
  * <pre>
  *   Keyword "john" matches name tokens: "john", "jon", "joan" (fuzzy)
- *   Keyword "alice" matches name tokens: "alice", "alise", "alie"
+ *   Keyword "alice" matches name tokens: "alice", "aliec", "alie"
  * </pre>
  * </p>
  *

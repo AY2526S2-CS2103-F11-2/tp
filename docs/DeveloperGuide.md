@@ -1265,7 +1265,7 @@ testers are expected to do more *exploratory* testing.
     1. Test case: `find n/alce`<br>
        Expected: `Alice Tan` is shown in the results.
 
-    1. Test case: `find n/alicia`<br>
+    1. Test case: `find n/aliec`<br>
        Expected: `Alice Tan` is shown in the results.
 
     1. Test case: `find n/Tan`<br>

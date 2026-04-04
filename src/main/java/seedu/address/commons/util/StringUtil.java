@@ -91,65 +91,92 @@ public class StringUtil {
         }
     }
 
-
     /**
-     * Computes the Levenshtein distance between two strings.
+     * Computes the Damerau–Levenshtein distance (Optimal String Alignment variant)
+     * between two strings.
      *
-     * <p>The Levenshtein distance is the minimum number of single-character edits
-     * (insertions, deletions, or substitutions) required to transform one string
-     * into the other.</p>
+     * <p>This distance measures the minimum number of single-character edits
+     * required to transform one string into the other. Supported operations are:
+     * <ul>
+     *   <li>Insertion</li>
+     *   <li>Deletion</li>
+     *   <li>Substitution</li>
+     *   <li>Transposition of adjacent characters (e.g. "alxe" → "alex")</li>
+     * </ul>
      *
      * <p>This implementation is case-insensitive and uses a dynamic programming
      * approach with O(n × m) time and space complexity, where n and m are the
      * lengths of the input strings.</p>
      *
-     * @param a the first string
-     * @param b the second string
-     * @return the Levenshtein distance between {@code a} and {@code b}
+     * <p>Note: This implementation uses the Optimal String Alignment (OSA) variant,
+     * which allows only non-overlapping transpositions.</p>
+     *
+     * @param query the input string (e.g. user search query)
+     * @param candidate the string to compare against (e.g. contact name)
+     * @return the edit distance between {@code query} and {@code candidate}
      * @throws NullPointerException if either input string is {@code null}
      */
-    static int levenshteinDistance(String a, String b) {
-        requireNonNull(a);
-        requireNonNull(b);
+    static int damerauLevenshteinDistance(String query, String candidate) {
+        requireNonNull(query);
+        requireNonNull(candidate);
 
-        int n = a.length();
-        int m = b.length();
+        // defensively normalize for case-insensitive comparison
+        String q = query.toLowerCase();
+        String c = candidate.toLowerCase();
 
-        int[][] dpMatrix = new int[n + 1][m + 1];
+        int n = q.length();
+        int m = c.length();
 
-        // first row (steps to transform "" → b[0..col])
+        // dynamic programming matrix
+        int[][] dp = new int[n + 1][m + 1];
+
+        // initialize the first row of the matrix
         for (int col = 0; col <= m; col++) {
-            dpMatrix[0][col] = col;
+            dp[0][col] = col;
         }
 
-        // first column (steps to transform "" → a[0..row])
+        // initialize the first col of the matrix
         for (int row = 0; row <= n; row++) {
-            dpMatrix[row][0] = row;
+            dp[row][0] = row;
         }
 
         // Fill up the matrix using dynamic programming
         for (int i = 1; i <= n; i++) {
             for (int j = 1; j <= m; j++) {
-                char chA = Character.toLowerCase(a.charAt(i - 1));
-                char chB = Character.toLowerCase(b.charAt(j - 1));
+                char chQ = q.charAt(i - 1);
+                char chC = c.charAt(j - 1);
 
-                int cost = (chA == chB) ? 0 : 1;
-                dpMatrix[i][j] = Math.min(
-                        dpMatrix[i - 1][j] + 1, // deletion
-                        Math.min(dpMatrix[i][j - 1] + 1, // insertion
-                                dpMatrix[i - 1][j - 1] + cost) // substitution/match
+                int cost = (chQ == chC) ? 0 : 1;
+                dp[i][j] = Math.min(
+                        dp[i - 1][j] + 1, // deletion
+                        Math.min(dp[i][j - 1] + 1, // insertion
+                                dp[i - 1][j - 1] + cost) // substitution/match
                 );
+
+
+                // Handles transpositions (swapping adjacent characters)
+                if (i > 1 && j > 1) {
+                    char prevQ = q.charAt(i - 2);
+                    char prevC = c.charAt(j - 2);
+
+                    if (chQ == prevC && prevQ == chC) {
+                        dp[i][j] = Math.min(
+                                dp[i][j],
+                                dp[i - 2][j - 2] + 1 // transposition
+                        );
+                    }
+                }
             }
         }
 
-        return dpMatrix[n][m];
+        return dp[n][m];
     }
 
     /**
-     * Returns true if the {@code query} matches the {@code word} using fuzzy matching.
+     * Returns true if the {@code query} matches the {@code candidate} using fuzzy matching.
      *
-     * <p>Fuzzy matching uses Levenshtein/edit distance to allow approximate matches.
-     * The method returns true if the Levenshtein/edit distance between the query and word
+     * <p>Fuzzy matching uses Damerau–Levenshtein distance to allow approximate matches.
+     * The method returns true if the Damerau–Levenshtein distance between the query and candidate
      * is less than or equal to the specified threshold.</p>
      *
      * <p>This is useful for typo-tolerant searches. For example, with a threshold of 2,
@@ -158,30 +185,30 @@ public class StringUtil {
      * <p>The matching is case-insensitive.</p>
      *
      * @param query the search query string (will be trimmed)
-     * @param word the word to match against (will be trimmed)
+     * @param candidate the word to match against (will be trimmed)
      * @param threshold the maximum Levenshtein distance allowed for a match
      * @return true if the words match within the threshold, false otherwise
      * @throws NullPointerException if {@code query} or {@code word} is {@code null}
      * @throws IllegalArgumentException if {@code threshold} is negative
      */
-    public static boolean matchesFuzzy(String query, String word, int threshold) {
-        requireNonNull(query, "Query cannot be null");
-        requireNonNull(word, "Word cannot be null");
+    public static boolean matchesFuzzy(String query, String candidate, int threshold) {
+        requireNonNull(query);
+        requireNonNull(candidate);
         checkArgument(threshold >= 0, "Threshold cannot be negative");
 
         // Normalize inputs by trimming whitespace
         String trimmedQuery = query.trim();
-        String trimmedWord = word.trim();
+        String trimmedCandidate = candidate.trim();
 
         // Handle empty strings after trimming
-        if (trimmedQuery.isEmpty() || trimmedWord.isEmpty()) {
+        if (trimmedQuery.isEmpty() || trimmedCandidate.isEmpty()) {
             // Empty query should not match non-empty word and vice versa
             // except when both are empty (distance = 0)
-            return trimmedQuery.isEmpty() && trimmedWord.isEmpty();
+            return trimmedQuery.isEmpty() && trimmedCandidate.isEmpty();
         }
 
-        // Calculate Levenshtein distance and check if within threshold
-        int distance = levenshteinDistance(trimmedQuery, trimmedWord);
+        // Calculate Damerau Levenshtein Distance and check if within threshold
+        int distance = damerauLevenshteinDistance(trimmedQuery, trimmedCandidate);
         return distance <= threshold;
     }
 

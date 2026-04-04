@@ -19,7 +19,7 @@ import seedu.address.model.person.Person;
  * <p>Matching behaviors by field:
  * <ul>
  *   <li><b>Name keywords:</b> Uses both exact substring matching and fuzzy matching to handle typos.
- *       Fuzzy matching uses Levenshtein distance with a dynamic threshold based on keyword length.</li>
+ *       Fuzzy matching uses Damerau–Levenshtein distance with a dynamic threshold based on keyword length.</li>
  *   <li><b>Email keywords:</b> Uses exact substring matching.</li>
  *   <li><b>Tags:</b> Uses exact matching.</li>
  * </ul>
@@ -27,8 +27,6 @@ import seedu.address.model.person.Person;
  *
  * <p>All matching is case-insensitive and performed on individual tokens (for names, split by whitespace).
  * Logic combination: OR within each field (any keyword matches), AND across fields (all fields must match).</p>
- *
- * @see seedu.address.model.person.NameContainsKeywordsPredicate for name matching details
  */
 public class FindCommand extends Command {
 

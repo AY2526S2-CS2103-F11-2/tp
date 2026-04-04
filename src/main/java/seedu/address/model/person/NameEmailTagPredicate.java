@@ -14,7 +14,7 @@ import seedu.address.commons.util.ToStringBuilder;
  * <p>Matching behaviors by field:
  * <ul>
  *    <li><b>Name keywords:</b> Uses both exact substring matching and fuzzy matching (with dynamic
- *        Levenshtein distance threshold) to handle typos and variations. See
+ *        Damerau–Levenshtein distance threshold) to handle typos and variations. See
  *        {@link NameContainsKeywordsPredicate} for details.</li>
  *    <li><b>Email keywords:</b> Uses exact substring matching for email addresses.</li>
  *    <li><b>Tags:</b> Uses exact matching on tag names.</li>

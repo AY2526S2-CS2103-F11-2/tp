@@ -167,71 +167,74 @@ public class StringUtilTest {
     }
 
 
-    //---------------- Tests for levenshteinDistance --------------------------------------
+    //---------------- Tests for dameraudamerauLevenshteinDistance --------------------------------------
 
     @Test
-    public void levenshteinDistance_identicalStrings_returnsZero() {
-        assertEquals(0, StringUtil.levenshteinDistance("a", "a"));
-        assertEquals(0, StringUtil.levenshteinDistance("test", "test"));
-        assertEquals(0, StringUtil.levenshteinDistance("kitten", "kitten"));
+    public void damerauLevenshteinDistance_identicalStrings_returnsZero() {
+        assertEquals(0, StringUtil.damerauLevenshteinDistance("a", "a"));
+        assertEquals(0, StringUtil.damerauLevenshteinDistance("test", "test"));
+        assertEquals(0, StringUtil.damerauLevenshteinDistance("kitten", "kitten"));
     }
 
     @Test
-    public void levenshteinDistance_emptyStrings_returnsCorrectDistance() {
-        assertEquals(0, StringUtil.levenshteinDistance("", ""));
-        assertEquals(4, StringUtil.levenshteinDistance("", "test"));
-        assertEquals(6, StringUtil.levenshteinDistance("", "kitten"));
+    public void damerauLevenshteinDistance_emptyStrings_returnsCorrectDistance() {
+        assertEquals(0, StringUtil.damerauLevenshteinDistance("", ""));
+        assertEquals(4, StringUtil.damerauLevenshteinDistance("", "test"));
+        assertEquals(6, StringUtil.damerauLevenshteinDistance("", "kitten"));
     }
 
     @Test
-    public void levenshteinDistance_differentStrings_returnsCorrectDistance() {
+    public void damerauLevenshteinDistance_differentStrings_returnsCorrectDistance() {
         // 1 substitution
-        assertEquals(1, StringUtil.levenshteinDistance("cat", "cut"));
+        assertEquals(1, StringUtil.damerauLevenshteinDistance("cat", "cut"));
 
         // 1 insertion
-        assertEquals(1, StringUtil.levenshteinDistance("cat", "cats"));
+        assertEquals(1, StringUtil.damerauLevenshteinDistance("cat", "cats"));
 
         // 1 deletion
-        assertEquals(1, StringUtil.levenshteinDistance("cats", "cat"));
+        assertEquals(1, StringUtil.damerauLevenshteinDistance("cats", "cat"));
+
+        // 1 transposition
+        assertEquals(1, StringUtil.damerauLevenshteinDistance("alex", "alxe"));
 
         // multiple of same operation (3 substitutions)
-        assertEquals(3, StringUtil.levenshteinDistance("kitten", "sitting"));
+        assertEquals(3, StringUtil.damerauLevenshteinDistance("kitten", "sitting"));
 
         // Mix of operations: Example from https://www.youtube.com/watch?v=We3YDTzNXEk
         // 2 substitutions, 1 deletion
-        assertEquals(3, StringUtil.levenshteinDistance("abcdef", "azced"));
+        assertEquals(3, StringUtil.damerauLevenshteinDistance("abcdef", "azced"));
 
         // incremental differences
-        assertEquals(3, StringUtil.levenshteinDistance("abc", "axcde"));
+        assertEquals(3, StringUtil.damerauLevenshteinDistance("abc", "axcde"));
 
         // More realistic real-world examples
-        assertEquals(2, StringUtil.levenshteinDistance("robert", "rupert"));
-        assertEquals(1, StringUtil.levenshteinDistance("email", "e-mail"));
+        assertEquals(2, StringUtil.damerauLevenshteinDistance("robert", "rupert"));
+        assertEquals(1, StringUtil.damerauLevenshteinDistance("email", "e-mail"));
     }
 
     @Test
-    public void levenshteinDistance_caseInsensitiveComparison_returnsCorrectDistance() {
+    public void damerauLevenshteinDistance_caseInsensitiveComparison_returnsCorrectDistance() {
         // identical strings
-        assertEquals(0, StringUtil.levenshteinDistance("Test", "test"));
-        assertEquals(0, StringUtil.levenshteinDistance("Kitten", "kitten"));
+        assertEquals(0, StringUtil.damerauLevenshteinDistance("Test", "test"));
+        assertEquals(0, StringUtil.damerauLevenshteinDistance("Kitten", "kitten"));
 
         // different strings
-        assertEquals(3, StringUtil.levenshteinDistance("Kitten", "SITTING"));
+        assertEquals(3, StringUtil.damerauLevenshteinDistance("Kitten", "SITTING"));
     }
 
     @Test
-    public void levenshteinDistance_symmetryProperty_holds() {
+    public void damerauLevenshteinDistance_symmetryProperty_holds() {
         assertEquals(
-                StringUtil.levenshteinDistance("kitten", "sitting"),
-                StringUtil.levenshteinDistance("sitting", "kitten")
+                StringUtil.damerauLevenshteinDistance("kitten", "sitting"),
+                StringUtil.damerauLevenshteinDistance("sitting", "kitten")
         );
     }
 
     @Test
-    public void levenshteinDistance_nullGiven_throwsNullPointerException() {
-        assertThrows(NullPointerException.class, () -> StringUtil.levenshteinDistance(null, "abc"));
-        assertThrows(NullPointerException.class, () -> StringUtil.levenshteinDistance("abc", null));
-        assertThrows(NullPointerException.class, () -> StringUtil.levenshteinDistance(null, null));
+    public void damerauLevenshteinDistance_nullGiven_throwsNullPointerException() {
+        assertThrows(NullPointerException.class, () -> StringUtil.damerauLevenshteinDistance(null, "abc"));
+        assertThrows(NullPointerException.class, () -> StringUtil.damerauLevenshteinDistance("abc", null));
+        assertThrows(NullPointerException.class, () -> StringUtil.damerauLevenshteinDistance(null, null));
     }
 
     //---------------- Tests for matchesFuzzy ----------------------------------------
@@ -256,12 +259,6 @@ public class StringUtilTest {
     public void matchesFuzzy_negativeThreshold_throwsIllegalArgumentException() {
         assertThrows(IllegalArgumentException.class, "Threshold cannot be negative", () ->
                 StringUtil.matchesFuzzy("query", "word", -1));
-    }
-
-    @Test
-    public void matchesFuzzy_negativeThresholdMultipleNegatives_throwsIllegalArgumentException() {
-        assertThrows(IllegalArgumentException.class, "Threshold cannot be negative", () ->
-                StringUtil.matchesFuzzy("query", "word", -100));
     }
 
     /*
@@ -313,11 +310,11 @@ public class StringUtilTest {
         assertTrue(StringUtil.matchesFuzzy("cat", "cut", 1)); // substitution: a->u
 
         // 1 character difference (insertion/deletion)
-        assertTrue(StringUtil.matchesFuzzy("cat", "cats", 1)); // insertion: s
-        assertTrue(StringUtil.matchesFuzzy("cats", "cat", 1)); // deletion: s
+        assertTrue(StringUtil.matchesFuzzy("cat", "cats", 1)); // 1 insertion
+        assertTrue(StringUtil.matchesFuzzy("cats", "cat", 1)); // 1 deletion: s
+        assertTrue(StringUtil.matchesFuzzy("jhon", "john", 2)); // 1 transposition
 
         // 2 character differences
-        assertTrue(StringUtil.matchesFuzzy("jhon", "john", 2)); // 2 substitutions
         assertTrue(StringUtil.matchesFuzzy("kitten", "sitting", 3)); // Multiple operations
 
         // Threshold larger than needed
@@ -436,9 +433,8 @@ public class StringUtilTest {
         assertTrue(StringUtil.matchesFuzzy("test-name", "test-name", 0));
 
         // Special character differences
+        // requires 1 deletion
         assertFalse(StringUtil.matchesFuzzy("test@email.com", "testemail.com", 0));
-        assertTrue(StringUtil.matchesFuzzy("test@email.com", "testemail.com", 1)); // 1 deletion
+        assertTrue(StringUtil.matchesFuzzy("test@email.com", "testemail.com", 1));
     }
-
-    //
 }
