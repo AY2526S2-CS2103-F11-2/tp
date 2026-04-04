@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_PREFIX_WITH_NO_INPUT;
+import static seedu.address.logic.Messages.MESSAGE_PREAMBLE_NOT_EMPTY;
 import static seedu.address.logic.Messages.MESSAGE_PREFIX_SHOULD_NOT_HAVE_VALUE;
 import static seedu.address.logic.Messages.MESSAGE_UNEXPECTED_EXTRA_INPUT;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_COURSE_TAG;
@@ -691,5 +692,45 @@ public class ParserUtilTest {
 
         assertTrue(exception.getMessage().contains(
                 String.format(MESSAGE_PREFIX_SHOULD_NOT_HAVE_VALUE, "tr/tutor")));
+    }
+
+    //================== validateEmptyPreamble ==================
+    /*
+     Valid equivalence partitions for argMultimap:
+    - Empty preamble
+    - Non-empty preamble
+
+    Possible Boundary values:
+    - Prefix containing all whitespaces (should not throw exception as it is considered empty)
+     */
+
+    @Test
+    public void validateEmptyPreamble_emptyPreamble_noExceptionThrown() {
+        String args = " n/alice";
+
+        assertDoesNotThrow(() -> {
+            ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, PREFIX_NAME);
+            ParserUtil.validateEmptyPreamble(argMultimap, "Usage message");
+        });
+    }
+
+    @Test
+    public void validateEmptyPreamble_preambleAllWhitespaces_noExceptionThrown() {
+        String args = " \t \t \n \t \t n/alice";
+
+        assertDoesNotThrow(() -> {
+            ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, PREFIX_NAME);
+            ParserUtil.validateEmptyPreamble(argMultimap, "Usage message");
+        });
+    }
+
+    @Test
+    public void validateEmptyPreamble_nonEmptyPreamble_throwsParseException() {
+        String args = " bob n/alice";
+        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, PREFIX_NAME);
+
+        assertThrows(ParseException.class,
+                String.format(MESSAGE_PREAMBLE_NOT_EMPTY, "bob", "Usage message"),
+                () -> ParserUtil.validateEmptyPreamble(argMultimap, "Usage message"));
     }
 }
