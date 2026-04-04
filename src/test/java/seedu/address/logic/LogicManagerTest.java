@@ -295,4 +295,39 @@ public class LogicManagerTest {
         expectedModel.addPerson(expectedPerson);
         assertCommandFailure(addCommand, CommandException.class, expectedMessage, expectedModel);
     }
+
+    @Test
+    public void execute_validEditCommand_success() throws Exception {
+        model = new ModelManager(TypicalPersons.getTypicalAddressBook(), new UserPrefs());
+        JsonAddressBookStorage addressBookStorage =
+                new JsonAddressBookStorage(temporaryFolder.resolve("editAb.json"));
+        JsonUserPrefsStorage userPrefsStorage =
+                new JsonUserPrefsStorage(temporaryFolder.resolve("editPrefs.json"));
+        logic = new LogicManager(model, new StorageManager(addressBookStorage, userPrefsStorage));
+
+        String editCommand = "edit 1 n/NewName";
+        logic.execute(editCommand);
+
+        Person originalAlice = TypicalPersons.ALICE;
+        Person editedAlice = new PersonBuilder(originalAlice).withName("NewName").build();
+        ModelManager expectedModel = new ModelManager(TypicalPersons.getTypicalAddressBook(), new UserPrefs());
+        expectedModel.setPerson(originalAlice, editedAlice);
+
+        assertEquals(expectedModel, model);
+    }
+
+    @Test
+    public void execute_undoAfterEdit_restoresOriginalPerson() throws Exception {
+        model = new ModelManager(TypicalPersons.getTypicalAddressBook(), new UserPrefs());
+        JsonAddressBookStorage addressBookStorage =
+                new JsonAddressBookStorage(temporaryFolder.resolve("editUndoAb.json"));
+        JsonUserPrefsStorage userPrefsStorage =
+                new JsonUserPrefsStorage(temporaryFolder.resolve("editUndoPrefs.json"));
+        logic = new LogicManager(model, new StorageManager(addressBookStorage, userPrefsStorage));
+
+        logic.execute("edit 1 n/NewName");
+        logic.execute(UndoCommand.COMMAND_WORD);
+
+        assertEquals(new ModelManager(TypicalPersons.getTypicalAddressBook(), new UserPrefs()), model);
+    }
 }
