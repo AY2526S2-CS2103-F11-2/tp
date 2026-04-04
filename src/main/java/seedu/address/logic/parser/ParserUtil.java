@@ -143,6 +143,23 @@ public class ParserUtil {
     }
 
     /**
+     * Parses all type of tags from the ArgumentMultimap and returns them as a Set.
+     *
+     * @param argMultimap the ArgumentMultimap containing the tokenized arguments.
+     * @return a Set of parsed Tags.
+     * @throws ParseException if any tag fails validation.
+     */
+    public static Set<Tag> parseAllTypeOfTags(ArgumentMultimap argMultimap) throws ParseException {
+        Set<Tag> tagList = new HashSet<>();
+
+        tagList.addAll(parseTags(argMultimap.getAllValues(PREFIX_ROLE_TAG), TagType.ROLE));
+        tagList.addAll(parseTags(argMultimap.getAllValues(PREFIX_COURSE_TAG), TagType.COURSE));
+        tagList.addAll(parseTags(argMultimap.getAllValues(PREFIX_GENERAL_TAG), TagType.GENERAL));
+
+        return tagList;
+    }
+
+    /**
      * Returns the first disallowed prefixed token in input order, if any.
      * A prefix is only recognized when preceded by whitespace, matching ArgumentTokenizer behavior.
      */
@@ -311,22 +328,5 @@ public class ParserUtil {
             throw new ParseException(
                     String.format(MESSAGE_PREAMBLE_NOT_EMPTY, argMultimap.getPreamble(), usageMessage));
         }
-    }
-
-    /**
-     * Parses all type of tags from the ArgumentMultimap and returns them as a Set.
-     *
-     * @param argMultimap the ArgumentMultimap containing the tokenized arguments.
-     * @return a Set of parsed Tags.
-     * @throws ParseException if any tag fails validation.
-     */
-    public static Set<Tag> parseAllTypeOfTags(ArgumentMultimap argMultimap) throws ParseException {
-        Set<Tag> tagList = new HashSet<>();
-
-        tagList.addAll(parseTags(argMultimap.getAllValues(PREFIX_ROLE_TAG), TagType.ROLE));
-        tagList.addAll(parseTags(argMultimap.getAllValues(PREFIX_COURSE_TAG), TagType.COURSE));
-        tagList.addAll(parseTags(argMultimap.getAllValues(PREFIX_GENERAL_TAG), TagType.GENERAL));
-
-        return tagList;
     }
 }
