@@ -321,6 +321,14 @@ public class ParserUtil {
         }
     }
 
+    /**
+     * Validates that the preamble of the given {@code ArgumentMultimap} is empty,
+     * i.e., that there is no unexpected text before the first valid prefix.
+     *
+     * @param argMultimap the ArgumentMultimap containing the tokenized arguments
+     * @param usageMessage the command usage message to include in the exception
+     * @throws ParseException if the preamble is not empty
+     */
     public static void validateEmptyPreamble(
             ArgumentMultimap argMultimap, String usageMessage) throws ParseException {
 
