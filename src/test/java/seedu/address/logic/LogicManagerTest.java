@@ -1,6 +1,7 @@
 package seedu.address.logic;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.Messages.MESSAGE_PERSON_NOT_FOUND_DISPLAYED_INDEX;
 import static seedu.address.logic.Messages.MESSAGE_UNKNOWN_COMMAND;
 import static seedu.address.logic.commands.CommandTestUtil.EMAIL_DESC_AMY;
@@ -17,6 +18,7 @@ import java.lang.reflect.Field;
 import java.nio.file.AccessDeniedException;
 import java.nio.file.Path;
 import java.util.Deque;
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -329,5 +331,40 @@ public class LogicManagerTest {
         logic.execute(UndoCommand.COMMAND_WORD);
 
         assertEquals(new ModelManager(TypicalPersons.getTypicalAddressBook(), new UserPrefs()), model);
+    }
+
+    @Test
+    public void execute_validFindCommand_success() throws Exception {
+        model = new ModelManager(TypicalPersons.getTypicalAddressBook(), new UserPrefs());
+        JsonAddressBookStorage addressBookStorage =
+                new JsonAddressBookStorage(temporaryFolder.resolve("findAb.json"));
+        JsonUserPrefsStorage userPrefsStorage =
+                new JsonUserPrefsStorage(temporaryFolder.resolve("findPrefs.json"));
+        logic = new LogicManager(model, new StorageManager(addressBookStorage, userPrefsStorage));
+
+        logic.execute("find n/Alice");
+
+        assertEquals(1, model.getFilteredPersonList().size());
+        assertEquals(TypicalPersons.ALICE, model.getFilteredPersonList().get(0));
+    }
+
+    @Test
+    public void execute_validSortCommand_success() throws Exception {
+        model = new ModelManager(TypicalPersons.getTypicalAddressBook(), new UserPrefs());
+        JsonAddressBookStorage addressBookStorage =
+                new JsonAddressBookStorage(temporaryFolder.resolve("sortAb.json"));
+        JsonUserPrefsStorage userPrefsStorage =
+                new JsonUserPrefsStorage(temporaryFolder.resolve("sortPrefs.json"));
+        logic = new LogicManager(model, new StorageManager(addressBookStorage, userPrefsStorage));
+
+        logic.execute("sort o/name");
+
+        List<Person> sortedList = model.getFilteredPersonList();
+        for (int i = 0; i < sortedList.size() - 1; i++) {
+            String currentName = sortedList.get(i).getName().fullName.toLowerCase();
+            String nextName = sortedList.get(i + 1).getName().fullName.toLowerCase();
+            assertTrue(currentName.compareTo(nextName) <= 0,
+                    "List should be sorted by name ascending");
+        }
     }
 }
