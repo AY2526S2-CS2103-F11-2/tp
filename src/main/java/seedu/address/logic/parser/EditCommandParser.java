@@ -12,7 +12,6 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_TELEGRAM_HANDLE;
 import java.util.Optional;
 
 import seedu.address.commons.core.index.Index;
-import seedu.address.logic.Messages;
 import seedu.address.logic.commands.EditCommand;
 import seedu.address.logic.commands.EditCommand.EditPersonDescriptor;
 import seedu.address.logic.parser.exceptions.ParseException;
@@ -47,14 +46,15 @@ public class EditCommandParser implements Parser<EditCommand> {
      */
     public EditCommand parse(String args) throws ParseException {
         requireNonNull(args);
-        Optional<String> invalidPrefix = ParserUtil.findInvalidPrefixInput(args, ADD_EDIT_COMMAND_PREFIXES);
-        if (invalidPrefix.isPresent()) {
-            throw new ParseException(String.format(MESSAGE_UNEXPECTED_EXTRA_INPUT, invalidPrefix.get()));
-        }
+
+        ParserUtil.validateNoInvalidPrefixInputs(args, ADD_EDIT_COMMAND_PREFIXES);
 
         ArgumentMultimap argMultimap =
                 ArgumentTokenizer.tokenize(args, PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL,
                         PREFIX_TELEGRAM_HANDLE);
+
+        ParserUtil.validateNoEmptyPrefixValues(argMultimap, PREFIX_NAME, PREFIX_PHONE,
+                PREFIX_EMAIL, PREFIX_TELEGRAM_HANDLE);
 
         String preamble = argMultimap.getPreamble().trim();
         if (preamble.isEmpty() || preamble.contains(" ")) {
@@ -87,7 +87,7 @@ public class EditCommandParser implements Parser<EditCommand> {
         }
 
         if (!editPersonDescriptor.isAnyFieldEdited()) {
-            throw new ParseException(String.format(Messages.MESSAGE_INVALID_COMMAND_FORMAT,
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
                     EditCommand.MESSAGE_USAGE));
         }
 
