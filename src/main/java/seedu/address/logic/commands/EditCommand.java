@@ -314,6 +314,5 @@ public class EditCommand extends Command {
                     .add("telegramHandle", telegramHandle)
                     .toString();
         }
-
     }
 }
