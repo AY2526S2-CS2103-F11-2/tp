@@ -1,6 +1,7 @@
 package seedu.address.logic.parser;
 
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
+import static seedu.address.logic.parser.CliSyntax.DELETE_COMMAND_PREFIXES;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_INDEX;
 
@@ -23,18 +24,17 @@ public class DeleteCommandParser implements Parser<DeleteCommand> {
      * @throws ParseException if the user input does not conform the expected format
      */
     public DeleteCommand parse(String args) throws ParseException {
-        Prefix[] deletePrefixes = new Prefix[]{PREFIX_INDEX, PREFIX_EMAIL};
-        ParserUtil.validateNoInvalidPrefixInputs(args, deletePrefixes);
+        ParserUtil.validateNoInvalidPrefixInputs(args, DELETE_COMMAND_PREFIXES);
 
-        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, deletePrefixes);
+        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, DELETE_COMMAND_PREFIXES);
 
-        if (!isExactlyOnePrefixPresent(argMultimap, deletePrefixes)
+        if (!isExactlyOnePrefixPresent(argMultimap, DELETE_COMMAND_PREFIXES)
                 || !argMultimap.getPreamble().isEmpty()) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE));
         }
 
-        argMultimap.verifyNoDuplicatePrefixesFor(deletePrefixes);
-        ParserUtil.validateNoEmptyPrefixValues(argMultimap, deletePrefixes);
+        argMultimap.verifyNoDuplicatePrefixesFor(DELETE_COMMAND_PREFIXES);
+        ParserUtil.validateNoEmptyPrefixValues(argMultimap, DELETE_COMMAND_PREFIXES);
 
         try {
             if (argMultimap.getValue(PREFIX_INDEX).isPresent()) {
