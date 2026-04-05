@@ -100,7 +100,7 @@ public class StringUtil {
     /**
      * Computes the Damerau–Levenshtein distance (OSA variant) between {@code keyword} and {@code target}.
      *
-     *<p>This distance measures the minimum number of single-character edits (insertion, deletion,*
+     * <p>This distance measures the minimum number of single-character edits (insertion, deletion,*
      * substitution, or transposition of adjacent characters) required to transform {@code keyword} into
      * {@code target}.</p>
      *
