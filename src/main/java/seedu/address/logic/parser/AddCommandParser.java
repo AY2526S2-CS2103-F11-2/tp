@@ -1,15 +1,12 @@
 package seedu.address.logic.parser;
 
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
-import static seedu.address.logic.Messages.MESSAGE_UNEXPECTED_EXTRA_INPUT;
 import static seedu.address.logic.parser.CliSyntax.ADD_EDIT_COMMAND_PREFIXES;
-import static seedu.address.logic.parser.CliSyntax.NON_ADD_COMMAND_PREFIXES;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TELEGRAM_HANDLE;
 
-import java.util.Optional;
 import java.util.stream.Stream;
 
 import seedu.address.logic.commands.AddCommand;
@@ -33,11 +30,7 @@ public class AddCommandParser implements Parser<AddCommand> {
     public AddCommand parse(String args) throws ParseException {
         String leadingSpacedArgs = args.startsWith(" ") ? args : " " + args;
 
-        Optional<String> unexpectedInput = ParserUtil
-                .findUnexpectedExtraInput(leadingSpacedArgs, NON_ADD_COMMAND_PREFIXES);
-        if (unexpectedInput.isPresent()) {
-            throw new ParseException(String.format(MESSAGE_UNEXPECTED_EXTRA_INPUT, unexpectedInput.get()));
-        }
+        ParserUtil.validateNoInvalidPrefixInputs(leadingSpacedArgs, ADD_EDIT_COMMAND_PREFIXES);
 
         ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(leadingSpacedArgs, ADD_EDIT_COMMAND_PREFIXES);
 

@@ -214,6 +214,13 @@ public class AddCommandParserTest {
     }
 
     @Test
+    public void parse_unknownSlashToken_failure() {
+        assertParseFailure(parser,
+                NAME_DESC_BOB + EMAIL_DESC_BOB + " x/y",
+                String.format(MESSAGE_UNEXPECTED_EXTRA_INPUT, "x/y"));
+    }
+
+    @Test
     public void parse_plainWordThatLooksLikeCommandWord_success() {
         Person expectedPerson = new Person(
                 new Name("Chloe tag"),
