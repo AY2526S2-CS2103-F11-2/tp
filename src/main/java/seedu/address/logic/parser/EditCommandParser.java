@@ -47,11 +47,9 @@ public class EditCommandParser implements Parser<EditCommand> {
         ParserUtil.validateNoInvalidPrefixInputs(args, ADD_EDIT_COMMAND_PREFIXES);
 
         ArgumentMultimap argMultimap =
-                ArgumentTokenizer.tokenize(args, PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL,
-                        PREFIX_TELEGRAM_HANDLE);
+                ArgumentTokenizer.tokenize(args, ADD_EDIT_COMMAND_PREFIXES);
 
-        ParserUtil.validateNoEmptyPrefixValues(argMultimap, PREFIX_NAME, PREFIX_PHONE,
-                PREFIX_EMAIL, PREFIX_TELEGRAM_HANDLE);
+        ParserUtil.validateNoEmptyPrefixValues(argMultimap, ADD_EDIT_COMMAND_PREFIXES);
 
         String preamble = argMultimap.getPreamble().trim();
         if (preamble.isEmpty() || preamble.contains(" ")) {
@@ -65,7 +63,7 @@ public class EditCommandParser implements Parser<EditCommand> {
             throw new ParseException(pe.getMessage());
         }
 
-        argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL, PREFIX_TELEGRAM_HANDLE);
+        argMultimap.verifyNoDuplicatePrefixesFor(ADD_EDIT_COMMAND_PREFIXES);
 
         EditPersonDescriptor editPersonDescriptor = new EditPersonDescriptor();
 
