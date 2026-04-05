@@ -39,11 +39,13 @@ public class StringUtil {
     }
 
     /**
-     * Normalizes the input string by converting it to lowercase and removing special characters such as punctuation.
+     * Normalizes the input string by converting it to lowercase, removing trailing whitespaces
+     * and special characters such as punctuation.
      *
      * <p>This method standardizes strings for comparison and storage by:
      * <ul>
      *   <li>Converting all characters to lowercase for case-insensitive operations</li>
+     *   <li>Removing any trailing whitespaces</li>
      *   <li>Removing all special characters (punctuation, symbols, etc.)</li>
      *   <li>Preserving alphanumeric characters (a-z, 0-9) and whitespace</li>
      * </ul>
@@ -60,6 +62,7 @@ public class StringUtil {
         requireNonNull(s);
 
         return s.toLowerCase()
+                .trim()
                 .replaceAll("[^a-z0-9\\s]", "");
     }
 

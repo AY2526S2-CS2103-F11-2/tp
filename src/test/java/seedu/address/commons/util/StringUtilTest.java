@@ -138,6 +138,9 @@ public class StringUtilTest {
         // Mixed cases
         assertEquals("bob", StringUtil.normalize("bOb"));
 
+        // Trailing whitespaces should be trimmed
+        assertEquals("bob", StringUtil.normalize("\t bob \t"));
+
         // Lowercase String with non-alphanumeric characters
         assertEquals("bob c prim", StringUtil.normalize("bob c. prim"));
         assertEquals("bob hi", StringUtil.normalize("bob hi."));
