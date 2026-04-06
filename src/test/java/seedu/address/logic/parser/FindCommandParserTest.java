@@ -19,6 +19,7 @@ public class FindCommandParserTest {
 
     private FindCommandParser parser = new FindCommandParser();
 
+    //========================== FAILURE CASES - Invalid Format ================================
     @Test
     public void parse_emptyArg_throwsParseException() {
         assertParseFailure(parser, "     ", String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
@@ -69,6 +70,7 @@ public class FindCommandParserTest {
                 String.format(MESSAGE_INVALID_KEYWORD_WITH_ONLY_SPECIAL_CHARACTERS, "n/", "."));
     }
 
+    //============================== SUCCESS CASES - One Field ===================================
     @Test
     public void parse_validSingleNamePrefix_returnsFindCommand() {
         List<String> names = List.of("Alice");
@@ -146,6 +148,7 @@ public class FindCommandParserTest {
         assertParseSuccess(parser, "t/friends \t \t \t cs2103", expectedFindCommand);
     }
 
+    //========================= SUCCESS CASES - Multiple different fields ===================================
     @Test
     public void parse_validNameAndEmailPrefix_returnsFindCommand() {
         List<String> names = List.of("Alice");
