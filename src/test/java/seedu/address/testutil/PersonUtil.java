@@ -25,31 +25,18 @@ public class PersonUtil {
     }
 
     /**
-     * Returns the part of command string for the given {@code person}'s details.
+     * Returns the add-command arguments representing the given {@code person}'s details.
      */
     public static String getPersonDetails(Person person) {
         StringBuilder sb = new StringBuilder();
         sb.append(PREFIX_NAME + person.getName().fullName + " ");
-        sb.append(PREFIX_PHONE + person.getPhone().value + " ");
         sb.append(PREFIX_EMAIL + person.getEmail().value + " ");
+        if (person.getPhone() != null) {
+            sb.append(PREFIX_PHONE).append(person.getPhone().value).append(" ");
+        }
         if (person.getTelegramHandle() != null) {
             sb.append(PREFIX_TELEGRAM_HANDLE).append(person.getTelegramHandle().value).append(" ");
         }
-        person.getTags().stream().forEach(tag -> {
-            switch (tag.getType()) {
-            case ROLE:
-                sb.append(PREFIX_ROLE_TAG).append(tag.tagName).append(" ");
-                break;
-            case COURSE:
-                sb.append(PREFIX_COURSE_TAG).append(tag.tagName).append(" ");
-                break;
-            case GENERAL:
-                sb.append(PREFIX_GENERAL_TAG).append(tag.tagName).append(" ");
-                break;
-            default:
-                throw new IllegalArgumentException("Unknown tag type: " + tag.getType());
-            }
-        });
         return sb.toString();
     }
 
