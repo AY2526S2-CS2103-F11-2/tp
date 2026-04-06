@@ -12,7 +12,7 @@ title: CampusBridge
 
 **CampusBridge** helps NUS students organise and access contact information for professors, teaching assistants, and peers across different modules and faculties. It provides a centralised, easy-to-use system to save, search, and manage academic contacts efficiently.
 
-> Developed by Team F11-2 for CS2103 (AY25/26 Sem 2) — Version 1.5.1
+> Developed by Team F11-2 for CS2103 (AY25/26 Sem 2)
 
 ---
 
@@ -20,7 +20,7 @@ title: CampusBridge
 
 1. Ensure you have Java installed.
 2. Download the latest `CampusBridge.jar`.
-3. Open a terminal, `cd` into the folder containing the jar, and run: java -jar CampusBridge.jar
+3. Open a terminal, `cd` into the folder containing the jar, and run: java ```-jar CampusBridge.jar```
 
 ---
 
@@ -28,18 +28,18 @@ title: CampusBridge
 
 | Command | Description |
 |---------|-------------|
-| `list` | Lists all contacts |
-| `find n/alex e/gmail t/friends` | Searches for contacts by name, email, or tag |
+| `help` | Opens the help page |
 | `add n/John Doe e/johnd@example.com p/98765432 h/johndoe` | Adds a new contact |
 | `edit 1 n/Alice Doe e/aliced@example.com h/alicedoe` | Edits an existing contact |
 | `delete i/3` | Deletes a contact by index or email |
 | `tag 1 tg/friends tc/cs2103` | Tags a contact with role, course, or general tags |
 | `untag 3 tr/tutor tc/cs2103` | Removes tags from a contact |
 | `cleartag 1 tg/` | Clears a specific tag type from a contact |
+| `list` | Lists all contacts |
 | `sort o/name` | Sorts the contact list by name or email |
+| `find n/alex e/gmail t/friends` | Searches for contacts matching all specified criteria |
 | `undo` | Undoes the last undoable command |
 | `clear` | Deletes all contacts |
-| `help` | Opens the help page |
 | `exit` | Exits the app |
 
 Type any command in the command box and press **Enter** to execute it.
