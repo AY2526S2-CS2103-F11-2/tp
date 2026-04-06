@@ -223,7 +223,7 @@ The parser enforces the following rules:
 * Values are trimmed before validation.
 * Repeated single-valued prefixes are rejected.
 * Any non-empty preamble is rejected.
-* Known prefixes belonging to other commands, such as `t/`, `tr/`, `tc/`, `tg/`, `i/`, `o/`, and `r/`, are treated as unexpected extra input in an `add` command.
+* Any unexpected slash-prefixed token is rejected as extra input. This includes prefixes from other commands such as `t/`, `tr/`, `tc/`, `tg/`, `i/`, `o/`, and `r/`, as well as unknown prefixes such as `x/`.
 
 After tokenization, `AddCommandParser` uses `ParserUtil` to validate and convert each supplied value into the corresponding model type. It then constructs a `Person` object and returns an `AddCommand`.
 
