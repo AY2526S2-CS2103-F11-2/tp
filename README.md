@@ -18,8 +18,6 @@
 2. Download the latest `CampusBridge.jar` from [here](https://github.com/AY2526S2-CS2103-F11-2/tp/releases).
 3. Run `java -jar CampusBridge.jar` in your terminal.
 
-For full setup instructions, see the **[User Guide](https://ay2526s2-cs2103-f11-2.github.io/tp/UserGuide.html)**.
-
 ---
 
 ## Example Commands
