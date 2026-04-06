@@ -394,7 +394,7 @@ Use case ends.
 
 **MSS:**
 1. User <ins>requests to list contacts (UC04)</ins>.
-2. User requests to delete a contact, providing the contact's index.
+2. User requests to delete a contact.
 3. CampusBridge validates the input.
 4. CampusBridge deletes the contact and updates the contact list.
 5. CampusBridge shows a success message.
@@ -486,7 +486,7 @@ Use case ends.
 
 **MSS:**
 1. User <ins>requests to list contacts (UC04)</ins>.
-2. User requests to tag a contact, providing the contact's index and tag type.
+2. User requests to tag a contact.
 3. CampusBridge validates the input.
 4. CampusBridge adds the tag and updates the contact list.
 5. CampusBridge shows a success message.
