@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import seedu.address.logic.parser.Prefix;
+import seedu.address.model.person.DuplicateConflict;
 import seedu.address.model.person.Person;
 import seedu.address.model.tag.Tag;
 
@@ -15,7 +16,7 @@ public class Messages {
 
     public static final String MESSAGE_UNKNOWN_COMMAND = "Unknown command";
     public static final String MESSAGE_INVALID_COMMAND_FORMAT = "Invalid command format! \n%1$s";
-    public static final String MESSAGE_INVALID_PERSON_DISPLAYED_INDEX = "The person index provided is invalid";
+    public static final String MESSAGE_INVALID_PERSON_DISPLAYED_INDEX = "The person index provided is invalid!";
     public static final String MESSAGE_PERSON_NOT_FOUND_DISPLAYED_INDEX =
             "No person exists at index %1$s. \nTip: Use 'list' to see the current person list.";
     public static final String MESSAGE_PERSONS_LISTED_OVERVIEW = "%1$d persons listed!";
@@ -38,6 +39,19 @@ public class Messages {
     public static final String MESSAGE_NON_NUS_EMAIL = "Warning: Email is not an NUS domain.";
     public static final String MESSAGE_UNEXPECTED_EXTRA_INPUT =
             "Invalid command format! \nUnexpected extra input detected: '%s'.";
+    public static final String MESSAGE_DUPLICATE_EMAIL =
+            "A person with this email already exists in the address book";
+    public static final String MESSAGE_DUPLICATE_TELEGRAM_HANDLE =
+            "A person with this Telegram handle already exists in the address book";
+    public static final String MESSAGE_DUPLICATE_EMAIL_AND_TELEGRAM_HANDLE =
+            "A person with this email and Telegram handle already exists in the address book";
+
+    public static final String MESSAGE_DUPLICATE_EMAIL_IN_STORAGE =
+            "Persons list contains duplicate email(s).";
+    public static final String MESSAGE_DUPLICATE_TELEGRAM_HANDLE_IN_STORAGE =
+            "Persons list contains duplicate Telegram handle(s).";
+    public static final String MESSAGE_DUPLICATE_EMAIL_AND_TELEGRAM_HANDLE_IN_STORAGE =
+            "Persons list contains duplicate email(s) and Telegram handle(s).";
     public static final String MESSAGE_INVALID_KEYWORD_WITH_ONLY_SPECIAL_CHARACTERS =
             "Invalid keyword detected for prefix %s: '%s' contains only special characters. "
             + "Keywords must contain at least one alphanumeric character.";
@@ -52,6 +66,19 @@ public class Messages {
                 Stream.of(duplicatePrefixes).map(Prefix::toString).collect(Collectors.toSet());
 
         return MESSAGE_DUPLICATE_FIELDS + String.join(" ", duplicateFields);
+    }
+
+    /**
+     * Returns the user-facing error message for the given duplicate conflict type,
+     * or {@code null} if there is no conflict.
+     */
+    public static String getDuplicateConflictMessage(DuplicateConflict conflict) {
+        return switch (conflict) {
+        case EMAIL_AND_TELEGRAM_HANDLE -> MESSAGE_DUPLICATE_EMAIL_AND_TELEGRAM_HANDLE;
+        case EMAIL -> MESSAGE_DUPLICATE_EMAIL;
+        case TELEGRAM_HANDLE -> MESSAGE_DUPLICATE_TELEGRAM_HANDLE;
+        case NONE -> null;
+        };
     }
 
     /**

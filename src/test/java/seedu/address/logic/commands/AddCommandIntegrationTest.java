@@ -43,7 +43,7 @@ public class AddCommandIntegrationTest {
     public void execute_duplicateEmail_throwsCommandException() {
         Person personInList = model.getAddressBook().getPersonList().get(0);
         assertCommandFailure(new AddCommand(personInList), model,
-                AddCommand.MESSAGE_DUPLICATE_PERSON);
+                AddCommand.MESSAGE_DUPLICATE_EMAIL);
     }
 
     @Test
@@ -62,7 +62,7 @@ public class AddCommandIntegrationTest {
                 .build();
 
         assertCommandFailure(new AddCommand(personWithSameTelegramHandle), model,
-                AddCommand.MESSAGE_DUPLICATE_PERSON);
+                AddCommand.MESSAGE_DUPLICATE_TELEGRAM_HANDLE);
     }
 
     @Test
@@ -81,6 +81,26 @@ public class AddCommandIntegrationTest {
                 .build();
 
         assertCommandFailure(new AddCommand(personWithSameTelegramHandle), model,
-                AddCommand.MESSAGE_DUPLICATE_PERSON);
+                AddCommand.MESSAGE_DUPLICATE_TELEGRAM_HANDLE);
+    }
+
+
+    @Test
+    public void execute_duplicateEmailAndTelegramHandle_throwsCommandException() {
+        Person existingPerson = new PersonBuilder()
+                .withName("Telegram Existing")
+                .withEmail("duplicate@example.com")
+                .withTelegramHandle("alice123")
+                .build();
+        model.addPerson(existingPerson);
+
+        Person duplicatePerson = new PersonBuilder()
+                .withName("Telegram Duplicate")
+                .withEmail("duplicate@example.com")
+                .withTelegramHandle("alice123")
+                .build();
+
+        assertCommandFailure(new AddCommand(duplicatePerson), model,
+                AddCommand.MESSAGE_DUPLICATE_EMAIL_AND_TELEGRAM_HANDLE);
     }
 }

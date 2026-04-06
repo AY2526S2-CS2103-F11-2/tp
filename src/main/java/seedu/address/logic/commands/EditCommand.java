@@ -18,13 +18,12 @@ import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
+import seedu.address.model.person.DuplicateConflict;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
 import seedu.address.model.person.TelegramHandle;
-import seedu.address.model.person.exceptions.DuplicatePersonException;
-
 
 /**
  * Edits the details of an existing person in the address book.
@@ -40,16 +39,18 @@ public class EditCommand extends Command {
             + "[" + PREFIX_NAME + "NAME] "
             + "[" + PREFIX_EMAIL + "EMAIL] "
             + "[" + PREFIX_PHONE + "PHONE] "
-            + "[" + PREFIX_TELEGRAM_HANDLE + "TELEGRAM HANDLE] \n "
+            + "[" + PREFIX_TELEGRAM_HANDLE + "TELEGRAM_HANDLE].\n"
             + "Example: " + COMMAND_WORD + " 1 "
             + PREFIX_EMAIL + "johndoe@example.com "
             + PREFIX_PHONE + "91234567 "
             + PREFIX_TELEGRAM_HANDLE + "johndoe123";
 
-
-    public static final String MESSAGE_DUPLICATE_PERSON = "This person already exists in the address book.";
-    public static final String MESSAGE_NOT_EDITED = "At least one field to edit must be provided.";
     public static final String MESSAGE_EDIT_PERSON_SUCCESS = "Edited Person: %1$s";
+    public static final String MESSAGE_DUPLICATE_EMAIL = Messages.MESSAGE_DUPLICATE_EMAIL;
+    public static final String MESSAGE_DUPLICATE_TELEGRAM_HANDLE = Messages.MESSAGE_DUPLICATE_TELEGRAM_HANDLE;
+    public static final String MESSAGE_DUPLICATE_EMAIL_AND_TELEGRAM_HANDLE =
+            Messages.MESSAGE_DUPLICATE_EMAIL_AND_TELEGRAM_HANDLE;
+    public static final String MESSAGE_NOT_EDITED = "At least one field to edit must be provided.";
     public static final String MESSAGE_UNDO_FAILURE = "Cannot undo edit before command execution.";
     public static final String MESSAGE_UNDO_SUCCESS = "Undo edit person: %1$s";
 
@@ -83,11 +84,14 @@ public class EditCommand extends Command {
         Person personToEdit = lastShownList.get(index.getZeroBased());
         Person editedPerson = createEditedPerson(personToEdit, editPersonDescriptor);
 
-        try {
-            model.setPerson(personToEdit, editedPerson);
-        } catch (DuplicatePersonException e) {
-            throw new CommandException(MESSAGE_DUPLICATE_PERSON);
+        DuplicateConflict duplicateConflict = model.getDuplicateConflictExcluding(personToEdit, editedPerson);
+
+        String duplicateMessage = Messages.getDuplicateConflictMessage(duplicateConflict);
+        if (duplicateMessage != null) {
+            throw new CommandException(duplicateMessage);
         }
+
+        model.setPerson(personToEdit, editedPerson);
         originalPerson = personToEdit;
         updatedPerson = editedPerson;
 
@@ -112,11 +116,14 @@ public class EditCommand extends Command {
             throw new CommandException(MESSAGE_UNDO_FAILURE);
         }
 
-        try {
-            model.setPerson(updatedPerson, originalPerson);
-        } catch (DuplicatePersonException e) {
-            throw new CommandException(MESSAGE_DUPLICATE_PERSON);
+        DuplicateConflict duplicateConflict = model.getDuplicateConflictExcluding(updatedPerson, originalPerson);
+
+        String duplicateMessage = Messages.getDuplicateConflictMessage(duplicateConflict);
+        if (duplicateMessage != null) {
+            throw new CommandException(duplicateMessage);
         }
+
+        model.setPerson(updatedPerson, originalPerson);
 
         return new CommandResult(String.format(MESSAGE_UNDO_SUCCESS, Messages.format(originalPerson)));
     }

@@ -13,6 +13,7 @@ import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.commons.core.LogsCenter;
+import seedu.address.model.person.DuplicateConflict;
 import seedu.address.model.person.Person;
 
 /**
@@ -95,6 +96,18 @@ public class ModelManager implements Model {
     public boolean hasPerson(Person person) {
         requireNonNull(person);
         return addressBook.hasPerson(person);
+    }
+
+    @Override
+    public DuplicateConflict getDuplicateConflict(Person person) {
+        requireNonNull(person);
+        return addressBook.getDuplicateConflict(person);
+    }
+
+    @Override
+    public DuplicateConflict getDuplicateConflictExcluding(Person target, Person person) {
+        requireAllNonNull(target, person);
+        return addressBook.getDuplicateConflictExcluding(target, person);
     }
 
     @Override

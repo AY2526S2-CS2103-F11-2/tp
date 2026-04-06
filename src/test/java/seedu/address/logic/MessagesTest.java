@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
+import seedu.address.model.person.DuplicateConflict;
 import seedu.address.model.person.Person;
 import seedu.address.testutil.PersonBuilder;
 
@@ -34,5 +35,16 @@ public class MessagesTest {
 
         assertEquals("Amy Bee; Phone: 85355255; Email: amy@gmail.com; Telegram: amybee; Tags: [GENERAL: friend]",
                 Messages.format(person));
+    }
+
+    @Test
+    public void getDuplicateConflictMessage_allConflictTypes_success() {
+        assertEquals(Messages.MESSAGE_DUPLICATE_EMAIL,
+                Messages.getDuplicateConflictMessage(DuplicateConflict.EMAIL));
+        assertEquals(Messages.MESSAGE_DUPLICATE_TELEGRAM_HANDLE,
+                Messages.getDuplicateConflictMessage(DuplicateConflict.TELEGRAM_HANDLE));
+        assertEquals(Messages.MESSAGE_DUPLICATE_EMAIL_AND_TELEGRAM_HANDLE,
+                Messages.getDuplicateConflictMessage(DuplicateConflict.EMAIL_AND_TELEGRAM_HANDLE));
+        assertEquals(null, Messages.getDuplicateConflictMessage(DuplicateConflict.NONE));
     }
 }

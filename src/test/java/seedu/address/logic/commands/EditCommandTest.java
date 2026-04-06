@@ -112,7 +112,7 @@ public class EditCommandTest {
         EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder(firstPerson).build();
         EditCommand editCommand = new EditCommand(INDEX_SECOND_PERSON, descriptor);
 
-        assertCommandFailure(editCommand, model, EditCommand.MESSAGE_DUPLICATE_PERSON);
+        assertCommandFailure(editCommand, model, EditCommand.MESSAGE_DUPLICATE_EMAIL);
     }
 
     @Test
@@ -123,7 +123,7 @@ public class EditCommandTest {
         EditCommand editCommand = new EditCommand(INDEX_FIRST_PERSON,
                 new EditPersonDescriptorBuilder(personInList).build());
 
-        assertCommandFailure(editCommand, model, EditCommand.MESSAGE_DUPLICATE_PERSON);
+        assertCommandFailure(editCommand, model, EditCommand.MESSAGE_DUPLICATE_EMAIL);
     }
 
     @Test
@@ -177,7 +177,7 @@ public class EditCommandTest {
                 .build();
         EditCommand editCommand = new EditCommand(INDEX_SECOND_PERSON, descriptor);
 
-        assertCommandFailure(editCommand, model, EditCommand.MESSAGE_DUPLICATE_PERSON);
+        assertCommandFailure(editCommand, model, EditCommand.MESSAGE_DUPLICATE_TELEGRAM_HANDLE);
     }
 
     @Test
@@ -201,7 +201,27 @@ public class EditCommandTest {
                 .build();
         EditCommand editCommand = new EditCommand(INDEX_SECOND_PERSON, descriptor);
 
-        assertCommandFailure(editCommand, model, EditCommand.MESSAGE_DUPLICATE_PERSON);
+        assertCommandFailure(editCommand, model, EditCommand.MESSAGE_DUPLICATE_TELEGRAM_HANDLE);
+    }
+
+    @Test
+    public void execute_duplicateEmailAndTelegramHandleUnfilteredList_failure() {
+        Person firstPersonWithTelegram = new PersonBuilder(model.getFilteredPersonList()
+                .get(INDEX_FIRST_PERSON.getZeroBased()))
+                .withTelegramHandle("alice123")
+                .build();
+        Person secondPerson = model.getFilteredPersonList().get(INDEX_SECOND_PERSON.getZeroBased());
+
+        model.setPerson(model.getFilteredPersonList()
+                .get(INDEX_FIRST_PERSON.getZeroBased()), firstPersonWithTelegram);
+
+        EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder()
+                .withEmail(firstPersonWithTelegram.getEmail().value)
+                .withTelegramHandle("alice123")
+                .build();
+        EditCommand editCommand = new EditCommand(INDEX_SECOND_PERSON, descriptor);
+
+        assertCommandFailure(editCommand, model, EditCommand.MESSAGE_DUPLICATE_EMAIL_AND_TELEGRAM_HANDLE);
     }
 
     @Test
@@ -300,7 +320,64 @@ public class EditCommandTest {
         Person benson = model.getFilteredPersonList().get(INDEX_SECOND_PERSON.getZeroBased());
         model.setPerson(benson, new PersonBuilder(benson).withEmail(alice.getEmail().value).build());
 
-        assertUndoFailure(editCommand, model, EditCommand.MESSAGE_DUPLICATE_PERSON);
+        assertUndoFailure(editCommand, model, EditCommand.MESSAGE_DUPLICATE_EMAIL);
+    }
+
+    @Test
+    public void undo_duplicateTelegramHandle_throwsCommandException() {
+        Person alice = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        Person aliceWithTelegram = new PersonBuilder(alice).withTelegramHandle("alice123").build();
+        model.setPerson(alice, aliceWithTelegram);
+
+        EditCommand editCommand = new EditCommand(INDEX_FIRST_PERSON,
+                new EditPersonDescriptorBuilder().withTelegramHandle("temp123").build());
+        Person editedAlice = new PersonBuilder(aliceWithTelegram).withTelegramHandle("temp123").build();
+
+        String executeMessage = String.format(EditCommand.MESSAGE_EDIT_PERSON_SUCCESS,
+                Messages.format(editedAlice));
+
+        Model expectedAfterEdit = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
+        expectedAfterEdit.setPerson(aliceWithTelegram, editedAlice);
+
+        assertCommandSuccess(editCommand, model, executeMessage, expectedAfterEdit);
+
+        Person benson = model.getFilteredPersonList().get(INDEX_SECOND_PERSON.getZeroBased());
+        model.setPerson(benson, new PersonBuilder(benson).withTelegramHandle("alice123").build());
+
+        assertUndoFailure(editCommand, model, EditCommand.MESSAGE_DUPLICATE_TELEGRAM_HANDLE);
+    }
+
+    @Test
+    public void undo_duplicateEmailAndTelegramHandle_throwsCommandException() {
+        Person alice = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        Person aliceWithTelegram = new PersonBuilder(alice).withTelegramHandle("alice123").build();
+        model.setPerson(alice, aliceWithTelegram);
+
+        EditCommand editCommand = new EditCommand(INDEX_FIRST_PERSON,
+                new EditPersonDescriptorBuilder()
+                        .withEmail("temp@example.com")
+                        .withTelegramHandle("temp123")
+                        .build());
+        Person editedAlice = new PersonBuilder(aliceWithTelegram)
+                .withEmail("temp@example.com")
+                .withTelegramHandle("temp123")
+                .build();
+
+        String executeMessage = String.format(EditCommand.MESSAGE_EDIT_PERSON_SUCCESS,
+                Messages.format(editedAlice)) + "\n" + Messages.MESSAGE_NON_NUS_EMAIL;
+
+        Model expectedAfterEdit = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
+        expectedAfterEdit.setPerson(aliceWithTelegram, editedAlice);
+
+        assertCommandSuccess(editCommand, model, executeMessage, expectedAfterEdit);
+
+        Person benson = model.getFilteredPersonList().get(INDEX_SECOND_PERSON.getZeroBased());
+        model.setPerson(benson, new PersonBuilder(benson)
+                .withEmail(aliceWithTelegram.getEmail().value)
+                .withTelegramHandle("alice123")
+                .build());
+
+        assertUndoFailure(editCommand, model, EditCommand.MESSAGE_DUPLICATE_EMAIL_AND_TELEGRAM_HANDLE);
     }
 
     @Test

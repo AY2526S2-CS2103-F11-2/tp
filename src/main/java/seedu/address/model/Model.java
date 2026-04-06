@@ -6,6 +6,7 @@ import java.util.function.Predicate;
 
 import javafx.collections.ObservableList;
 import seedu.address.commons.core.GuiSettings;
+import seedu.address.model.person.DuplicateConflict;
 import seedu.address.model.person.Person;
 
 /**
@@ -57,6 +58,16 @@ public interface Model {
      * Returns true if a person with the same identity as {@code person} exists in the address book.
      */
     boolean hasPerson(Person person);
+
+    /**
+     * Returns the duplicate conflict type for {@code person}.
+     */
+    DuplicateConflict getDuplicateConflict(Person person);
+
+    /**
+     * Returns the duplicate conflict type for {@code person}, excluding {@code target}.
+     */
+    DuplicateConflict getDuplicateConflictExcluding(Person target, Person person);
 
     /**
      * Deletes the given person.

@@ -10,6 +10,7 @@ import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
+import seedu.address.model.person.DuplicateConflict;
 import seedu.address.model.person.Person;
 
 /**
@@ -33,8 +34,10 @@ public class AddCommand extends Command {
             + PREFIX_TELEGRAM_HANDLE + "johndoe123";
 
     public static final String MESSAGE_SUCCESS = "New person added: %1$s";
-    public static final String MESSAGE_DUPLICATE_PERSON =
-            "A person with this email or Telegram handle already exists in the address book";
+    public static final String MESSAGE_DUPLICATE_EMAIL = Messages.MESSAGE_DUPLICATE_EMAIL;
+    public static final String MESSAGE_DUPLICATE_TELEGRAM_HANDLE = Messages.MESSAGE_DUPLICATE_TELEGRAM_HANDLE;
+    public static final String MESSAGE_DUPLICATE_EMAIL_AND_TELEGRAM_HANDLE =
+            Messages.MESSAGE_DUPLICATE_EMAIL_AND_TELEGRAM_HANDLE;
     public static final String MESSAGE_UNDO_SUCCESS = "Undo add person: %1$s";
     public static final String MESSAGE_UNDO_FAILURE = "Cannot undo add because the person no longer exists.";
     private final Person toAdd;
@@ -51,8 +54,11 @@ public class AddCommand extends Command {
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
 
-        if (model.hasPerson(toAdd)) {
-            throw new CommandException(MESSAGE_DUPLICATE_PERSON);
+        DuplicateConflict duplicateConflict = model.getDuplicateConflict(toAdd);
+
+        String duplicateMessage = Messages.getDuplicateConflictMessage(duplicateConflict);
+        if (duplicateMessage != null) {
+            throw new CommandException(duplicateMessage);
         }
 
         model.addPerson(toAdd);

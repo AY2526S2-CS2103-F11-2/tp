@@ -29,6 +29,50 @@ public class PersonTest {
     }
 
     @Test
+    public void hasSameEmail() {
+        assertTrue(ALICE.hasSameEmail(ALICE));
+        assertFalse(ALICE.hasSameEmail(null));
+
+        Person editedAlice = new PersonBuilder(ALICE)
+                .withName(VALID_NAME_BOB)
+                .withPhone(VALID_PHONE_BOB)
+                .withRoleTags(VALID_ROLE_TAG_TEAMMATE)
+                .build();
+        assertTrue(ALICE.hasSameEmail(editedAlice));
+
+        Person differentEmail = new PersonBuilder(ALICE)
+                .withEmail(VALID_EMAIL_BOB)
+                .build();
+        assertFalse(ALICE.hasSameEmail(differentEmail));
+    }
+
+    @Test
+    public void hasSameTelegramHandle() {
+        Person aliceWithTelegram = new PersonBuilder(ALICE).withTelegramHandle("alice123").build();
+
+        assertTrue(aliceWithTelegram.hasSameTelegramHandle(aliceWithTelegram));
+        assertFalse(aliceWithTelegram.hasSameTelegramHandle(null));
+        assertFalse(ALICE.hasSameTelegramHandle(aliceWithTelegram));
+
+        Person sameTelegramDifferentEmail = new PersonBuilder(aliceWithTelegram)
+                .withEmail(VALID_EMAIL_BOB)
+                .build();
+        assertTrue(aliceWithTelegram.hasSameTelegramHandle(sameTelegramDifferentEmail));
+
+        Person sameTelegramDifferentCase = new PersonBuilder(aliceWithTelegram)
+                .withEmail("other@example.com")
+                .withTelegramHandle("ALICE123")
+                .build();
+        assertTrue(aliceWithTelegram.hasSameTelegramHandle(sameTelegramDifferentCase));
+
+        Person differentTelegram = new PersonBuilder(aliceWithTelegram)
+                .withEmail("other@example.com")
+                .withTelegramHandle("bob123")
+                .build();
+        assertFalse(aliceWithTelegram.hasSameTelegramHandle(differentTelegram));
+    }
+
+    @Test
     public void isSamePerson() {
         // same object -> returns true
         assertTrue(ALICE.isSamePerson(ALICE));

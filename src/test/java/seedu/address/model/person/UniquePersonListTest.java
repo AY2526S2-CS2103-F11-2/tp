@@ -59,6 +59,87 @@ public class UniquePersonListTest {
     }
 
     @Test
+    public void getDuplicateConflict_nullPerson_throwsNullPointerException() {
+        assertThrows(NullPointerException.class, () -> uniquePersonList.getDuplicateConflict(null));
+    }
+
+    @Test
+    public void getDuplicateConflict_personWithSameEmail_returnsEmail() {
+        uniquePersonList.add(ALICE);
+        Person editedAlice = new PersonBuilder(ALICE).withRoleTags(VALID_ROLE_TAG_TEAMMATE).build();
+
+        assertEquals(DuplicateConflict.EMAIL, uniquePersonList.getDuplicateConflict(editedAlice));
+    }
+
+    @Test
+    public void getDuplicateConflict_personWithSameTelegramHandle_returnsTelegramHandle() {
+        Person aliceWithTelegram = new PersonBuilder(ALICE).withTelegramHandle("alice123").build();
+        Person editedAlice = new PersonBuilder(aliceWithTelegram).withEmail(VALID_EMAIL_BOB).build();
+
+        uniquePersonList.add(aliceWithTelegram);
+
+        assertEquals(DuplicateConflict.TELEGRAM_HANDLE, uniquePersonList.getDuplicateConflict(editedAlice));
+    }
+
+    @Test
+    public void getDuplicateConflict_personWithSameEmailAndTelegramHandle_returnsBoth() {
+        Person aliceWithTelegram = new PersonBuilder(ALICE).withTelegramHandle("alice123").build();
+        Person duplicateAlice = new PersonBuilder(aliceWithTelegram).build();
+
+        uniquePersonList.add(aliceWithTelegram);
+
+        assertEquals(DuplicateConflict.EMAIL_AND_TELEGRAM_HANDLE,
+                uniquePersonList.getDuplicateConflict(duplicateAlice));
+    }
+
+    @Test
+    public void getDuplicateConflict_personWithDifferentEmailAndTelegramHandle_returnsNone() {
+        uniquePersonList.add(ALICE);
+
+        assertEquals(DuplicateConflict.NONE, uniquePersonList.getDuplicateConflict(BOB));
+    }
+
+    @Test
+    public void getDuplicateConflictExcluding_nullTarget_throwsNullPointerException() {
+        assertThrows(NullPointerException.class, () -> uniquePersonList.getDuplicateConflictExcluding(null, ALICE));
+    }
+
+    @Test
+    public void getDuplicateConflictExcluding_nullPerson_throwsNullPointerException() {
+        assertThrows(NullPointerException.class, () -> uniquePersonList.getDuplicateConflictExcluding(ALICE, null));
+    }
+
+    @Test
+    public void getDuplicateConflictExcluding_sameTarget_returnsNone() {
+        uniquePersonList.add(ALICE);
+
+        assertEquals(DuplicateConflict.NONE, uniquePersonList.getDuplicateConflictExcluding(ALICE, ALICE));
+    }
+
+    @Test
+    public void getDuplicateConflictExcluding_otherPersonWithSameEmail_returnsEmail() {
+        uniquePersonList.add(ALICE);
+        uniquePersonList.add(BOB);
+
+        Person editedBob = new PersonBuilder(BOB).withEmail(ALICE.getEmail().value).build();
+
+        assertEquals(DuplicateConflict.EMAIL, uniquePersonList.getDuplicateConflictExcluding(BOB, editedBob));
+    }
+
+    @Test
+    public void getDuplicateConflictExcluding_otherPersonWithSameTelegramHandle_returnsTelegramHandle() {
+        Person aliceWithTelegram = new PersonBuilder(ALICE).withTelegramHandle("alice123").build();
+        Person bobWithTelegram = new PersonBuilder(BOB).withTelegramHandle("bob123").build();
+        Person editedBob = new PersonBuilder(bobWithTelegram).withTelegramHandle("alice123").build();
+
+        uniquePersonList.add(aliceWithTelegram);
+        uniquePersonList.add(bobWithTelegram);
+
+        assertEquals(DuplicateConflict.TELEGRAM_HANDLE,
+                uniquePersonList.getDuplicateConflictExcluding(bobWithTelegram, editedBob));
+    }
+
+    @Test
     public void add_nullPerson_throwsNullPointerException() {
         assertThrows(NullPointerException.class, () -> uniquePersonList.add(null));
     }

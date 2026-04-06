@@ -213,6 +213,9 @@ When an undo command is called, the deque will peek at the first item to be out.
 
 If the undo of the command is successfully executed, the deque will pop.
 
+Here is the sequence UML diagram:![UndoSequenceDiagram-Logic.png]
+Note: Undo methods in commands now directly calls methods in Model to revert the changes.
+
 More UML diagrams are to be added in a later.
 
 #### Design considerations:
@@ -550,6 +553,37 @@ Use case ends.
 
 * 4a. The displayed command is invalid.
     * 4a1. CampusBridge shows an error message indicating the invalid command.
+
+  Use case ends.
+
+
+#### Use Case: UC07 - Undo previous action
+
+**Preconditions: Application is running**
+
+**MSS:**
+1. User requests to undo the most recent action.
+2. CampusBridge retrieves the most recent undoable command from the undo history.
+3. CampusBridge invokes the undo operation of that command.
+4. The command reverses its own effects on the application state.
+5. CampusBridge updates the undo history.
+6. CampusBridge shows the updated state and a success message.
+
+Use case ends.
+
+**Extensions:**
+* 2a. No undoable commands available in undo history.
+    * 2a1. CampusBridge shows an error message indicating that there are no actions to undo.
+
+  Use case ends.
+
+* 3a. Command fails to execute its undo operation.
+    * 3a1. CampusBridge shows an error message indicating that the undo operation failed.
+
+  Use case ends.
+
+* 5a. Storage file cannot be written or accessed.
+    * 5a1. CampusBridge shows an error message indicating the state could not be saved.
 
   Use case ends.
 

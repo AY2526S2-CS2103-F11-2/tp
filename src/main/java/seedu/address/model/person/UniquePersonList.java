@@ -37,6 +37,22 @@ public class UniquePersonList implements Iterable<Person> {
     }
 
     /**
+     * Returns the duplicate conflict type for {@code toCheck}.
+     */
+    public DuplicateConflict getDuplicateConflict(Person toCheck) {
+        requireNonNull(toCheck);
+        return findDuplicateConflict(toCheck, null);
+    }
+
+    /**
+     * Returns the duplicate conflict type for {@code toCheck}, excluding {@code target}.
+     */
+    public DuplicateConflict getDuplicateConflictExcluding(Person target, Person toCheck) {
+        requireAllNonNull(target, toCheck);
+        return findDuplicateConflict(toCheck, target);
+    }
+
+    /**
      * Adds a person to the list.
      * The person must not already exist in the list.
      */
@@ -149,6 +165,39 @@ public class UniquePersonList implements Iterable<Person> {
     @Override
     public String toString() {
         return internalList.toString();
+    }
+
+    /**
+     * Returns the duplicate conflict type for {@code toCheck}, optionally excluding {@code targetToExclude}.
+     */
+    private DuplicateConflict findDuplicateConflict(Person toCheck, Person targetToExclude) {
+        boolean hasDuplicateEmail = false;
+        boolean hasDuplicateTelegramHandle = false;
+
+        for (Person existingPerson : internalList) {
+            if (targetToExclude != null && existingPerson.equals(targetToExclude)) {
+                continue;
+            }
+
+            if (existingPerson.hasSameEmail(toCheck)) {
+                hasDuplicateEmail = true;
+            }
+            if (existingPerson.hasSameTelegramHandle(toCheck)) {
+                hasDuplicateTelegramHandle = true;
+            }
+
+            if (hasDuplicateEmail && hasDuplicateTelegramHandle) {
+                return DuplicateConflict.EMAIL_AND_TELEGRAM_HANDLE;
+            }
+        }
+
+        if (hasDuplicateEmail) {
+            return DuplicateConflict.EMAIL;
+        }
+        if (hasDuplicateTelegramHandle) {
+            return DuplicateConflict.TELEGRAM_HANDLE;
+        }
+        return DuplicateConflict.NONE;
     }
 
     /**
