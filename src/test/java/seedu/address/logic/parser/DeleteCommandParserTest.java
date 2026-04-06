@@ -1,6 +1,7 @@
 package seedu.address.logic.parser;
 
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
+import static seedu.address.logic.Messages.MESSAGE_INVALID_INDEX;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_PREFIX_WITH_NO_INPUT;
 import static seedu.address.logic.Messages.MESSAGE_UNEXPECTED_EXTRA_INPUT;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_EMAIL_AMY;
@@ -47,16 +48,16 @@ public class DeleteCommandParserTest {
     public void parse_invalidIndex_throwsParseException() {
         // EP: invalid index - non-numeric characters
         assertParseFailure(parser, " i/a",
-                String.format(ParserUtil.MESSAGE_INVALID_INDEX));
+                String.format(MESSAGE_INVALID_INDEX));
 
         // EP: invalid index - zero
         // Boundary value
         assertParseFailure(parser, " i/0",
-                String.format(ParserUtil.MESSAGE_INVALID_INDEX));
+                String.format(MESSAGE_INVALID_INDEX));
 
         // EP: invalid index - negative number
         assertParseFailure(parser, " i/-1",
-                String.format(ParserUtil.MESSAGE_INVALID_INDEX));
+                String.format(MESSAGE_INVALID_INDEX));
     }
 
     @Test

@@ -58,28 +58,28 @@ public class ClearTagCommandParserTest {
     @Test
     public void parse_invalidIndexWithoutPrefix_failure() {
         assertParseFailure(parser, "0",
-                ParserUtil.MESSAGE_INVALID_INDEX);
+                MESSAGE_INVALID_INDEX);
 
         assertParseFailure(parser, "abc",
-                ParserUtil.MESSAGE_INVALID_INDEX);
+                MESSAGE_INVALID_INDEX);
     }
 
     @Test
     public void parse_invalidIndexWithPrefix_failure() {
         assertParseFailure(parser,
                 "0 tr/",
-                ParserUtil.MESSAGE_INVALID_INDEX);
+                MESSAGE_INVALID_INDEX);
 
         assertParseFailure(parser,
                 "-5 tr/",
-                ParserUtil.MESSAGE_INVALID_INDEX);
+                MESSAGE_INVALID_INDEX);
     }
 
     @Test
     public void parse_invalidIndexNonNumeric_failure() {
         assertParseFailure(parser,
                 "abc tg/",
-                ParserUtil.MESSAGE_INVALID_INDEX);
+                MESSAGE_INVALID_INDEX);
     }
 
     // ================== FAILURE CASES - PREFIX VALIDATION ==================

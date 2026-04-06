@@ -1,6 +1,7 @@
 package seedu.address.logic.parser;
 
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
+import static seedu.address.logic.Messages.MESSAGE_INVALID_INDEX;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_PREFIX_WITH_NO_INPUT;
 import static seedu.address.logic.Messages.MESSAGE_UNEXPECTED_EXTRA_INPUT;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseFailure;
@@ -132,28 +133,28 @@ public class TagCommandParserTest {
     @Test
     public void parse_invalidIndexWithoutPrefix_failure() {
         assertParseFailure(parser, "0",
-                ParserUtil.MESSAGE_INVALID_INDEX);
+                MESSAGE_INVALID_INDEX);
 
         assertParseFailure(parser, "abc",
-                ParserUtil.MESSAGE_INVALID_INDEX);
+                MESSAGE_INVALID_INDEX);
     }
 
     @Test
     public void parse_invalidIndexWithPrefix_failure() {
         assertParseFailure(parser,
                 "0 tr/" + VALID_ROLE_TAG,
-                ParserUtil.MESSAGE_INVALID_INDEX);
+                MESSAGE_INVALID_INDEX);
 
         assertParseFailure(parser,
                 "-5 tr/" + VALID_ROLE_TAG,
-                ParserUtil.MESSAGE_INVALID_INDEX);
+                MESSAGE_INVALID_INDEX);
     }
 
     @Test
     public void parse_invalidIndexNonNumeric_failure() {
         assertParseFailure(parser,
                 "abc tg/" + VALID_GENERAL_TAG,
-                ParserUtil.MESSAGE_INVALID_INDEX);
+                MESSAGE_INVALID_INDEX);
     }
 
     // ================== FAILURE CASES - TAG VALIDATION ==================
