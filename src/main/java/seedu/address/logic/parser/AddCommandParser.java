@@ -34,6 +34,8 @@ public class AddCommandParser implements Parser<AddCommand> {
 
         ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(leadingSpacedArgs, ADD_EDIT_COMMAND_PREFIXES);
 
+        ParserUtil.validateNoEmptyPrefixValues(argMultimap, ADD_EDIT_COMMAND_PREFIXES);
+
         if (!arePrefixesPresent(argMultimap, PREFIX_NAME, PREFIX_EMAIL)
                 || !argMultimap.getPreamble().isEmpty()) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));

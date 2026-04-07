@@ -1,6 +1,7 @@
 package seedu.address.logic.parser;
 
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
+import static seedu.address.logic.Messages.MESSAGE_INVALID_PREFIX_WITH_NO_INPUT;
 import static seedu.address.logic.Messages.MESSAGE_UNEXPECTED_EXTRA_INPUT;
 import static seedu.address.logic.commands.CommandTestUtil.EMAIL_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.EMAIL_DESC_BOB;
@@ -192,6 +193,16 @@ public class AddCommandParserTest {
         assertParseFailure(parser,
                 PREAMBLE_NON_EMPTY + NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB,
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
+
+        // empty phone
+        assertParseFailure(parser,
+                NAME_DESC_BOB + EMAIL_DESC_BOB + " p/",
+                String.format(MESSAGE_INVALID_PREFIX_WITH_NO_INPUT, "p/"));
+
+        // empty telegram handle
+        assertParseFailure(parser,
+                NAME_DESC_BOB + EMAIL_DESC_BOB + " h/",
+                String.format(MESSAGE_INVALID_PREFIX_WITH_NO_INPUT, "h/"));
     }
 
     @Test

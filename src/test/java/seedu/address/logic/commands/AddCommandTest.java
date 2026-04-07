@@ -170,9 +170,17 @@ public class AddCommandTest {
     public void undo_beforeExecute_throwsCommandException() {
         Model model = new ModelManager(TypicalPersons.getTypicalAddressBook(), new UserPrefs());
         AddCommand addCommand = new AddCommand(new PersonBuilder(HOON).build());
-        assertUndoFailure(addCommand, model, AddCommand.MESSAGE_UNDO_FAILURE);
+        assertUndoFailure(addCommand, model, AddCommand.MESSAGE_UNDO_NOT_EXECUTED);
     }
 
+    @Test
+    public void undo_beforeExecuteExistingPerson_throwsCommandException() {
+        Model model = new ModelManager(TypicalPersons.getTypicalAddressBook(), new UserPrefs());
+        Person existingPerson = model.getFilteredPersonList().get(0);
+        AddCommand addCommand = new AddCommand(existingPerson);
+
+        assertUndoFailure(addCommand, model, AddCommand.MESSAGE_UNDO_NOT_EXECUTED);
+    }
 
     @Test
     public void undo_personNoLongerInModel_throwsCommandException() {

@@ -39,8 +39,12 @@ public class AddCommand extends Command {
     public static final String MESSAGE_DUPLICATE_EMAIL_AND_TELEGRAM_HANDLE =
             Messages.MESSAGE_DUPLICATE_EMAIL_AND_TELEGRAM_HANDLE;
     public static final String MESSAGE_UNDO_SUCCESS = "Undo add person: %1$s";
+    public static final String MESSAGE_UNDO_NOT_EXECUTED =
+            "Cannot undo add because it was never executed.";
     public static final String MESSAGE_UNDO_FAILURE = "Cannot undo add because the person no longer exists.";
+
     private final Person toAdd;
+    private boolean wasExecuted;
 
     /**
      * Creates an AddCommand to add the specified {@code Person}
@@ -55,13 +59,13 @@ public class AddCommand extends Command {
         requireNonNull(model);
 
         DuplicateConflict duplicateConflict = model.getDuplicateConflict(toAdd);
-
         String duplicateMessage = Messages.getDuplicateConflictMessage(duplicateConflict);
         if (duplicateMessage != null) {
             throw new CommandException(duplicateMessage);
         }
 
         model.addPerson(toAdd);
+        wasExecuted = true;
 
         String resultMessage = String.format(MESSAGE_SUCCESS, Messages.format(toAdd));
         if (!toAdd.getEmail().isNusDomain()) {
@@ -79,20 +83,25 @@ public class AddCommand extends Command {
     }
 
     /**
-     * The undo operation removes the person that was previously added to the model.
+     * Removes the person previously added by this command from the model.
      *
      * @param model The model containing the current state of the address book.
      * @return A {@code CommandResult} indicating the result of the undo operation.
-     * @throws CommandException If the person to be removed no longer exists in the model,
-     *                          and thus the undo operation cannot be completed.
+     * @throws CommandException If this command was never successfully executed, or if the
+     *                          added person no longer exists in the model.
      */
     @Override
     public CommandResult undo(Model model) throws CommandException {
         requireNonNull(model);
+
+        if (!wasExecuted) {
+            throw new CommandException(MESSAGE_UNDO_NOT_EXECUTED);
+        }
         if (!model.hasPerson(toAdd)) {
             throw new CommandException(MESSAGE_UNDO_FAILURE);
         }
         model.deletePerson(toAdd);
+        wasExecuted = false;
         return createUndoPersonResult(MESSAGE_UNDO_SUCCESS, toAdd);
     }
 

@@ -86,7 +86,7 @@ public class AddCommandIntegrationTest {
 
 
     @Test
-    public void execute_duplicateEmailAndTelegramHandle_throwsCommandException() {
+    public void execute_duplicateEmailAndTelegramHandleFromSamePerson_throwsCommandException() {
         Person existingPerson = new PersonBuilder()
                 .withName("Telegram Existing")
                 .withEmail("duplicate@example.com")
@@ -98,6 +98,32 @@ public class AddCommandIntegrationTest {
                 .withName("Telegram Duplicate")
                 .withEmail("duplicate@example.com")
                 .withTelegramHandle("alice123")
+                .build();
+
+        assertCommandFailure(new AddCommand(duplicatePerson), model,
+                AddCommand.MESSAGE_DUPLICATE_EMAIL_AND_TELEGRAM_HANDLE);
+    }
+
+    @Test
+    public void execute_duplicateEmailAndTelegramHandleFromDifferentPersons_throwsCommandException() {
+        Person personWithDuplicateEmail = new PersonBuilder()
+                .withName("Email Existing")
+                .withEmail("duplicate@example.com")
+                .withTelegramHandle("emailperson")
+                .build();
+        model.addPerson(personWithDuplicateEmail);
+
+        Person personWithDuplicateTelegramHandle = new PersonBuilder()
+                .withName("Telegram Existing")
+                .withEmail("telegram@example.com")
+                .withTelegramHandle("sharedhandle")
+                .build();
+        model.addPerson(personWithDuplicateTelegramHandle);
+
+        Person duplicatePerson = new PersonBuilder()
+                .withName("Conflicting Person")
+                .withEmail("duplicate@example.com")
+                .withTelegramHandle("sharedhandle")
                 .build();
 
         assertCommandFailure(new AddCommand(duplicatePerson), model,

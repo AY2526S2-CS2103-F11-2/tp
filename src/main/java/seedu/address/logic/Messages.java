@@ -46,7 +46,8 @@ public class Messages {
     public static final String MESSAGE_DUPLICATE_TELEGRAM_HANDLE =
             "A person with this Telegram handle already exists in the address book";
     public static final String MESSAGE_DUPLICATE_EMAIL_AND_TELEGRAM_HANDLE =
-            "A person with this email and Telegram handle already exists in the address book";
+            "A person with this email already exists, "
+                    + "and a person with this Telegram handle already exists in the address book";
     public static final String MESSAGE_DUPLICATE_EMAIL_IN_STORAGE =
             "Persons list contains duplicate email(s).";
     public static final String MESSAGE_DUPLICATE_TELEGRAM_HANDLE_IN_STORAGE =
