@@ -567,6 +567,17 @@ _Details coming soon …_
 
 --------------------------------------------------------------------------------------------------------------------
 
+## Coming soon [in v2.0]
+
+* Clear multiple tag types at once — Allow cleartag to accept multiple tag type prefixes in a single command.
+* Edit tags — Support modifying existing tags directly.
+* Find by other fields — Extend find to search by Telegram handle and other fields beyond name.
+* Unknown command suggestions — Use fuzzy matching to suggest the closest valid command when a typo is entered (e.g. "Did you mean cleartag?").
+* Fuzzy matching for emails — Detect near-duplicate emails by fuzzy matching the local and domain parts separately.
+* Redo command — Add a redo command to complement undo.
+
+--------------------------------------------------------------------------------------------------------------------
+
 ## Command summary
 
 Action | Format, Examples
