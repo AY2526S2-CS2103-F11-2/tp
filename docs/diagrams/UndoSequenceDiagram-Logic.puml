@@ -6,7 +6,7 @@ box Logic LOGIC_COLOR_T1
 participant ":LogicManager" as LogicManager LOGIC_COLOR
 participant ":AddressBookParser" as AddressBookParser LOGIC_COLOR
 participant "u:UndoCommand" as UndoCommand LOGIC_COLOR
-collections "undoHistory : Deque<Command>" as UndoHistory
+participant "undoHistory : Deque<Command>" as UndoHistory LOGIC_COLOR
 participant "c:Command" as PrevCommand LOGIC_COLOR
 end box
 
