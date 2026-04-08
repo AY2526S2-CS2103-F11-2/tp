@@ -1424,3 +1424,24 @@ testers are expected to do more *exploratory* testing.
 - Data integrity and robustness: Successfully navigated complex data permutations (valid/invalid assignments, duplicate handling) to ensure a stable system.
 - Refined logic and refactoring: The team turned individual contributions into a cohesive whole through active refactoring and the introduction of generalized utility classes.
 - Successful system extension: The team successfully adapted to and extended a large existing codebase.
+
+## Appendix: Planned Enhancements
+
+**Team size:** 6
+
+We identified **5 planned enhancements** in total, including several **currently unfixable limitations and bugs**.
+
+1. **Improve copy usability**  
+   Copying currently requires two clicks because of the existing UI design, which presents information as a panel of cards and fields. Users must first select the card, then select the specific field to copy. A possible future improvement would be to redesign the UI structure so that copying can be done more efficiently.
+
+2. **Reduce noise in fuzzy search results**  
+   The current `find` command uses fuzzy search, which can return irrelevant matches. For example, if both *Robert* and *Hubert* exist in the address book, searching for either name may return both entries. A future enhancement would be to prioritise exact matches whenever both exact and fuzzy matches are available.
+
+3. **Handle edge cases involving special characters in search**  
+   The `find` command can behave unexpectedly when queries contain unusual special characters, such as `find n/ale\x`. At present, special characters are converted into spaces and then split by whitespace into keywords. A future improvement could introduce stronger validation or error handling for malformed input.
+
+4. **Allow special characters in tags**  
+   Tags currently cannot contain special characters. We plan to support selected characters such as hyphens and underscores to make tagging more flexible and practical.
+
+5. **Provide clearer undo feedback in filtered views**  
+   Currently, if a user edits, tags, untags, or clears tags for a person and then applies a filter using `find`, that person may disappear from the filtered list. If the user later performs `undo`, the person’s previous state is correctly restored in the address book, but the active filtered view remains unchanged. As a result, the restored person may still not appear, which can make it seem as though `undo` failed. A planned enhancement is to improve the undo feedback message so users understand that the undo was successful, but the current filter is still being applied.
