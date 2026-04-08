@@ -160,6 +160,7 @@ Adds a person to the address book.
 **Format:** `add n/NAME e/EMAIL [p/PHONE_NUMBER] [h/TELEGRAM_HANDLE]`
 
 * `n/NAME` and `e/EMAIL` are required.
+* Prefixes are case-insensitive (n/ and N/ are treated the same).
 * `p/PHONE_NUMBER` and `h/TELEGRAM_HANDLE` are optional.
 * If no phone number is provided, the contact will be created without one.
 * If no Telegram handle is provided, the contact will be created without one.
@@ -167,11 +168,13 @@ Adds a person to the address book.
 * Email must be unique. You cannot add two persons with the same email address.
 * Telegram handle, if provided, must be unique. You cannot add two persons with the same Telegram handle.
 * Telegram handles are treated case-insensitively for duplicate detection. For example, `handle1` and `HANDLE1` are considered the same handle.
+* Telegram handles must start with a letter, contain only letters, numbers, and underscores, be 5 to 32 characters long, not contain consecutive underscores, and not end with an underscore.
 * Repeated prefixes for single-valued fields are not allowed. For example, `add n/Amy n/Ben e/x@example.com` is invalid.
 * Any unexpected slash-prefixed token is rejected as extra input. This includes prefixes from other commands such as `t/`, `tr/`, `tc/`, `tg/`, `i/`, `o/`, and `r/`, as well as unknown prefixes such as `x/`.
 * If the email is not an NUS domain, the contact is still added, but a warning message is shown.
-* Names may contain only letters, numbers, spaces, and these symbols: `(` `)` `.` `-` `,` `'`.
-* Other special characters are not supported. In particular, `/` is not accepted because it may be interpreted as command syntax. If needed, replace it with a supported symbol instead, e.g. `D/O` as `D-O`.
+* Requirements for an email provided is specified [here](#email-validation).
+* Names may contain only letters, numbers, spaces, and these symbols: `(` `)` `.` `-` `,` `'`. <br>
+  Other special characters are not supported. In particular, `/` is not accepted because it may be interpreted as command syntax. If needed, replace it with a supported symbol instead, e.g. `D/O` as `D-O`.
 
 <div markdown="span" class="alert alert-primary">:bulb: **Tip:**
 Parameters can be entered in any order, as long as each value is preceded by the correct prefix.
@@ -194,18 +197,24 @@ Edits an existing person in the address book.
 * The index **must be a positive integer** 1, 2, 3, …​
 * At least one of the optional fields must be provided.
 * Existing values will be updated to the input values.
+* Any unexpected slash-prefixed token is rejected as extra input.
+* Prefixes are case-insensitive (n/ and N/ are treated the same).
+* Repeated prefixes for single-valued fields are not allowed. For example, edit n/Amy n/Ben e/x@example.com is invalid.
+* Phone numbers provided must contain only digits and be at least 3 digits long.
+* Requirements for an email provided is specified [here](#email-validation).
 * The updated email and Telegram handle, if provided, must remain unique.
-* Telegram handles are treated case-insensitively for duplicate detection. For example, `handle1` and `HANDLE1` are considered the same handle.
-* Updated names may contain only letters, numbers, spaces, and these symbols: `(` `)` `.` `-` `,` `'`.
-* Other special characters are not supported. In particular, `/` is not accepted because it may be interpreted as command syntax. If needed, replace it with a supported symbol instead, e.g. `D/O` as `D-O`.
+* Telegram handles provided are treated case-insensitively for duplicate detection. For example, `handle1` and `HANDLE1` are considered the same handle.
+* Telegram handles provide must start with a letter, contain only letters, numbers, and underscores, be 5 to 32 characters long, not contain consecutive underscores, and not end with an underscore.
+* Updated names may contain only letters, numbers, spaces, and these symbols: `(` `)` `.` `-` `,` `'`. <br>
+  Other special characters are not supported. In particular, `/` is not accepted because it may be interpreted as command syntax. If needed, replace it with a supported symbol instead, e.g. `D/O` as `D-O`.
 
 <div markdown="span" class="alert alert-info">:information_source: **Note:**
-If the updated email is not an NUS domain (`@u.nus.edu` or `@*.nus.edu.sg` or `@nus.edu.sg`), a warning message will be shown. The contact will still be updated.
+If the updated email is not an [NUS domain](#email-validation) (`@u.nus.edu` or `@*.nus.edu.sg` or `@nus.edu.sg`), a warning message will be shown. The contact will still be updated.
 </div>
 
 **Examples:**
-*  `edit 1 p/91234567 e/johndoe@example.com`<br/>
-Edits the phone number and email address of the 1st person to be `91234567` and `johndoe@example.com` respectively.
+*  `edit 1 p/91234567 e/johndoe@u.nus.edu`<br/>
+Edits the phone number and email address of the 1st person to be `91234567` and `johndoe@u.nus.edu` respectively.
 *  `edit 2 n/Betsy Crower h/betsyy`<br/>
 Edits the name of the 2nd person to be `Betsy Crower` and the telegram handle to be `betsyy`.
 
