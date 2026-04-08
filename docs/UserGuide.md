@@ -120,7 +120,7 @@ Non-NUS emails are still accepted, but a warning will be displayed to alert you 
   e.g `n/NAME [p/PHONE_NUMBER]` can be used as `n/John Doe p/1234567` or as `n/John Doe`.
 
 * Items with `…`​ after them can be used multiple times including zero times.<br>
-  e.g. `[tg/GENERAL_TAG]…​` can be used as ` ` (i.e. 0 times), `tg/friend`, `tg/friend tg/family` etc.
+  e.g. `[tg/GENERAL_TAG]…​` can be used as <code>&nbsp;</code> (i.e. 0 times), `tg/friend`, `tg/friend tg/family` etc.
 
 * Parameters can be in any order.<br>
   e.g. if the command specifies `n/NAME p/PHONE_NUMBER`, `p/PHONE_NUMBER n/NAME` is also acceptable.
@@ -140,7 +140,7 @@ Opens the user guide in the browser, and optionally directly to the section for 
 
 **Format:** `help [COMMAND]`
 
-Alternatively, press `F1` to open the user guide.
+Alternatively, press `F1` or `fn + F1` to open the user guide.
 
 * `COMMAND` is optional. When provided, it must be a single valid command name (e.g. `add`, `edit`).
 * If `COMMAND` is provided, the user guide is opened at the section for that command.
@@ -199,7 +199,7 @@ Edits an existing person in the address book.
 * Existing values will be updated to the input values.
 * Any unexpected slash-prefixed token is rejected as extra input.
 * Prefixes are case-insensitive (n/ and N/ are treated the same).
-* Repeated prefixes for single-valued fields are not allowed. For example, edit n/Amy n/Ben e/x@example.com is invalid.
+* Repeated prefixes for single-valued fields are not allowed. For example, `edit n/Amy n/Ben e/x@example.com` is invalid.
 * Phone numbers provided must contain only digits and be at least 3 digits long.
 * Requirements for an email provided is specified [here](#email-validation).
 * The updated email and Telegram handle, if provided, must remain unique.
@@ -373,7 +373,7 @@ Shows a list of all persons in the address book.
 
 **Format:** `list`
 
-Alternatively, press `F2` to list all contacts.
+Alternatively, press `F2` or `fn + F2` to list all contacts.
 
 ### Sorting persons : `sort`
 
@@ -549,7 +549,7 @@ Exits the program.
 
 **Format:** `exit`
 
-Alternatively, press `F3` to exit the application.
+Alternatively, press `F3` or `fn + F3` to exit the application.
 
 ### Saving the data
 
@@ -571,8 +571,8 @@ Furthermore, certain edits can cause CampusBridge to behave in unexpected ways (
 **Q**: How do I transfer my data to another Computer?<br>
 **A**: Install the app in the other computer and overwrite the empty data file it creates with the file that contains the data of your previous CampusBridge home folder.
 
-**Q**: What happens to my data when I upgrade from v1.3 to v1.4 (or a later version?)<br>
-**A**: CampusBridge v1.4 onwards uses an updated storage format that may not be compatible with older versions. If your existing data cannot be read, the app will start with an empty data file. Back up your `data/addressbook.json` before upgrading.
+**Q**: What happens to my data when I upgrade from v1.3 to v1.4 (or a later version)?<br>
+**A**: CampusBridge v1.4 and later uses an updated storage format that may not be compatible with older versions. If your existing data cannot be read, the app will start with an empty data file. Back up your `data/addressbook.json` before upgrading.
 
 --------------------------------------------------------------------------------------------------------------------
 

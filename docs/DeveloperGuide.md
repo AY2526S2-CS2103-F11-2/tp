@@ -777,7 +777,7 @@ testers are expected to do more *exploratory* testing.
    1. Test case: `exit`<br>
       Expected: The application closes.
 
-   1. Alternative: Press <kbd>F3</kbd> (or <kbd>Fn + F3</kbd> on Mac).<br>
+   1. Alternative: Press `F3` (or `Fn + F3` on Mac).<br>
       Expected: Same as above.
 
    1. Test case: `exit 123`<br>
@@ -791,7 +791,7 @@ testers are expected to do more *exploratory* testing.
     1. Test case: `help`<br>
        Expected: The User Guide opens in the system default browser. Status message shows `Opened user guide in browser.`
 
-   1. Alternative: Press <kbd>F1</kbd> (or <kbd>Fn + F1</kbd> on Mac).<br>
+   1. Alternative: Press `F1` (or `Fn + F1` on Mac).<br>
       Expected: Same as above.
 
 1. Opening command-specific help
@@ -1345,45 +1345,45 @@ testers are expected to do more *exploratory* testing.
 
     1. Prerequisites: Application is running. Some text is present in the input box.
 
-    1. Test case (Windows/Linux): Press <kbd>Delete</kbd><br>
+    1. Test case (Windows/Linux): Press `Delete`<br>
        Expected: The input box is cleared.
 
-    1. Test case (macOS): Press <kbd>fn</kbd> + <kbd>Delete</kbd><br>
+    1. Test case (macOS): Press `fn + Delete`<br>
        Expected: The input box is cleared.
 
-2. Exiting the application
+1. Exiting the application
 
     1. Prerequisites: Application is running.
 
-    1. Test case (Windows/Linux): Press <kbd>F3</kbd><br>
+    1. Test case (Windows/Linux): Press `F3` or `fn + F3`<br>
        Expected: The application closes.
 
-    1. Test case (macOS): Press <kbd>fn</kbd> + <kbd>F3</kbd><br>
+    1. Test case (macOS): Press `fn + F3`<br>
        Expected: The application closes.
 
-3. Opening help
+1. Opening help
 
     1. Prerequisites: Application is running.
 
-    1. Test case (Windows/Linux): Press <kbd>F1</kbd><br>
+    1. Test case (Windows/Linux): Press `F1` or `fn + F1`<br>
        Expected: The User Guide opens in the system default browser.
 
-    1. Test case (macOS): Press <kbd>fn</kbd> + <kbd>F1</kbd><br>
+    1. Test case (macOS): Press `fn + F1`<br>
        Expected: Same as above.
 
-4. Listing all contacts
+1. Listing all contacts
 
     1. Prerequisites: Application is running.
 
-    1. Test case (Windows/Linux): Press <kbd>F2</kbd><br>
+    1. Test case (Windows/Linux): Press `F2` or `fn + F2`<br>
        Expected: All contacts are displayed in the list.
 
-    1. Test case (macOS): Press <kbd>fn</kbd> + <kbd>F2</kbd><br>
+    1. Test case (macOS): Press `fn + F2`<br>
        Expected: Same as above.
 
-5. Invalid or unsupported key combinations
+1. Invalid or unsupported key combinations
 
-    1. Test case: Press unrelated keys (e.g., <kbd>F4</kbd>, <kbd>Ctrl</kbd> + <kbd>F1</kbd>)<br>
+    1. Test case: Press unrelated keys (e.g., `F4`, `Ctrl + F1`)<br>
        Expected: No action is triggered. Application remains unchanged.
 
 ### Saving data
@@ -1427,21 +1427,21 @@ testers are expected to do more *exploratory* testing.
 
 ## **Appendix: Planned Enhancements**
 
-**Team size:** 6
+Team size: 6
 
-We identified **5 planned enhancements** in total, including several **currently unfixable limitations and bugs**.
+We identified 5 planned enhancements in total, including several currently unfixable limitations and bugs.
 
-1. **Improve copy usability**  
+1. Improve copy usability  
    Copying currently requires two clicks because of the existing UI design, which presents information as a panel of cards and fields. Users must first select the card, then select the specific field to copy. A possible future improvement would be to redesign the UI structure so that copying can be done more efficiently.
 
-2. **Reduce noise in fuzzy search results**  
+2. Reduce noise in fuzzy search results  
    The current `find` command uses fuzzy search, which can return irrelevant matches. For example, if both *Robert* and *Hubert* exist in the address book, searching for either name may return both entries. A future enhancement would be to prioritise exact matches whenever both exact and fuzzy matches are available.
 
-3. **Handle edge cases involving special characters in search**  
+3. Handle edge cases involving special characters in search  
    The `find` command may behave unexpectedly when search keywords contain special characters. This is more noticeable in some name queries such as `find n/ale\x`. Email and tag searches do not currently provide additional handling for such cases. A future enhancement could introduce clearer validation rules and more consistent handling of special characters across name, email, and tag searches.
 
-4. **Allow special characters in tags**  
+4. Allow special characters in tags  
    Tags currently cannot contain special characters. We plan to support selected characters such as hyphens and underscores to make tagging more flexible and practical.
 
-5. **Provide clearer undo feedback in filtered views**  
+5. Provide clearer undo feedback in filtered views  
    Currently, if a user edits, tags, untags, or clears tags for a person and then applies a filter using `find`, that person may disappear from the filtered list. If the user later performs `undo`, the person’s previous state is correctly restored in the address book, but the active filtered view remains unchanged. As a result, the restored person may still not appear, which can make it seem as though `undo` failed. A planned enhancement is to improve the undo feedback message so users understand that the undo was successful, but the current filter is still being applied.
