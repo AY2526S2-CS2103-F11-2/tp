@@ -33,9 +33,10 @@ public class TagCommandParser implements Parser<TagCommand> {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, TagCommand.MESSAGE_USAGE));
         }
 
+        ParserUtil.validateNoEmptyPrefixValues(argMultimap, TAGS_COMMAND_PREFIXES);
+
         Index index = ParserUtil.parseIndex(preamble);
 
-        ParserUtil.validateNoEmptyPrefixValues(argMultimap, TAGS_COMMAND_PREFIXES);
         if (argMultimap.getAllValues(PREFIX_ROLE_TAG).isEmpty()
                 && argMultimap.getAllValues(PREFIX_COURSE_TAG).isEmpty()
                 && argMultimap.getAllValues(PREFIX_GENERAL_TAG).isEmpty()) {
