@@ -186,7 +186,14 @@ Data is stored in two JSON files:
 * `preferences.json` — GUI window size/position and the address book file path:
   ```json
   {
-    "guiSettings": { "windowWidth": 740.0, "windowHeight": 574.0, "windowCoordinates": { "x": 100, "y": 100 } },
+    "guiSettings": {
+      "windowWidth": 740.0, 
+      "windowHeight": 574.0, 
+      "windowCoordinates": { 
+        "x": 100, 
+        "y": 100 
+      } 
+    },
     "addressBookFilePath": "data/addressbook.json"
   }
   ```
