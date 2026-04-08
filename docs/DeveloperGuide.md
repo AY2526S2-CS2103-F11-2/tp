@@ -224,6 +224,8 @@ The parser enforces the following rules:
 * Repeated single-valued prefixes are rejected.
 * Any non-empty preamble is rejected.
 * Any unexpected slash-prefixed token is rejected as extra input. This includes prefixes from other commands such as `t/`, `tr/`, `tc/`, `tg/`, `i/`, `o/`, and `r/`, as well as unknown prefixes such as `x/`.
+* `Name` validation allows only letters, numbers, spaces, and these symbols: `(` `)` `.` `-` `,` `'`.
+* Other special characters are intentionally rejected. In particular, `/` is not supported because `/` is used by the CLI prefix-based syntax and may create parsing ambiguity. If a real-world name uses `/`, users should enter a supported substitute such as `-` instead (e.g. `D/O` as `D-O`).
 
 After tokenization, `AddCommandParser` uses `ParserUtil` to validate and convert each supplied value into the corresponding model type. It then constructs a `Person` object and returns an `AddCommand`.
 
