@@ -1223,7 +1223,7 @@ testers are expected to do more *exploratory* testing.
        Expected: Contacts whose names match `Alex` **AND** whose email contains `nus.edu` are shown.
 
     1. Test case: `find n/Alex e/nus.edu t/friends`<br>
-       Expected: Contacts matching all three criteria (Name AND Email AND Tag) are shown.
+       Expected: Contacts matching all three criteria (Name **AND** Email **AND** Tag) are shown.
 
 1. Fuzzy search for names (slight typo tolerance)
 
