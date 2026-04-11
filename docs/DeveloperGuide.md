@@ -937,7 +937,7 @@ testers are expected to do more *exploratory* testing.
 
 1. Deleting a person by email
 
-   1. Prerequisites: Ensure a person with email `alicetan@u.nus.edu` exists in the address book.
+   1. Prerequisites: List all persons using the `list` command. Ensure a person with email `alicetan@u.nus.edu` exists in the list.
 
    1. Test case: `delete e/alicetan@u.nus.edu`<br>
       Expected: Person with the specified email is deleted from the list. Details of the deleted contact shown in the status message.
