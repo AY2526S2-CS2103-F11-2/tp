@@ -929,7 +929,7 @@ testers are expected to do more *exploratory* testing.
 
 1. Deleting a person by email
 
-   1. Prerequisites: Ensure a person with email `alicetan@u.nus.edu` exists in the address book.
+   1. Prerequisites: List all persons using the `list` command. Ensure a person with email `alicetan@u.nus.edu` exists in the list.
 
    1. Test case: `delete e/alicetan@u.nus.edu`<br>
       Expected: Person with the specified email is deleted from the list. Details of the deleted contact shown in the status message.
@@ -979,7 +979,7 @@ testers are expected to do more *exploratory* testing.
       Expected: Only one `tutor` role tag is added to the 2nd person in the list. Status message shows the details of the new tags added.
 
    1. Test case: `tag 2 tr/mentor tg/mentor` (same name, different types)<br>
-      Expected: Both `mentor` tutor tag and `mentor` general tag are added to the 2nd person in the list. Status message shows the details of the new tags added.
+      Expected: Both `mentor` role tag and `mentor` general tag are added to the 2nd person in the list. Status message shows the details of the new tags added.
 
 1. Adding tags to a person where some tags already exist
 
@@ -1135,7 +1135,7 @@ testers are expected to do more *exploratory* testing.
       Expected: No tag cleared. Error details shown in the status message indicating invalid command format and unexpected extra input.
 
    1. Test case: `cleartag 1 tr/ tr/` (multiple same prefixes)<br>
-      Expected: No tag cleared. Error details shown in the status message indicating multiple values specified for the following single-valued field(s): `i/`.
+      Expected: No tag cleared. Error details shown in the status message indicating multiple values specified for the following single-valued field(s): `tr/`.
 
    1. Test case: `cleartag 1 tr/ tg/` (multiple prefixes)<br>
       Expected: No tag cleared. Error details shown in the status message indicating invalid command format and command usage.
