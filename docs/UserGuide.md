@@ -61,13 +61,19 @@ CampusBridge supports three tag types, each displayed in a distinct colour:
 * `tc/COURSE_TAG` — creates a Course tag
 * `tg/GENERAL_TAG` — creates a General tag
 
-**Tag constraints:**
-* Tags are **case-insensitive** — `tr/Friends`, `tr/FRIENDS` and `tr/friends` are all treated as `tr/friends`.
-* Tag names are automatically **converted to lowercase** for storage and display (e.g., `ProjectMate` &rarr; `projectmate`).
-* Tag names must be **alphanumeric**.
-    * Only letters A-Z, a-z, and number 0-9 are allowed.
-    * Spaces and special characters (e.g `@`, `#`, `-`, `!`, `_`) are not allowed.
-* Each tag name must be unique within its type — you cannot create two Role tags with the same name, but a Role tag and a General tag can share the same name.
+**Tag naming constraints:**
+* Tag names must be **alphanumeric** (letters A-Z, a-z, and number 0-9 only).
+* Spaces and special characters (e.g `@`, `#`, `-`, `!`, `_`) are **not** allowed.
+
+**Case handling:**
+* Tags are **case-insensitive** — `tr/Friends`, `tr/FRIENDS` and `tr/friends` are considered the same tag.
+* **First occurrence priority**: When duplicate tags with different casing appear in the same command, the **first occurrence's casing** is preserved and stored. 
+* **Original casing is preserved** — the first time a tag is added (or the first occurrence in a command), its casing is how the tag will be displayed. 
+* Subsequent additions with different casing will match the existing tag (case-insensitively) and will not change the display casing.
+
+**Uniqueness:**
+* Tag names must be unique within their type — you cannot create two Role tags with the same name.
+* Different tag types can share the same name (e.g. a Role tag `mentor` and a General tag `mentor` can both exist).
 
 ### Email validation
 
@@ -281,8 +287,9 @@ Adds one or more tags to an existing person in the address book.
 **Behavior:**
 * Adds tags to the person at the specified `INDEX`.
 * The index refers to the index number shown in the displayed person list.
-* Existing tags will be preserved. New tags are appended.
 * Tag matching is **case-insensitive** (e.g. `friends` and `FRIENDS` are considered the same).
+* **First occurrence priority:** When duplicate tags with different casing are provided in the same command (e.g. `tc/cs2103 tc/CS2103`), the **first occurrence's casing** is preserved and stored.
+* Existing tags will be preserved. New tags are appended.
 * If some tags already exist, only new ones are added. A message will show which tags were added and skipped.
 * If all tags already exist, an error message will be shown and no changes will be made.
 
@@ -301,6 +308,10 @@ Adds the `tutor` role tag, `cs2103` course tag and `helpful` general tag to the 
 Adds the `friends` general tag to the 3rd person in the displayed list and shows `cs2101` course tag already exists.
 ![result for 'tag 3 tc/cs2101 tg/friends'](images/tagPartialSuccessResult.png)
 
+* `tag 3 tc/cs2103 tc/CS2103`<br/>
+Adds the `cs2103` course tag to the 3rd person in the displayed list. The duplicate `CS2103` is ignored, and the first occurrence's casing (`cs2103`) is preserved.
+![result for 'tag 3 tc/cs2103 tc/CS2103'](images/tagFirstOccurrencePriorityResult.png)
+
 ### Untagging a person : `untag`
 
 Removes one or more tags from an existing person in the address book.
@@ -318,9 +329,10 @@ Removes one or more tags from an existing person in the address book.
 **Behavior:**
 * Removes the specified tags from the person at the given `INDEX`.
 * The index refers to the index number shown in the displayed person list.
+* Tag matching is **case-insensitive** (e.g. `friends` and `FRIENDS` are considered the same).
+* The casing of the tags provided does not need to match the stored/displayed casing — the tag will be removed regardless.
 * Only tags currently assigned to the person will be removed.
 * Existing tags that are not specified will remain unchanged.
-* Tag matching is **case-insensitive** (e.g. `friends` and `FRIENDS` are considered the same).
 * If some tags exist and others don't, the existing ones will be removed. A message will show which tags were not found.
 * If none of the specified tags exist, an error message will be shown and no changes will be made.
 
@@ -335,8 +347,9 @@ Removes the `friends` general tag from the 1st person in the list.
 * `untag 2 tr/tutor tc/cs2103 tg/classmates`<br/>
 Removes the `tutor` role tag, `cs2103` course tag and `classmates` general tag from the 2nd person in the list.
 
-* `untag 3 tc/cs2103 tc/cs2109`<br/>
-Removes both `cs2103` and `cs2109` course tags from the 3rd person in the list.
+* `untag 3 tc/cs2101 tc/cs2103`<br/>
+Removes both `cs2101` and `cs2103` course tags from the 3rd person in the list.
+![result for 'untag 3 tc/cs2101 tc/cs2103'](images/untagSuccessResult.png)
 
 ### Clearing all tags of a specific type : `cleartag`
 
@@ -366,6 +379,7 @@ Clears all general tags from the 1st person in the displayed list.
 
 * `cleartag 2 tr/`<br/>
 Clears all role tags from the 2nd person in the displayed list.
+![result for 'cleartag 2 tr/'](images/cleartagSuccessResult.png)
 
 ### Listing all persons : `list`
 
@@ -612,7 +626,7 @@ Action | Format, Examples
 **Untag** | `untag INDEX [tr/ROLE_TAG]…​ [tc/COURSE_TAG]…​ [tg/GENERAL_TAG]…​`<br> e.g., `untag 3 tr/tutor tc/cs2103`
 **Undo** | `undo`
 
-## Keyboard Shortcuts Summary
+## Keyboard shortcuts summary
 
 ### Windows / Linux
 
