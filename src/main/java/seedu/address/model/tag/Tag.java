@@ -20,6 +20,7 @@ public class Tag {
     public static final String VALIDATION_REGEX = "\\p{Alnum}+";
 
     public final String tagName;
+    public final String normalizedTagName;
     public final TagType type;
 
     /**
@@ -34,7 +35,8 @@ public class Tag {
 
         checkArgument(isValidTagName(tagName), MESSAGE_CONSTRAINTS);
 
-        this.tagName = tagName.toLowerCase(Locale.ROOT);
+        this.tagName = tagName;
+        this.normalizedTagName = tagName.toLowerCase(Locale.ROOT);
         this.type = type;
     }
 
@@ -61,13 +63,13 @@ public class Tag {
         }
 
         Tag otherTag = (Tag) other;
-        return tagName.equals(otherTag.tagName)
+        return normalizedTagName.equals(otherTag.normalizedTagName)
                 && type.equals(otherTag.type);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(tagName, type);
+        return Objects.hash(normalizedTagName, type);
     }
 
     /**
