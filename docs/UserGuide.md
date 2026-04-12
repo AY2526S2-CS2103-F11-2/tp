@@ -123,7 +123,7 @@ Non-NUS emails are still accepted, but a warning will be displayed to alert you 
   e.g. in `add n/NAME`, `NAME` is a parameter which can be used as `add n/John Doe`.
 
 * Items in square brackets are optional.<br>
-  e.g `n/NAME [p/PHONE_NUMBER]` can be used as `n/John Doe p/1234567` or as `n/John Doe`.
+  e.g. `n/NAME [p/PHONE_NUMBER]` can be used as `n/John Doe p/1234567` or as `n/John Doe`.
 
 * Items with `…`​ after them can be used multiple times including zero times.<br>
   e.g. `[tg/GENERAL_TAG]…​` can be used as <code>&nbsp;</code> (i.e. 0 times), `tg/friend`, `tg/friend tg/family` etc.
@@ -233,14 +233,14 @@ Deletes the specified person from the address book.
   * Deletes the person at the specified `INDEX`.
   * The index refers to the index number shown in the displayed person list.
   * The index **must be a positive integer** 1, 2, 3, …​
-  * Repeated prefixes for single-valued fields are not allowed (eg. `delete i/1 i/2` is invalid).
+  * Repeated prefixes for single-valued fields are not allowed (e.g. `delete i/1 i/2` is invalid).
 
 * `delete e/EMAIL`
   * Deletes the person with the specified `EMAIL`.
   * The email refers to the email address of a person shown in the displayed person list.
   * The email **must be a valid email address**.
   * Email matching is **case-insensitive**.
-  * Repeated prefixes for single-valued fields are not allowed (eg. `delete e/betsy@example.com e/alex@example.com` is invalid).
+  * Repeated prefixes for single-valued fields are not allowed (e.g. `delete e/betsy@example.com e/alex@example.com` is invalid).
 
 <div markdown="block" class="alert alert-info">:information_source: **NOTE:**
 Only one of `i/INDEX` or `e/EMAIL` can be provided at a time.
@@ -355,12 +355,16 @@ Removes both `cs2101` and `cs2103` course tags from the 3rd person in the list.
 
 Clears all tags of a specific type from an existing person in the address book.
 
-**Format:** `cleartag INDEX tr/ or cleartag INDEX tc/ or cleartag INDEX tg/`
+**Format:** 
+* `cleartag INDEX tr/` — clears all role tags from the person.
+* `cleartag INDEX tc/` — clears all course tags from the person.
+* `cleartag INDEX tg/` — clears all general tags from the person.
+
 
 * The index **must be a positive integer** 1, 2, 3, …​
 * **Exactly one tag type prefix** must be provided (without any tag names).
 * Any unexpected slash-prefixed token is rejected as extra input.
-* Repeated prefixes for single-valued fields are not allowed (eg. `cleartag 1 tr/ tr/` is invalid).
+* Repeated prefixes for single-valued fields are not allowed (e.g. `cleartag 1 tr/ tr/` is invalid).
 
 **Behavior:**
 * Clears all tags of the specified type from the person at the given `INDEX`.
