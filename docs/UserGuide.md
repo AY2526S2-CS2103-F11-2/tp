@@ -546,6 +546,16 @@ You can repeatedly use `undo` to step backwards through your previous changes.
   ```
   When no more commands to undo, an error message will be shown indicating that there are no actions to undo.
 
+**Format:** `clear`
+
+### Exiting the program : `exit`
+
+Exits the program.
+
+**Format:** `exit`
+
+Alternatively, press `F3` or `fn + F3` to exit the application.
+
 ### Navigating command history
 
 Previously entered commands can be recalled using the keyboard.
@@ -560,16 +570,6 @@ Previously entered commands can be recalled using the keyboard.
 ### Clearing all entries : `clear`
 
 Clears all entries from the address book.
-
-**Format:** `clear`
-
-### Exiting the program : `exit`
-
-Exits the program.
-
-**Format:** `exit`
-
-Alternatively, press `F3` or `fn + F3` to exit the application.
 
 ### Saving the data
 
