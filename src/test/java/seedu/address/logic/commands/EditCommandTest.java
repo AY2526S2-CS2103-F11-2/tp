@@ -307,7 +307,8 @@ public class EditCommandTest {
 
         assertCommandSuccess(editCommand, model, executeMessage, expectedAfterEdit);
 
-        String undoMessage = String.format(EditCommand.MESSAGE_UNDO_SUCCESS, Messages.format(alice));
+        String undoMessage = String.format(EditCommand.MESSAGE_UNDO_SUCCESS, Messages.format(alice))
+                + "\n" + Command.MESSAGE_RESTORED_CONTACT_FILTER_NOTE;
         assertUndoSuccess(editCommand, model, undoMessage, expectedOriginal);
     }
 

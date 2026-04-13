@@ -57,15 +57,15 @@ public class PersonCard extends UiPart<Region> {
         this.person = person;
         id.setText(displayedIndex + ". ");
         name.setText(person.getName().fullName);
-        email.setText(person.getEmail().value);
+        email.setText("Email: " + person.getEmail().value);
 
         boolean hasPhone = person.getPhone() != null;
-        phone.setText(hasPhone ? person.getPhone().value : "");
+        phone.setText(hasPhone ? "Phone: " + person.getPhone().value : "");
         phone.setManaged(hasPhone);
         phone.setVisible(hasPhone);
 
         boolean hasTelegram = person.getTelegramHandle() != null;
-        telegramHandle.setText(hasTelegram ? person.getTelegramHandle().value : "");
+        telegramHandle.setText(hasTelegram ? "Telegram: " + person.getTelegramHandle().value : "");
         telegramHandle.setManaged(hasTelegram);
         telegramHandle.setVisible(hasTelegram);
 
@@ -74,13 +74,14 @@ public class PersonCard extends UiPart<Region> {
         phone.getStyleClass().add("copyable-label");
         telegramHandle.getStyleClass().add("copyable-label");
 
-        setupCopyable(name, person.getName().fullName);
-        setupCopyable(email, person.getEmail().value);
+        setupCopyable(name, person.getName().fullName, person.getName().fullName);
+        setupCopyable(email, "Email: " + person.getEmail().value, person.getEmail().value);
         if (hasPhone) {
-            setupCopyable(phone, person.getPhone().value);
+            setupCopyable(phone, "Phone: " + person.getPhone().value, person.getPhone().value);
         }
         if (hasTelegram) {
-            setupCopyable(telegramHandle, person.getTelegramHandle().value);
+            setupCopyable(telegramHandle, "Telegram: " + person.getTelegramHandle().value,
+                    person.getTelegramHandle().value);
         }
 
         person.getTags().stream()
@@ -89,7 +90,7 @@ public class PersonCard extends UiPart<Region> {
                     Label tagLabel = new Label(tag.tagName);
                     tagLabel.getStyleClass().add(getTagStyleClass(tag.getType()));
                     tagLabel.setTooltip(new Tooltip(tag.tagName + "\nClick to copy"));
-                    tagLabel.setOnMouseClicked(e -> copyToClipboard(tagLabel, tag.tagName));
+                    tagLabel.setOnMouseClicked(e -> copyToClipboard(tagLabel, tag.tagName, tag.tagName));
                     tags.getChildren().add(tagLabel);
                 });
     }
@@ -102,23 +103,23 @@ public class PersonCard extends UiPart<Region> {
         };
     }
 
-    private void setupCopyable(Label label, String text) {
+    private void setupCopyable(Label label, String displayText, String copiedText) {
         label.setTooltip(new Tooltip("Click to copy"));
-        label.setOnMouseClicked(e -> copyToClipboard(label, text));
+        label.setOnMouseClicked(e -> copyToClipboard(label, displayText, copiedText));
     }
 
-    private void copyToClipboard(Label label, String text) {
+    private void copyToClipboard(Label label, String displayText, String copiedText) {
         if (COPIED_TEXT.equals(label.getText())) {
             return;
         }
 
         ClipboardContent content = new ClipboardContent();
-        content.putString(text);
+        content.putString(copiedText);
         Clipboard.getSystemClipboard().setContent(content);
 
         label.setText(COPIED_TEXT);
         PauseTransition pause = new PauseTransition(Duration.seconds(PAUSE_TIME));
-        pause.setOnFinished(e -> label.setText(text));
+        pause.setOnFinished(e -> label.setText(displayText));
         pause.play();
     }
 }

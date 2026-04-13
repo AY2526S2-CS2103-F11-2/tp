@@ -267,6 +267,8 @@ When the `undo` command is invoked, `LogicManager` retrieves the most recent com
 
 This design ensures that each command is responsible for reversing its own changes, providing flexibility and adhering to the Command pattern.
 
+Undo preserves the model's current filtered view instead of resetting it to show all contacts. As a result, when undo restores contacts after commands such as `delete`, `edit`, `clear`, `tag`, `untag`, or `cleartag`, some restored contacts may remain hidden if they do not satisfy the active filter. The command feedback explicitly informs the user of this behavior.
+
 The following sequence diagram illustrates how the undo operation is executed:
 
 ![UndoSequenceDiagram-Logic](images/UndoSequenceDiagram-Logic.png)
@@ -645,7 +647,8 @@ Use case ends.
 **MSS:**
 1. User requests to undo the most recent action.
 2. CampusBridge restores the data to its previous state.
-3. CampusBridge shows the updated state and a success message.
+3. CampusBridge keeps the current filtered view unchanged.
+4. CampusBridge shows the updated state and a success message. If restored contacts do not match the active filter, they may remain hidden and the success message states this explicitly.
 
 Use case ends.
 
@@ -953,14 +956,14 @@ testers are expected to do more *exploratory* testing.
 
 1. Invalid delete commands
 
-  1. Test case: `delete`<br>
-     Expected: No person deleted. Error details shown in the status message indicating invalid command format and command usage.
+   1. Test case: `delete`<br>
+      Expected: No person deleted. Error details shown in the status message indicating invalid command format and command usage.
 
-  1. Test case: `delete abc`<br>
-     Expected: No person deleted. Error details shown in the status message indicating invalid command format and command usage.
+   1. Test case: `delete abc`<br>
+      Expected: No person deleted. Error details shown in the status message indicating invalid command format and command usage.
 
-  1. Test case: `delete 100` (where 100 is larger than list size)<br>
-     Expected: No person deleted. Error details shown in the status message indicating no person exists at that index and tip to use `list` command.
+   1. Test case: `delete 100` (where 100 is larger than list size)<br>
+      Expected: No person deleted. Error details shown in the status message indicating no person exists at that index and tip to use `list` command.
 
 ### Tagging a person
 
@@ -1252,7 +1255,7 @@ testers are expected to do more *exploratory* testing.
        Expected: The previously added contact is removed from the list. Status message indicates that the last add action has been undone.
 
     1. Test case: `delete 1` followed by `undo`<br>
-       Expected: The deleted contact is restored to the list. Status message indicates that the last delete action has been undone.
+       Expected: The deleted contact is restored. The current filtered view remains unchanged. Status message indicates that the last delete action has been undone.
 
 2. Undoing multiple commands consecutively
 
@@ -1283,7 +1286,10 @@ testers are expected to do more *exploratory* testing.
     1. Prerequisites: List all persons using the `list` command. Multiple persons in the list.
 
     1. Test case: `add n/A e/a@example.com`, `list`, `delete 1`, then `undo`<br>
-       Expected: The deleted contact is restored. The `list` command is ignored by undo.
+       Expected: The deleted contact is restored. The `list` command is ignored by undo, and the current filtered view remains unchanged.
+
+    1. Test case: `find n/alex`, `clear`, then `undo`<br>
+       Expected: All contacts are restored in the address book, but the filtered view still shows only contacts matching `alex`. Status message indicates that restored contacts may be hidden by the current filter.
    
 6. Persistence after undo
 
@@ -1431,5 +1437,3 @@ We identified 5 planned enhancements in total, including several currently unfix
 4. Allow spaces and selected special characters in tags<br>
    Currently, tags do not support spaces or special characters. We plan to enhance flexibility by allowing spaces and commonly used characters such as hyphens and underscores, making tags more expressive and practical.
 
-5. Provide clearer undo feedback in filtered views<br>
-   Currently, if a user edits, tags, untags, or clears tags for a person and then applies a filter using `find`, that person may disappear from the filtered list. If the user later performs `undo`, the person’s previous state is correctly restored in the address book, but the active filtered view remains unchanged. As a result, the restored person may still not appear, which can make it seem as though `undo` failed. A planned enhancement is to improve the undo feedback message so users understand that the undo was successful, but the current filter is still being applied.

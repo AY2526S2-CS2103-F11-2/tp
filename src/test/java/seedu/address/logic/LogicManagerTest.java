@@ -37,6 +37,7 @@ import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.ReadOnlyAddressBook;
 import seedu.address.model.UserPrefs;
+import seedu.address.model.person.NameContainsKeywordsPredicate;
 import seedu.address.model.person.Person;
 import seedu.address.storage.JsonAddressBookStorage;
 import seedu.address.storage.JsonUserPrefsStorage;
@@ -139,6 +140,34 @@ public class LogicManagerTest {
 
         logic.execute(UndoCommand.COMMAND_WORD);
         assertEquals(new ModelManager(TypicalPersons.getTypicalAddressBook(), new UserPrefs()), model);
+    }
+
+    @Test
+    public void execute_findThenClearThenUndo_preservesFilteredView() throws Exception {
+        model = new ModelManager(TypicalPersons.getTypicalAddressBook(), new UserPrefs());
+        JsonAddressBookStorage addressBookStorage =
+                new JsonAddressBookStorage(temporaryFolder.resolve("filteredUndo.json"));
+        JsonUserPrefsStorage userPrefsStorage =
+                new JsonUserPrefsStorage(temporaryFolder.resolve("filteredUndoPrefs.json"));
+        logic = new LogicManager(model, new StorageManager(addressBookStorage, userPrefsStorage));
+
+        Person firstPerson = model.getAddressBook().getPersonList().get(0);
+        String nameKeyword = firstPerson.getName().fullName.split("\\s+")[0];
+        NameContainsKeywordsPredicate predicate = new NameContainsKeywordsPredicate(List.of(nameKeyword));
+
+        logic.execute("find n/" + nameKeyword);
+        logic.execute(ClearCommand.COMMAND_WORD);
+
+        ModelManager expectedAfterClear = new ModelManager(TypicalPersons.getTypicalAddressBook(), new UserPrefs());
+        expectedAfterClear.updateFilteredPersonList(predicate);
+        expectedAfterClear.setAddressBook(new AddressBook());
+        assertEquals(expectedAfterClear, model);
+
+        logic.execute(UndoCommand.COMMAND_WORD);
+
+        ModelManager expectedAfterUndo = new ModelManager(TypicalPersons.getTypicalAddressBook(), new UserPrefs());
+        expectedAfterUndo.updateFilteredPersonList(predicate);
+        assertEquals(expectedAfterUndo, model);
     }
 
     @Test

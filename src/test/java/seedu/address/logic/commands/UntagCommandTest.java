@@ -282,7 +282,8 @@ public class UntagCommandTest {
 
         Model expectedAfterUndo = new ModelManager(getTypicalAddressBook(), new UserPrefs());
         assertUndoSuccess(untagCommand, model,
-                String.format(UntagCommand.MESSAGE_UNDO_SUCCESS, Messages.format(personToEdit)),
+                String.format(UntagCommand.MESSAGE_UNDO_SUCCESS, Messages.format(personToEdit))
+                        + "\n" + Command.MESSAGE_RESTORED_CONTACT_FILTER_NOTE,
                 expectedAfterUndo);
     }
 

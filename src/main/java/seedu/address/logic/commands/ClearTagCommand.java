@@ -150,6 +150,8 @@ public class ClearTagCommand extends Command {
     }
 
     private CommandResult getUndoResult() {
-        return new CommandResult(String.format(MESSAGE_UNDO_SUCCESS, typeToClear, Messages.format(originalPerson)));
+        return createUndoResultWithFilterNote(
+                String.format(MESSAGE_UNDO_SUCCESS, typeToClear, Messages.format(originalPerson)),
+                MESSAGE_RESTORED_CONTACT_FILTER_NOTE);
     }
 }

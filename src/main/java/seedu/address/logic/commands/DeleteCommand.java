@@ -82,7 +82,7 @@ public class DeleteCommand extends Command {
         requireNonNull(model);
         validateUndoable(model);
         restoreDeletedPerson(model);
-        return createUndoPersonResult(MESSAGE_UNDO_SUCCESS, deletedPerson);
+        return createUndoPersonResultWithFilterNote(MESSAGE_UNDO_SUCCESS, deletedPerson);
     }
 
     @Override

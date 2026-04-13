@@ -204,7 +204,8 @@ public class ClearTagCommandTest {
 
         Model expectedAfterUndo = new ModelManager(getTypicalAddressBook(), new UserPrefs());
         assertUndoSuccess(clearTagCommand, model,
-                String.format(ClearTagCommand.MESSAGE_UNDO_SUCCESS, typeToClear, Messages.format(personToEdit)),
+                String.format(ClearTagCommand.MESSAGE_UNDO_SUCCESS, typeToClear, Messages.format(personToEdit))
+                        + "\n" + Command.MESSAGE_RESTORED_CONTACT_FILTER_NOTE,
                 expectedAfterUndo);
     }
 

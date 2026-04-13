@@ -177,6 +177,6 @@ public class UntagCommand extends Command {
     }
 
     private CommandResult getUndoResult() {
-        return createUndoPersonResult(MESSAGE_UNDO_SUCCESS, originalPerson);
+        return createUndoPersonResultWithFilterNote(MESSAGE_UNDO_SUCCESS, originalPerson);
     }
 }

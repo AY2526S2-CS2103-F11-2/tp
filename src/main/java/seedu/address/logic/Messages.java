@@ -96,14 +96,14 @@ public class Messages {
         if (person.getTelegramHandle() != null) {
             builder.append("; Telegram: ").append(person.getTelegramHandle());
         }
-        builder.append("; Tags: ");
 
-        String tags = person.getTags().stream()
-                .map(Tag::toString)
-                .sorted()
-                .collect(Collectors.joining(", ", "[", "]"));
-
-        builder.append(tags);
+        if (!person.getTags().isEmpty()) {
+            String tags = person.getTags().stream()
+                    .map(Tag::toString)
+                    .sorted()
+                    .collect(Collectors.joining(", ", "[", "]"));
+            builder.append("; Tags: ").append(tags);
+        }
 
         return builder.toString();
     }

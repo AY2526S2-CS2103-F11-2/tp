@@ -38,6 +38,19 @@ public class MessagesTest {
     }
 
     @Test
+    public void format_personWithoutTags_success() {
+        Person person = new PersonBuilder()
+                .withName("Amy Bee")
+                .withEmail("amy@gmail.com")
+                .build();
+        person = new Person(person.getName(), null, person.getEmail(),
+                null, person.getTags());
+
+        assertEquals("Amy Bee; Email: amy@gmail.com",
+                Messages.format(person));
+    }
+
+    @Test
     public void getDuplicateConflictMessage_allConflictTypes_success() {
         assertEquals(Messages.MESSAGE_DUPLICATE_EMAIL,
                 Messages.getDuplicateConflictMessage(DuplicateConflict.EMAIL));

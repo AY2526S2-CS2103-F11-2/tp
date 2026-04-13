@@ -14,6 +14,10 @@ import seedu.address.model.person.Person;
  * Represents a command with hidden internal logic and the ability to be executed.
  */
 public abstract class Command {
+    protected static final String MESSAGE_RESTORED_CONTACT_FILTER_NOTE =
+            "The restored contact may be hidden by the current filter. Try `list` to view the full list.";
+    protected static final String MESSAGE_RESTORED_CONTACTS_FILTER_NOTE =
+            "Restored contacts may be hidden by the current filter. Try `list` to view the full list.";
 
     /**
      * Executes the command and returns the result message.
@@ -80,5 +84,29 @@ public abstract class Command {
      */
     protected CommandResult createUndoPersonResult(String successMessage, Person person) {
         return new CommandResult(String.format(successMessage, Messages.format(person)));
+    }
+
+    /**
+     * Creates a command result for an undo operation involving a single restored person, together with
+     * a note that the current filter is still applied.
+     *
+     * @param successMessage the undo success message template
+     * @param person the person to include in the message
+     * @return the formatted undo result with the filter note appended
+     */
+    protected CommandResult createUndoPersonResultWithFilterNote(String successMessage, Person person) {
+        return createUndoResultWithFilterNote(String.format(successMessage, Messages.format(person)),
+                MESSAGE_RESTORED_CONTACT_FILTER_NOTE);
+    }
+
+    /**
+     * Creates a command result for an undo operation with an additional note about the current filter.
+     *
+     * @param successMessage the main undo success message
+     * @param filterNote the note about restored contact visibility in the current filter
+     * @return the formatted undo result with the filter note appended
+     */
+    protected CommandResult createUndoResultWithFilterNote(String successMessage, String filterNote) {
+        return new CommandResult(successMessage + "\n" + filterNote);
     }
 }

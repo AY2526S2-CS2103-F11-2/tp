@@ -260,4 +260,15 @@ public class AddCommandParserTest {
                 NAME_DESC_BOB + EMAIL_DESC_BOB + " " + PREFIX_ROLE_TAG + "tutor " + PREFIX_GENERAL_TAG + "friends",
                 String.format(MESSAGE_UNEXPECTED_EXTRA_INPUT, "tr/tutor"));
     }
+
+    @Test
+    public void parse_optionalPhoneWithSpaces_success() {
+        Person expectedPerson = new PersonBuilder().withName(VALID_NAME_BOB)
+                .withPhone("9312 1534")
+                .withEmail(VALID_EMAIL_BOB)
+                .build();
+
+        assertParseSuccess(parser, NAME_DESC_BOB + " p/9312 1534" + EMAIL_DESC_BOB,
+                new AddCommand(expectedPerson));
+    }
 }

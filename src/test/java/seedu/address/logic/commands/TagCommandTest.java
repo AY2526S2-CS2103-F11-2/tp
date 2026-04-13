@@ -322,7 +322,8 @@ public class TagCommandTest {
 
         Model expectedAfterUndo = new ModelManager(getTypicalAddressBook(), new UserPrefs());
         assertUndoSuccess(tagCommand, model,
-                String.format(TagCommand.MESSAGE_UNDO_SUCCESS, Messages.format(personToEdit)),
+                String.format(TagCommand.MESSAGE_UNDO_SUCCESS, Messages.format(personToEdit))
+                        + "\n" + Command.MESSAGE_RESTORED_CONTACT_FILTER_NOTE,
                 expectedAfterUndo);
     }
 

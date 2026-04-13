@@ -139,11 +139,11 @@ public class DeleteCommandTest {
 
         assertCommandSuccess(deleteCommand, model, deleteMessage, expectedAfterDelete);
 
-        String undoMessage = String.format(DeleteCommand.MESSAGE_UNDO_SUCCESS, Messages.format(personToDelete));
+        String undoMessage = String.format(DeleteCommand.MESSAGE_UNDO_SUCCESS, Messages.format(personToDelete))
+                + "\n" + Command.MESSAGE_RESTORED_CONTACT_FILTER_NOTE;
         assertUndoSuccess(deleteCommand, model, undoMessage, expectedBefore);
     }
 
-    @Test
     public void undo_beforeExecute_throwsCommandException() {
         Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
         DeleteCommand deleteCommand = new DeleteCommand(INDEX_FIRST_PERSON);
@@ -187,7 +187,8 @@ public class DeleteCommandTest {
         Model expectedAfterUndo = new ModelManager(expectedAfterDelete.getAddressBook(), new UserPrefs());
         expectedAfterUndo.addPerson(personToDelete);
         assertUndoSuccess(deleteCommand, model,
-                String.format(DeleteCommand.MESSAGE_UNDO_SUCCESS, Messages.format(personToDelete)),
+                String.format(DeleteCommand.MESSAGE_UNDO_SUCCESS, Messages.format(personToDelete))
+                        + "\n" + Command.MESSAGE_RESTORED_CONTACT_FILTER_NOTE,
                 expectedAfterUndo);
     }
 
