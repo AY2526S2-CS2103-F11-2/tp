@@ -160,6 +160,7 @@ public class EditCommand extends Command {
      * Creates and returns a {@code Person} with the details of {@code personToEdit}
      * edited with {@code editPersonDescriptor}.
      * Fields not present in the descriptor retain their original values.
+     * Fields marked as cleared in the descriptor are set to {@code null}.
      *
      * @param personToEdit the person whose details are to be used as defaults.
      * @param editPersonDescriptor the descriptor containing the new field values.
@@ -232,6 +233,8 @@ public class EditCommand extends Command {
      * Stores the details to edit the person with.
      * Each non-empty field value will replace the corresponding field value of the person.
      * Fields left as {@code null} indicate that the corresponding value should not be changed.
+     * The {@code phoneCleared} and {@code telegramHandleCleared} flags indicate that
+     * the respective optional field should be removed from the person.
      */
     public static class EditPersonDescriptor {
         private Name name;
