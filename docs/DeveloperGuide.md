@@ -612,7 +612,7 @@ Use case ends.
 
 **MSS:**
 1. User requests to sort contacts.
-2. User provides sort field (name/email/phone/reset) and optional reverse order.
+2. User provides sort field (name/email/phone/none) and optional reverse order.
 3. CampusBridge sorts the contacts based on the specified criteria.
 4. CampusBridge displays the list of contacts in the specified sorted order.
 
@@ -831,7 +831,7 @@ testers are expected to do more *exploratory* testing.
    1. Test case: `help add` with no internet connection<br>
       Expected: The usage message for the `add` command is still shown in the result box.
 
-   1. Other valid command names to try: `help list`, `help edit`, `help delete`, `help find`, `help sort`, `help tag`, `help untag`, `help cleartag`, `help clear`, `help exit`<br>
+   1. Other valid command names to try: `help edit`, `help delete`, `help tag`, `help untag`, `help cleartag`, `help list`, `help sort`, `help find`, `help undo`, `help clear`, `help exit`<br>
       Expected: The usage message for the respective command is shown in the result box. The User Guide opens at the respective command section.
 
 1. Invalid help arguments
@@ -919,10 +919,10 @@ testers are expected to do more *exploratory* testing.
       Expected: The first contact's phone number is updated. All other fields remain unchanged. The success message shows the edited person's details.
 
    1. Test case: `edit 1 h/johnlimm`<br>
-      Expected: The first contact's telegram handle is updated. All other fields remain unchanged. The success message shows the edited person's details.
+      Expected: The first contact's Telegram handle is updated. All other fields remain unchanged. The success message shows the edited person's details.
 
 3. Editing a person with a non-NUS email
-    1. Prerequisites: Start with the sample data loaded. Ensure the email used below do not already exist. At least one person in the list.
+    1. Prerequisites: Start with the sample data loaded. Ensure the email used below does not already exist. At least one person in the list.
 
     1. Test case: `edit 1 e/john@gmail.com`<br>
        Expected: The first contact's email is updated. A warning is shown indicating that the email is not an NUS domain.

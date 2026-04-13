@@ -192,7 +192,7 @@ Adds a person to the address book.
 **Validation rules:**
 * Names may contain only letters, numbers, spaces, and these symbols: `(` `)` `.` `-` `,` `'`. <br>
   Other special characters are not supported. In particular, `/` is not accepted because it may be interpreted as command syntax. If needed, replace it with a supported symbol instead, e.g. `D/O` as `D-O`.
-* Requirements for an email provided is specified [here](#email-validation).
+* The requirements for a valid email are specified [here](#email-validation).
 * Phone numbers, if provided, may contain digits and spaces, and must contain at least 3 digits in total.
 * Telegram handles must start with a letter, contain only letters, numbers, and underscores, be 5 to 32 characters long, not contain consecutive underscores, and not end with an underscore.
 * Repeated prefixes for single-valued fields are not allowed. For example, `add n/Amy n/Ben e/x@example.com` is invalid.
@@ -242,9 +242,9 @@ Edits an existing person in the address book.
 **Validation rules:**
 * Updated names may contain only letters, numbers, spaces, and these symbols: `(` `)` `.` `-` `,` `'`. <br>
   Other special characters are not supported. In particular, `/` is not accepted because it may be interpreted as command syntax. If needed, replace it with a supported symbol instead, e.g. `D/O` as `D-O`.
-* Requirements for an email provided is specified [here](#email-validation).
+* The requirements for a valid email are specified [here](#email-validation).
 * Phone numbers provided may contain digits and spaces, and must contain at least 3 digits in total.
-* Telegram handles provide must start with a letter, contain only letters, numbers, and underscores, be 5 to 32 characters long, not contain consecutive underscores, and not end with an underscore.
+* Telegram handles provided must start with a letter, contain only letters, numbers, and underscores, be 5 to 32 characters long, not contain consecutive underscores, and not end with an underscore.
 * Repeated prefixes for single-valued fields are not allowed. For example, `edit 1 n/Amy n/Ben e/x@example.com` is invalid.
 * Any unexpected slash-prefixed token is rejected as extra input. This includes prefixes from other commands such as `t/`, `tr/`, `tc/`, `tg/`, `o/`, and `r/`, as well as unknown prefixes such as `x/`.
 
@@ -468,7 +468,7 @@ Sorts all persons in reverse lexicographic order by phone number.
 Resets the list to its default order.
 
 <div markdown="span" class="alert alert-info">:information_source: **Note:**
-The sort order stays active until you explicitly reset it (e.g. with `sort o/none` or `list`). Data commands (`add`, `edit`, `delete`, `tag`, `untag`, `cleartag`) do not reset the sort order.
+The sort order stays active until you explicitly reset it (e.g. with `sort o/none`). Data commands (`add`, `edit`, `delete`, `tag`, `untag`, `cleartag`) do not reset the sort order.
 </div>
 
 ### Locating persons by name / email / tag : `find`
