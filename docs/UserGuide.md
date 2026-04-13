@@ -632,8 +632,8 @@ Action | Format, Examples
 **List** | `list`
 **Sort** | `sort o/ORDER [r/]`<br> e.g., `sort o/name`, `sort o/email r/`, `sort o/none`
 **Tag** | `tag INDEX [tr/ROLE_TAG]…​ [tc/COURSE_TAG]…​ [tg/GENERAL_TAG]…​`<br> e.g., `tag 1 tg/friends tc/cs2103`
-**Untag** | `untag INDEX [tr/ROLE_TAG]…​ [tc/COURSE_TAG]…​ [tg/GENERAL_TAG]…​`<br> e.g., `untag 3 tr/tutor tc/cs2103`
 **Undo** | `undo`
+**Untag** | `untag INDEX [tr/ROLE_TAG]…​ [tc/COURSE_TAG]…​ [tg/GENERAL_TAG]…​`<br> e.g., `untag 3 tr/tutor tc/cs2103`
 
 ## Keyboard shortcuts summary
 
