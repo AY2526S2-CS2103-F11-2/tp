@@ -207,6 +207,7 @@ Edits an existing person in the address book.
 * Existing values will be updated to the input values.
 * Any unexpected slash-prefixed token is rejected as extra input.
 * Prefixes are case-insensitive (n/ and N/ are treated the same).
+* To remove an optional field, use the prefix with no value: `p/` clears the phone number, `h/` clears the Telegram handle.
 * Repeated prefixes for single-valued fields are not allowed. For example, `edit 1 n/Amy n/Ben e/x@example.com` is invalid.
 * Phone numbers provided must contain only digits and be at least 3 digits long.
 * Requirements for an email provided is specified [here](#email-validation).
@@ -225,6 +226,10 @@ If the updated email is not an [NUS domain](#email-validation) (`@u.nus.edu` or 
 Edits the phone number and email address of the 1st person to be `91234567` and `johndoe@u.nus.edu` respectively.
 *  `edit 2 n/Betsy Crower h/betsyy`<br/>
 Edits the name of the 2nd person to be `Betsy Crower` and the telegram handle to be `betsyy`.
+* `edit 1 p/`<br/>
+Removes the phone number from the 1st person.
+* `edit 1 h/`<br/>
+Removes the Telegram handle from the 1st person.
 
 ### Deleting a person : `delete`
 
