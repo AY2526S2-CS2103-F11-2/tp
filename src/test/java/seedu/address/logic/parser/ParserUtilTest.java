@@ -600,4 +600,27 @@ public class ParserUtilTest {
             ParserUtil.validateKeywordContainsAlphanumeric(PREFIX_NAME, "#Alice123!!!");
         });
     }
+    @Test
+    public void validatePreambleAsIndex_emptyPreamble_throwsParseException() {
+        String args = " n/alice";
+        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, PREFIX_NAME);
+        assertThrows(ParseException.class, () ->
+                ParserUtil.validatePreambleAsIndex(argMultimap, "Usage message"));
+    }
+
+    @Test
+    public void validatePreambleAsIndex_multipleTokens_throwsParseException() {
+        String args = "1 2 n/alice";
+        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, PREFIX_NAME);
+        assertThrows(ParseException.class, () ->
+                ParserUtil.validatePreambleAsIndex(argMultimap, "Usage message"));
+    }
+
+    @Test
+    public void validatePreambleAsIndex_singleToken_success() {
+        String args = "1 n/alice";
+        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, PREFIX_NAME);
+        assertDoesNotThrow(() ->
+                ParserUtil.validatePreambleAsIndex(argMultimap, "Usage message"));
+    }
 }
