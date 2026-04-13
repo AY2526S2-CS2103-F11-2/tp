@@ -932,24 +932,36 @@ testers are expected to do more *exploratory* testing.
     1. Test case: `edit 2 h/johnlimm`<br>
        Expected: No changes made. Error details shown indicating a person with this Telegram handle already exists.
 
-5. Invalid edit commands
-    1. Test case: `edit`<br>
-       Expected: No changes made. Invalid command format error shown.
+5. Clearing optional fields
+   1. Prerequisites: At least one person in the list with a phone number and Telegram handle.
+   
+   1. Test case: `edit 1 p/`<br> 
+   Expected: The first contact's phone number is removed. Success message shown.
+   
+   1. Test case: `edit 1 h/`<br>
+   Expected: The first contact's Telegram handle is removed. Success message shown.
+   
+   1. Test case: `edit 1 p/ h/`<br>
+   Expected: Both phone and Telegram handle are removed. Success message shown.
 
-    1. Test case: `edit 1`<br>
-       Expected: No changes made. Invalid command format error shown.
+6. Invalid edit commands
+  1. Test case: `edit`<br>
+     Expected: No changes made. Invalid command format error shown.
 
-    1. Test case: `edit 0 n/John Lim`<br>
-       Expected: No changes made. Error details shown indicating the index should be a positive integer.
+  1. Test case: `edit 1`<br>
+     Expected: No changes made. Invalid command format error shown.
 
-    1. Test case: `edit 999 n/John Lim` (where 999 is larger than list size) <br>
-       Expected: No changes made. Error details shown in the status message indicating no person exists at that index and tip to use `list` command.
+  1. Test case: `edit 0 n/John Lim`<br>
+     Expected: No changes made. Error details shown indicating the index should be a positive integer.
 
-    1. Test case: `edit 1 n/John Lim n/Jane Lim`<br>
-       Expected: No changes made. Error details shown indicating duplicate prefixes.
+  1. Test case: `edit 999 n/John Lim` (where 999 is larger than list size) <br>
+     Expected: No changes made. Error details shown in the status message indicating no person exists at that index and tip to use `list` command.
 
-    1. Test case: `edit 1 n/John Lim tg/friend`<br>
-       Expected: No changes made. Error details shown indicating unexpected extra input.
+  1. Test case: `edit 1 n/John Lim n/Jane Lim`<br>
+     Expected: No changes made. Error details shown indicating duplicate prefixes.
+
+  1. Test case: `edit 1 n/John Lim tg/friend`<br>
+     Expected: No changes made. Error details shown indicating unexpected extra input.
 
 ### Deleting a person
 
