@@ -43,7 +43,7 @@ public class ParserUtilTest {
     private static final String INVALID_TELEGRAM_HANDLE = "ab";
 
     private static final String VALID_NAME = "Rachel Walker";
-    private static final String VALID_PHONE = "123456";
+    private static final String VALID_PHONE = "1234 56";
     private static final String VALID_EMAIL = "rachel@example.com";
     private static final String VALID_TAG_1 = "friend";
     private static final String VALID_TAG_2 = "neighbour";
@@ -107,9 +107,20 @@ public class ParserUtilTest {
     }
 
     @Test
+    public void parsePhone_invalidValueWithLessThanThreeDigitsIgnoringSpaces_throwsParseException() {
+        assertThrows(ParseException.class, () -> ParserUtil.parsePhone("1 2"));
+    }
+
+    @Test
     public void parsePhone_validValueWithoutWhitespace_returnsPhone() throws Exception {
         Phone expectedPhone = new Phone(VALID_PHONE);
         assertEquals(expectedPhone, ParserUtil.parsePhone(VALID_PHONE));
+    }
+
+    @Test
+    public void parsePhone_validValueWithInternalSpaces_returnsPhone() throws Exception {
+        Phone expectedPhone = new Phone("9312 1534");
+        assertEquals(expectedPhone, ParserUtil.parsePhone("9312 1534"));
     }
 
     @Test

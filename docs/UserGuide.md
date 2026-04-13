@@ -186,7 +186,7 @@ Adds a person to the address book.
 * `p/PHONE_NUMBER` and `h/TELEGRAM_HANDLE` are optional.
 * If no phone number is provided, the contact will be created without one.
 * If no Telegram handle is provided, the contact will be created without one.
-* Phone numbers, if provided, must contain only digits and be at least 3 digits long.
+* Phone numbers, if provided, may contain digits and spaces, and must contain at least 3 digits in total.
 * Email must be unique. You cannot add two persons with the same email address.
 * Telegram handle, if provided, must be unique. You cannot add two persons with the same Telegram handle.
 * Telegram handles are treated case-insensitively for duplicate detection. For example, `handle1` and `HANDLE1` are considered the same handle.
@@ -204,7 +204,7 @@ Parameters can be entered in any order, as long as each value is preceded by the
 
 **Examples:**
 * `add n/John Doe e/johnd@example.com`
-* `add n/Betsy Crowe e/betsycrowe@example.com p/1234567`
+* `add n/Betsy Crowe e/betsycrowe@example.com p/1234 5678`
 * `add n/Alex Lim e/alexlim@example.com h/alex_lim123`
 * `add e/berniceyu@example.com n/Bernice Yu p/98765432 h/bernice_yu`
 
@@ -222,7 +222,7 @@ Edits an existing person in the address book.
 * Any unexpected slash-prefixed token is rejected as extra input.
 * Prefixes are case-insensitive (n/ and N/ are treated the same).
 * Repeated prefixes for single-valued fields are not allowed. For example, `edit 1 n/Amy n/Ben e/x@example.com` is invalid.
-* Phone numbers provided must contain only digits and be at least 3 digits long.
+* Phone numbers provided may contain digits and spaces, and must contain at least 3 digits in total.
 * Requirements for an email provided is specified [here](#email-validation).
 * The updated email and Telegram handle, if provided, must remain unique.
 * Telegram handles provided are treated case-insensitively for duplicate detection. For example, `handle1` and `HANDLE1` are considered the same handle.
@@ -235,8 +235,8 @@ If the updated email is not an [NUS domain](#email-validation), a warning messag
 </div>
 
 **Examples:**
-*  `edit 1 p/91234567 e/johndoe@u.nus.edu`<br/>
-Edits the phone number and email address of the 1st person to be `91234567` and `johndoe@u.nus.edu` respectively.
+*  `edit 1 p/9123 4567 e/johndoe@u.nus.edu`<br/>
+Edits the phone number and email address of the 1st person to be `9123 4567` and `johndoe@u.nus.edu` respectively.
 *  `edit 2 n/Betsy Crower h/betsyy`<br/>
 Edits the name of the 2nd person to be `Betsy Crower` and the telegram handle to be `betsyy`.
 

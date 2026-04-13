@@ -75,6 +75,24 @@ public class JsonAdaptedPersonTest {
     }
 
     @Test
+    public void toModelType_validPhoneWithSpaces_returnsPerson() throws Exception {
+        JsonAdaptedPerson person = new JsonAdaptedPerson(
+                VALID_NAME, "9312 1534", VALID_EMAIL, null, VALID_TAGS);
+
+        Person modelPerson = person.toModelType();
+        assertEquals(VALID_NAME, modelPerson.getName().fullName);
+        assertEquals("9312 1534", modelPerson.getPhone().value);
+        assertEquals(VALID_EMAIL, modelPerson.getEmail().value);
+    }
+
+    @Test
+    public void toModelType_phoneWithTrailingWhitespace_trimsPhone() throws Exception {
+        JsonAdaptedPerson person = new JsonAdaptedPerson(
+                VALID_NAME, "9312 1534 ", VALID_EMAIL, null, VALID_TAGS);
+        assertEquals("9312 1534", person.toModelType().getPhone().value);
+    }
+
+    @Test
     public void toModelType_invalidEmail_throwsIllegalValueException() {
         JsonAdaptedPerson person =
                 new JsonAdaptedPerson(VALID_NAME, VALID_PHONE, INVALID_EMAIL, null, VALID_TAGS);
