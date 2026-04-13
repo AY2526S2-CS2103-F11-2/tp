@@ -251,6 +251,8 @@ Deletes the specified person from the address book.
   delete 2
   ```
   Deletes the 2nd person in the address book.
+  ![result for 'delete 2'](images/deleteSuccessResult.png)
+
 * ```
   find n/Betsy
   delete 1
@@ -549,7 +551,7 @@ Clears all entries from the address book.
 
 **Format:** `clear`
 
-![ClearCommandSuccessResultImage](images/clearcommand.png)
+![result for 'clear'](images/clearcommand.png)
 
 * `clear` keeps the current filtered view unchanged.
 
