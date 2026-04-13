@@ -40,7 +40,7 @@ CampusBridge is a desktop app for **NUS students** to organise and manage academ
 
    * `exit` : Exits the app.
 
-1. Refer to the [Features](#features) below for details of each command.
+1. Refer to the [Features](#features) below for additional details.
 
 --------------------------------------------------------------------------------------------------------------------
 
