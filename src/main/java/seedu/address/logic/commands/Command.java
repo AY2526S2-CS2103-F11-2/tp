@@ -15,9 +15,9 @@ import seedu.address.model.person.Person;
  */
 public abstract class Command {
     protected static final String MESSAGE_RESTORED_CONTACT_FILTER_NOTE =
-            "The restored contact may be hidden by the current filter.";
+            "The restored contact may be hidden by the current filter. Try `list` to view the full list.";
     protected static final String MESSAGE_RESTORED_CONTACTS_FILTER_NOTE =
-            "Restored contacts may be hidden by the current filter.";
+            "Restored contacts may be hidden by the current filter. Try `list` to view the full list.";
 
     /**
      * Executes the command and returns the result message.
