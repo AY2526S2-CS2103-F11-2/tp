@@ -65,8 +65,7 @@ public class FindCommandParser implements Parser<FindCommand> {
      * @return A list of valid keywords extracted from the specified prefix.
      * @throws ParseException if any keyword contains only special characters (no alphanumeric characters)
      */
-    private static List<String> parseKeywords(ArgumentMultimap argumentMultimap, Prefix prefix)
-            throws ParseException {
+    private static List<String> parseKeywords(ArgumentMultimap argumentMultimap, Prefix prefix) {
         List<String> validKeywords = new ArrayList<>();
 
         for (String value : argumentMultimap.getAllValues(prefix)) {
@@ -77,8 +76,6 @@ public class FindCommandParser implements Parser<FindCommand> {
                     continue;
                 }
 
-                // Check if token contains only special characters (no alphanumeric characters)
-                ParserUtil.validateKeywordContainsAlphanumeric(prefix, token);
                 validKeywords.add(token);
             }
         }
