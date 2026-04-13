@@ -225,12 +225,18 @@ When the user enters an `add` command, `AddressBookParser` delegates the input t
 
 The parser enforces the following rules:
 
+**Field requirements**
 * `n/NAME` and `e/EMAIL` are compulsory.
+* Email is compulsory because the product assumes campus-related contacts are typically reachable by email, and email serves as the primary stable identifier for duplicate detection.
 * `p/PHONE` and `h/TELEGRAM_HANDLE` are optional.
+
+**Input handling**
 * Values are trimmed before validation.
 * Repeated single-valued prefixes are rejected.
 * Any non-empty preamble is rejected.
 * Any unexpected slash-prefixed token is rejected as extra input. This includes prefixes from other commands such as `t/`, `tr/`, `tc/`, `tg/`, `o/`, and `r/`, as well as unknown prefixes such as `x/`.
+
+**Validation**
 * `Name` validation allows only letters, numbers, spaces, and these symbols: `(` `)` `.` `-` `,` `'`.
 * Other special characters are intentionally rejected. In particular, `/` is not supported because `/` is used by the CLI prefix-based syntax and may create parsing ambiguity. If a real-world name uses `/`, users should enter a supported substitute such as `-` instead (e.g. `D/O` as `D-O`).
 
@@ -252,6 +258,8 @@ Two persons are considered the same person if they have:
 
 * the same email, or
 * the same non-null Telegram handle.
+
+Emails and Telegram handles are both treated case-insensitively for duplicate detection.
 
 This identity rule is used by `UniquePersonList` when adding and updating persons. As a result, the `add` command rejects contacts that duplicate either an existing email or an existing Telegram handle.
 
@@ -840,55 +848,55 @@ testers are expected to do more *exploratory* testing.
 
     1. Prerequisites: Start with the sample data loaded. Ensure the email and Telegram handle used below do not already exist.
 
-    1. Test case: `add n/John Doe e/johndoe@example.com p/91234567 h/john_doe`<br>
+    1. Test case: `add n/John Doe e/johndoe@example.com p/9123 4567 h/john_doe`<br>
        Expected: A new contact is added to the list. The success message shows the added person's details.
 
-2. Adding a person with only compulsory fields
+1. Adding a person with only compulsory fields
 
     1. Prerequisites: Ensure the email used below does not already exist.
 
     1. Test case: `add n/Jane Doe e/janedoe@example.com`<br>
        Expected: A new contact is added without phone number and Telegram handle. The success message shows the added person's details.
 
-3. Adding a person with a non-NUS email
+1. Adding a person with a non-NUS email
 
     1. Prerequisites: Ensure the email used below does not already exist.
 
     1. Test case: `add n/Alex Tan e/alextan@gmail.com`<br>
        Expected: A new contact is added. A warning is shown indicating that the email is not an NUS domain.
 
-4. Adding a person with duplicate email or Telegram handle
+1. Adding a person with duplicate email or Telegram handle
 
     1. Prerequisites: Add a contact using `add n/Test Person e/testperson@example.com h/test_person`.
 
     1. Test case: `add n/Another Person e/testperson@example.com`<br>
-       Expected: No person is added. Error details shown in the status message indicating that a person with this email already exists.
+       Expected: No person is added. The status message shows `A person with this email already exists in the address book`.
 
     1. Test case: `add n/Another Person e/anotherperson@example.com h/test_person`<br>
-       Expected: No person is added. Error details shown in the status message indicating that a person with this Telegram handle already exists.
+       Expected: No person is added. The status message shows `A person with this Telegram handle already exists in the address book`.
 
     1. Test case: `add n/Case Person e/caseperson@example.com h/TEST_PERSON`<br>
-       Expected: No person is added. Error details shown in the status message indicating that a person with this Telegram handle already exists.
+       Expected: No person is added. The status message shows `A person with this Telegram handle already exists in the address book`.
 
     1. Test case: `add n/Another Person e/testperson@example.com h/test_person`<br>
-       Expected: No person is added. Error details shown in the status message indicating that a person with this email and Telegram handle already exists.
+       Expected: No person is added. The status message shows `A person with this email already exists, and a person with this Telegram handle already exists in the address book`.
 
-5. Invalid add commands
+1. Invalid add commands
 
     1. Test case: `add n/John Doe`<br>
-       Expected: No person is added. Error details shown in the status message.
+       Expected: No person is added. The status message shows an invalid command format error.
 
     1. Test case: `add e/johndoe@example.com`<br>
-       Expected: No person is added. Error details shown in the status message.
+       Expected: No person is added. The status message shows an invalid command format error.
 
     1. Test case: `add n/John Doe e/invalid-email`<br>
-       Expected: No person is added. Error details shown in the status message.
+       Expected: No person is added. The status message shows email constraints.
 
     1. Test case: `add n/John Doe n/Jane Doe e/johndoe@example.com`<br>
-       Expected: No person is added. Error details shown in the status message indicating duplicate prefixes.
+       Expected: No person is added. The status message shows the duplicate-prefix error.
 
     1. Test case: `add n/John Doe e/johndoe@example.com tg/friend`<br>
-       Expected: No person is added. Error details shown in the status message indicating unexpected extra input.
+       Expected: No person is added. The status message shows unexpected extra input `tg/friend`.
 
 ### Editing a person
 
