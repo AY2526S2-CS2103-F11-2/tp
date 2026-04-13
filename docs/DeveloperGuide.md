@@ -1239,9 +1239,6 @@ testers are expected to do more *exploratory* testing.
     1. Test case: `find n/`<br>
        Expected: Error message indicating empty value provided for prefix `n/`.
 
-    1. Test case: `find n/!@#`<br>
-       Expected: Error message indicating that the keyword `!@#` contains only special characters and must contain at least one alphanumeric character.
-
     1. Test case: `find p/91234567` (unsupported prefix for find)<br>
        Expected: Error message indicating unexpected extra input `p/91234567`.
 
