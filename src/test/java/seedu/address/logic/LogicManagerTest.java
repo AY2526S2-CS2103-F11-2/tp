@@ -72,7 +72,7 @@ public class LogicManagerTest {
 
     @Test
     public void execute_commandExecutionError_throwsCommandException() {
-        String deleteCommand = "delete i/9";
+        String deleteCommand = "delete 9";
         assertCommandException(deleteCommand, String.format(MESSAGE_PERSON_NOT_FOUND_DISPLAYED_INDEX, 9));
     }
 
@@ -177,7 +177,7 @@ public class LogicManagerTest {
                 new JsonUserPrefsStorage(temporaryFolder.resolve("multiUndoTypicalPrefs.json"));
         logic = new LogicManager(model, new StorageManager(addressBookStorage, userPrefsStorage));
 
-        logic.execute("delete i/7");
+        logic.execute("delete 7");
         logic.execute(ClearCommand.COMMAND_WORD);
         assertEquals(new ModelManager(), model);
 
@@ -201,7 +201,7 @@ public class LogicManagerTest {
                 new JsonUserPrefsStorage(temporaryFolder.resolve("undoFailPrefs.json"));
         logic = new LogicManager(model, new StorageManager(addressBookStorage, userPrefsStorage));
 
-        logic.execute("delete i/1");
+        logic.execute("delete 1");
         Person benson = model.getFilteredPersonList().get(0);
         model.setPerson(benson, new PersonBuilder(benson).withEmail(TypicalPersons.ALICE.getEmail().value).build());
 

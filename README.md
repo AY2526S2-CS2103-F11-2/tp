@@ -27,7 +27,7 @@
 | `help` | Opens the help page |
 | `add n/John Doe e/johnd@example.com p/98765432 h/johndoe` | Adds a new contact |
 | `edit 1 n/Alice Doe e/aliced@example.com h/alicedoe` | Edits an existing contact |
-| `delete i/3` | Deletes a contact by index or email |
+| `delete 3` | Deletes a contact by index |
 | `tag 1 tg/friends tc/cs2103` | Tags a contact with role, course, or general tags |
 | `untag 3 tr/tutor tc/cs2103` | Removes tags from a contact |
 | `cleartag 1 tg/` | Clears a specific tag type from a contact |

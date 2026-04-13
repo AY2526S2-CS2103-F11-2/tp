@@ -34,7 +34,7 @@ CampusBridge is a desktop app for **NUS students** to organise and manage academ
 
    * `find n/John` : Finds all contacts whose names contain `John`.
 
-   * `delete i/3` : Deletes the 3rd contact shown in the current list.
+   * `delete 3` : Deletes the 3rd contact shown in the current list.
 
    * `clear` : Deletes all contacts.
 
@@ -188,7 +188,7 @@ Adds a person to the address book.
 * Telegram handles are treated case-insensitively for duplicate detection. For example, `handle1` and `HANDLE1` are considered the same handle.
 * Telegram handles must start with a letter, contain only letters, numbers, and underscores, be 5 to 32 characters long, not contain consecutive underscores, and not end with an underscore.
 * Repeated prefixes for single-valued fields are not allowed. For example, `add n/Amy n/Ben e/x@example.com` is invalid.
-* Any unexpected slash-prefixed token is rejected as extra input. This includes prefixes from other commands such as `t/`, `tr/`, `tc/`, `tg/`, `i/`, `o/`, and `r/`, as well as unknown prefixes such as `x/`.
+* Any unexpected slash-prefixed token is rejected as extra input. This includes prefixes from other commands such as `t/`, `tr/`, `tc/`, `tg/`, `o/`, and `r/`, as well as unknown prefixes such as `x/`.
 * If the email is not an NUS domain, the contact is still added, but a warning message is shown.
 * Requirements for an email provided is specified [here](#email-validation).
 * Names may contain only letters, numbers, spaces, and these symbols: `(` `)` `.` `-` `,` `'`. <br>
@@ -240,47 +240,23 @@ Edits the name of the 2nd person to be `Betsy Crower` and the telegram handle to
 
 Deletes the specified person from the address book.
 
-**Format:**
-* `delete i/INDEX`
+**Format:** `delete INDEX`
   * Deletes the person at the specified `INDEX`.
   * The index refers to the index number shown in the displayed person list.
   * The index **must be a positive integer** 1, 2, 3, …​
-  * Repeated prefixes for single-valued fields are not allowed (e.g. `delete i/1 i/2` is invalid).
-
-* `delete e/EMAIL`
-  * Deletes the person with the specified `EMAIL`.
-  * The email refers to the email address of a person shown in the displayed person list.
-  * The email **must be a valid email address**.
-  * Email matching is **case-insensitive**.
-  * Repeated prefixes for single-valued fields are not allowed (e.g. `delete e/betsy@example.com e/alex@example.com` is invalid).
-
-<div markdown="block" class="alert alert-info">:information_source: **NOTE:**
-Only one of `i/INDEX` or `e/EMAIL` can be provided at a time.
-</div>
 
 **Examples:**
 * Delete by index:
   * ```
     list
-    delete i/2
+    delete 2
     ```
     Deletes the 2nd person in the address book.
   * ```
     find n/Betsy
-    delete i/1
+    delete 1
     ```
     Deletes the 1st person in the results of the `find` command.
-* Delete by email:
-  * ```
-    list
-    delete e/betsy@example.com
-    ```
-    Deletes the person with email `betsy@example.com` in the address book.
-  * ```
-    find n/Betsy
-    delete e/BETSY@example.com
-    ```
-    Deletes the person with email `BETSY@example.com` in the results of the `find` command (case-insensitive match also works).
 
 ### Tagging a person : `tag`
 
@@ -537,7 +513,7 @@ You can repeatedly use `undo` to step backwards through your previous changes.
   ```
   Reverts the addition of John Doe.
 * ```
-  delete i/2
+  delete 2
   undo
   ```
   Restores the previously deleted person.
@@ -633,7 +609,7 @@ Action | Format, Examples
 **Add** | `add n/NAME e/EMAIL [p/PHONE_NUMBER] [h/TELEGRAM_HANDLE]` <br> e.g., `add n/James Ho e/jamesho@example.com p/22224444 h/james_ho`
 **Clear** | `clear`
 **Cleartag** | `cleartag INDEX tr/ or cleartag INDEX tc/ or cleartag INDEX tg/` <br> e.g., `cleartag 1 tg/`
-**Delete** | `delete i/INDEX OR delete e/EMAIL`<br> e.g., `delete i/3 OR delete e/jameslee@example.com `
+**Delete** | `delete INDEX`<br> e.g., `delete 3`
 **Edit** | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [h/TELEGRAM_HANDLE]`<br> e.g.,`edit 2 n/James Lee e/jameslee@example.com h/jlee01`
 **Exit** | `exit`
 **Find** | `find [n/NAME [MORE_NAMES]] [e/EMAIL [MORE_EMAILS]] [t/TAG [MORE_TAGS]]`<br> e.g., `find n/alex e/gmail t/friends`

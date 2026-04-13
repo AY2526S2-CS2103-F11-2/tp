@@ -1,9 +1,6 @@
 package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
-import static seedu.address.logic.Messages.MESSAGE_PERSON_NOT_FOUND_DISPLAYED_EMAIL;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_INDEX;
 
 import java.util.List;
 import java.util.Objects;
@@ -13,29 +10,25 @@ import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
-import seedu.address.model.person.Email;
 import seedu.address.model.person.Person;
 
 /**
- * Deletes a person identified using their displayed index or email from the address book.
+ * Deletes a person identified using their displayed index from the address book.
  */
 public class DeleteCommand extends Command {
 
     public static final String COMMAND_WORD = "delete";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
-            + ": Deletes the person identified by the index number or email used in the displayed person list.\n"
-            + "Only one prefix can be provided at a time.\n"
-            + "Parameters: " + PREFIX_INDEX + "INDEX (must be a positive integer) or " + PREFIX_EMAIL + "EMAIL.\n"
-            + "Example: " + COMMAND_WORD + " " + PREFIX_INDEX + "1, "
-            + COMMAND_WORD + " " + PREFIX_EMAIL + "johnd@example.com";
+            + ": Deletes the person identified by the index number used in the displayed person list.\n"
+            + "Parameters: INDEX (must be a positive integer).\n"
+            + "Example: " + COMMAND_WORD + " 1";
 
     public static final String MESSAGE_DELETE_PERSON_SUCCESS = "Deleted Person: %1$s";
     public static final String MESSAGE_UNDO_SUCCESS = "Undo delete person: %1$s";
     public static final String MESSAGE_UNDO_FAILURE = "Cannot undo delete because the person already exists.";
 
     private final Index targetIndex;
-    private final Email targetEmail;
     private Person deletedPerson;
     private int deletedPersonIndex = -1;
 
@@ -45,16 +38,6 @@ public class DeleteCommand extends Command {
     public DeleteCommand(Index targetIndex) {
         requireNonNull(targetIndex);
         this.targetIndex = targetIndex;
-        this.targetEmail = null;
-    }
-
-    /**
-     * Creates a DeleteCommand using email
-     */
-    public DeleteCommand(Email email) {
-        requireNonNull(email);
-        this.targetEmail = email;
-        this.targetIndex = null;
     }
 
     @Override
@@ -62,19 +45,13 @@ public class DeleteCommand extends Command {
         requireNonNull(model);
         List<Person> lastShownList = model.getFilteredPersonList();
 
-        Person personToDelete;
-
-        if (targetIndex != null) {
-            if (targetIndex.getZeroBased() >= lastShownList.size()) {
-                throw new CommandException(
-                        String.format(Messages.MESSAGE_PERSON_NOT_FOUND_DISPLAYED_INDEX, targetIndex.getOneBased())
-                );
-            }
-
-            personToDelete = lastShownList.get(targetIndex.getZeroBased());
-        } else {
-            personToDelete = findPersonByEmail(lastShownList);
+        if (targetIndex.getZeroBased() >= lastShownList.size()) {
+            throw new CommandException(
+                    String.format(Messages.MESSAGE_PERSON_NOT_FOUND_DISPLAYED_INDEX, targetIndex.getOneBased())
+            );
         }
+
+        Person personToDelete = lastShownList.get(targetIndex.getZeroBased());
 
         deletedPersonIndex = model.getAddressBook().getPersonList().indexOf(personToDelete);
         model.deletePerson(personToDelete);
@@ -120,26 +97,14 @@ public class DeleteCommand extends Command {
         }
 
         DeleteCommand otherDeleteCommand = (DeleteCommand) other;
-        return Objects.equals(targetIndex, otherDeleteCommand.targetIndex)
-                && Objects.equals(targetEmail, otherDeleteCommand.targetEmail);
+        return Objects.equals(targetIndex, otherDeleteCommand.targetIndex);
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this)
                 .add("targetIndex", targetIndex)
-                .add("targetEmail", targetEmail)
                 .toString();
-    }
-
-    private Person findPersonByEmail(List<Person> personList) throws CommandException {
-        return personList.stream()
-                .filter(person -> person.getEmail().equals(targetEmail))
-                .findFirst()
-                .orElseThrow(() -> new CommandException(
-                                String.format(MESSAGE_PERSON_NOT_FOUND_DISPLAYED_EMAIL, targetEmail)
-                        )
-                );
     }
 
     /**

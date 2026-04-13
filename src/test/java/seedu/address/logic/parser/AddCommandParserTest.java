@@ -22,7 +22,7 @@ import static seedu.address.logic.commands.CommandTestUtil.VALID_NAME_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_PHONE_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_TELEGRAM_HANDLE_BOB;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_INDEX;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_GENERAL_TAG;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ROLE_TAG;
@@ -212,10 +212,6 @@ public class AddCommandParserTest {
                 String.format(MESSAGE_UNEXPECTED_EXTRA_INPUT, "tr/tutor"));
 
         assertParseFailure(parser,
-                NAME_DESC_BOB + EMAIL_DESC_BOB + " " + PREFIX_INDEX + "3",
-                String.format(MESSAGE_UNEXPECTED_EXTRA_INPUT, "i/3"));
-
-        assertParseFailure(parser,
                 NAME_DESC_BOB + EMAIL_DESC_BOB + " " + PREFIX_TAG + "friend",
                 String.format(MESSAGE_UNEXPECTED_EXTRA_INPUT, "t/friend"));
 
@@ -254,14 +250,14 @@ public class AddCommandParserTest {
     @Test
     public void parse_multipleKnownNonAddPrefixes_reportsEarliestPrefix() {
         assertParseFailure(parser,
-                NAME_DESC_BOB + EMAIL_DESC_BOB + " " + PREFIX_INDEX + "3 " + PREFIX_ROLE_TAG + "tutor",
-                String.format(MESSAGE_UNEXPECTED_EXTRA_INPUT, "i/3"));
+                NAME_DESC_BOB + EMAIL_DESC_BOB + " " + PREFIX_GENERAL_TAG + "friends " + PREFIX_ROLE_TAG + "tutor",
+                String.format(MESSAGE_UNEXPECTED_EXTRA_INPUT, "tg/friends"));
     }
 
     @Test
     public void parse_multipleKnownNonAddPrefixes_replacesWithEarlierPrefix() {
         assertParseFailure(parser,
-                NAME_DESC_BOB + EMAIL_DESC_BOB + " " + PREFIX_ROLE_TAG + "tutor " + PREFIX_INDEX + "3",
+                NAME_DESC_BOB + EMAIL_DESC_BOB + " " + PREFIX_ROLE_TAG + "tutor " + PREFIX_GENERAL_TAG + "friends",
                 String.format(MESSAGE_UNEXPECTED_EXTRA_INPUT, "tr/tutor"));
     }
 }
