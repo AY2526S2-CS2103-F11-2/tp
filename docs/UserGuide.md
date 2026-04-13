@@ -207,16 +207,16 @@ Parameters can be entered in any order, as long as each value is preceded by the
 </div>
 
 **Examples:**
-* `add n/John Doe e/johnd@example.com`</br>
+* `add n/John Doe e/johnd@example.com`<br>
   Adds a contact named `John Doe` with email `johnd@example.com`.
 
-* `add n/Betsy Crowe e/betsycrowe@example.com p/1234 5678`</br>
+* `add n/Betsy Crowe e/betsycrowe@example.com p/1234 5678`<br>
   Adds a contact named `Betsy Crowe` with email `betsycrowe@example.com` and phone number `1234 5678`.
 
-* `add n/Alex Lim e/alexlim@example.com h/alex_lim123`</br>
+* `add n/Alex Lim e/alexlim@example.com h/alex_lim123`<br>
   Adds a contact named `Alex Lim` with email `alexlim@example.com` and Telegram handle `alex_lim123`.
 
-* `add e/berniceyu@example.com n/Bernice Yu p/98765432 h/bernice_yu`</br>
+* `add e/berniceyu@example.com n/Bernice Yu p/98765432 h/bernice_yu`<br>
   Adds a contact named `Bernice Yu` with email `berniceyu@example.com`, phone number `98765432`, and Telegram handle `bernice_yu`.
 
 ![Result of adding Bernice](images/addBerniceResult.png)
