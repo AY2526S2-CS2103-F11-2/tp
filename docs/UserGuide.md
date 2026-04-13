@@ -177,32 +177,48 @@ Adds a person to the address book.
 
 **Format:** `add n/NAME e/EMAIL [p/PHONE_NUMBER] [h/TELEGRAM_HANDLE]`
 
+**Fields**
 * `n/NAME` and `e/EMAIL` are required.
-* Prefixes are case-insensitive (n/ and N/ are treated the same).
+* Email is required because CampusBridge uses it as the primary stable identifier for campus-related contacts.
 * `p/PHONE_NUMBER` and `h/TELEGRAM_HANDLE` are optional.
 * If no phone number is provided, the contact will be created without one.
 * If no Telegram handle is provided, the contact will be created without one.
+* Prefixes are case-insensitive (n/ and N/ are treated the same).
+
+**Validation rules**
+* Names may contain only letters, numbers, spaces, and these symbols: `(` `)` `.` `-` `,` `'`. <br>
+  Other special characters are not supported. In particular, `/` is not accepted because it may be interpreted as command syntax. If needed, replace it with a supported symbol instead, e.g. `D/O` as `D-O`.
+* Requirements for an email provided is specified [here](#email-validation).
 * Phone numbers, if provided, may contain digits and spaces, and must contain at least 3 digits in total.
-* Email must be unique. You cannot add two persons with the same email address.
-* Telegram handle, if provided, must be unique. You cannot add two persons with the same Telegram handle.
-* Telegram handles are treated case-insensitively for duplicate detection. For example, `handle1` and `HANDLE1` are considered the same handle.
 * Telegram handles must start with a letter, contain only letters, numbers, and underscores, be 5 to 32 characters long, not contain consecutive underscores, and not end with an underscore.
 * Repeated prefixes for single-valued fields are not allowed. For example, `add n/Amy n/Ben e/x@example.com` is invalid.
 * Any unexpected slash-prefixed token is rejected as extra input. This includes prefixes from other commands such as `t/`, `tr/`, `tc/`, `tg/`, `o/`, and `r/`, as well as unknown prefixes such as `x/`.
+
+**Identity and warnings**
+* A contact is treated as a duplicate if another contact already has the same email, or the same Telegram handle (case-insensitive).
+* Email must be unique. You cannot add two persons with the same email address.
+* Telegram handle, if provided, must be unique. You cannot add two persons with the same Telegram handle.
+* Telegram handles are treated case-insensitively for duplicate detection. For example, `handle1` and `HANDLE1` are considered the same handle.
 * If the email is not an NUS domain, the contact is still added, but a warning message is shown.
-* Requirements for an email provided is specified [here](#email-validation).
-* Names may contain only letters, numbers, spaces, and these symbols: `(` `)` `.` `-` `,` `'`. <br>
-  Other special characters are not supported. In particular, `/` is not accepted because it may be interpreted as command syntax. If needed, replace it with a supported symbol instead, e.g. `D/O` as `D-O`.
 
 <div markdown="span" class="alert alert-primary">:bulb: **Tip:**
 Parameters can be entered in any order, as long as each value is preceded by the correct prefix.
 </div>
 
 **Examples:**
-* `add n/John Doe e/johnd@example.com`
-* `add n/Betsy Crowe e/betsycrowe@example.com p/1234 5678`
-* `add n/Alex Lim e/alexlim@example.com h/alex_lim123`
-* `add e/berniceyu@example.com n/Bernice Yu p/98765432 h/bernice_yu`
+* `add n/John Doe e/johnd@example.com`</br>
+  Adds a contact named `John Doe` with email `johnd@example.com`.
+
+* `add n/Betsy Crowe e/betsycrowe@example.com p/1234 5678`</br>
+  Adds a contact named `Betsy Crowe` with email `betsycrowe@example.com` and phone number `1234 5678`.
+
+* `add n/Alex Lim e/alexlim@example.com h/alex_lim123`</br>
+  Adds a contact named `Alex Lim` with email `alexlim@example.com` and Telegram handle `alex_lim123`.
+
+* `add e/berniceyu@example.com n/Bernice Yu p/98765432 h/bernice_yu`</br>
+  Adds a contact named `Bernice Yu` with email `berniceyu@example.com`, phone number `98765432`, and Telegram handle `bernice_yu`.
+
+![Result of adding Bernice](images/addBerniceResult.png)
 
 ### Editing a person : `edit`
 

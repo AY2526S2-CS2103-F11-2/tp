@@ -226,6 +226,7 @@ When the user enters an `add` command, `AddressBookParser` delegates the input t
 The parser enforces the following rules:
 
 * `n/NAME` and `e/EMAIL` are compulsory.
+* Email is compulsory because the product assumes campus-related contacts are typically reachable by email, and email serves as the primary stable identifier for duplicate detection.
 * `p/PHONE` and `h/TELEGRAM_HANDLE` are optional.
 * Values are trimmed before validation.
 * Repeated single-valued prefixes are rejected.
