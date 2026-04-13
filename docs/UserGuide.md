@@ -524,10 +524,16 @@ You can repeatedly use `undo` to step backwards through your previous changes.
   ```
   Reverts the addition of John Doe.
 * ```
-  delete 2
+  delete 1
   undo
   ```
   Restores the previously deleted person.
+  ![Initial list before `delete 1`](images/Undo-Initial-List.png)
+  Initial list before `delete 1`.
+  ![List after `delete 1`](images/Undo-Deletion.png)
+  List after `delete 1`.
+  ![List after `undo`](images/Undo-Undo.png)
+  List after `undo`, with the deleted person restored.
 * ```
   edit 1 n/Alex Tan
   undo
