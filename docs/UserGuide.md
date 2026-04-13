@@ -150,7 +150,7 @@ Non-NUS emails are still accepted, but a warning will be displayed to alert you 
 
 ### Viewing help : `help`
 
-Opens the user guide in the browser, and optionally directly to the section for a specific command.
+Shows usage information in the command result box, and opens the user guide in the browser.
 
 **Format:** `help [COMMAND]`
 
@@ -158,14 +158,16 @@ Alternatively, press `F1` or `fn + F1` to open the user guide.
 
 * `COMMAND` is optional. When provided, it must be a single valid command name (e.g. `add`, `edit`).
 * `COMMAND` is case-insensitive. e.g. `help ADD`, `help Add`, and `help add` are treated the same.
-* If `COMMAND` is provided, the user guide is opened at the section for that command.
+* If `COMMAND` is provided, the usage message for that command is shown in the result box and the user guide is opened at the relevant section.
+* If `COMMAND` is omitted, a summary of available commands is shown in the result box and the full user guide is opened.
+* If the browser cannot be opened (e.g. no internet), the usage information is still displayed in the result box.
 * If `COMMAND` is not a recognised command name, an error is shown listing all valid commands.
 * If more than one word is provided (e.g. `help add clear`), an invalid command format error is shown.
 
 Examples:
-* `help` — opens the user guide in the browser.
-* `help add` — opens the user guide at the **Adding a person** section.
-* `help sort` — opens the user guide at the **Sorting persons** section.
+* `help` — shows available commands in the result box and opens the user guide in the browser.
+* `help add` — shows the usage message for `add` in the result box and opens the user guide at the **Adding a person** section.
+* `help sort` — shows the usage message for `sort` in the result box and opens the user guide at the **Sorting persons** section.
 
 Supported commands: `help`, `add`, `edit`, `delete`, `untag`, `cleartag`, `list`, `sort`, `find`, `clear`, `exit`
 

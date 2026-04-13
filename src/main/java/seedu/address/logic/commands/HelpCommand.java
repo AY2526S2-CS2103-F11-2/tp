@@ -57,6 +57,26 @@ public class HelpCommand extends Command {
             "Command \"%s\" does not exist.\nValid commands: "
             + String.join(", ", VALID_COMMAND_NAMES_SORTED);
 
+    public static final String FALLBACK_HELP_MESSAGE = "Available commands: "
+            + String.join(", ", VALID_COMMAND_NAMES_SORTED)
+            + "\nType 'help <command>' for details.\nUser guide: " + USERGUIDE_URL;
+
+    static final Map<String, String> COMMAND_USAGE_MESSAGES = Map.ofEntries(
+            Map.entry("help", MESSAGE_USAGE),
+            Map.entry("add", AddCommand.MESSAGE_USAGE),
+            Map.entry("list", "list: Lists all contacts. No parameters."),
+            Map.entry("sort", SortCommand.MESSAGE_USAGE),
+            Map.entry("edit", EditCommand.MESSAGE_USAGE),
+            Map.entry("find", FindCommand.MESSAGE_USAGE),
+            Map.entry("delete", DeleteCommand.MESSAGE_USAGE),
+            Map.entry("clear", "clear: Clears all contacts. No parameters."),
+            Map.entry("exit", "exit: Exits the application. No parameters."),
+            Map.entry("tag", TagCommand.MESSAGE_USAGE),
+            Map.entry("untag", UntagCommand.MESSAGE_USAGE),
+            Map.entry("cleartag", ClearTagCommand.MESSAGE_USAGE),
+            Map.entry("undo", "undo: Undoes the last action. No parameters.")
+    );
+
     private final String targetCommand;
 
     /**
@@ -95,8 +115,8 @@ public class HelpCommand extends Command {
         String fragment = targetCommand == null ? "" : COMMAND_URL_FRAGMENTS.get(targetCommand);
         String url = USERGUIDE_URL + fragment;
         String message = targetCommand == null
-                ? SHOWING_HELP_MESSAGE
-                : String.format(SHOWING_HELP_COMMAND_MESSAGE, targetCommand);
+                ? FALLBACK_HELP_MESSAGE
+                : COMMAND_USAGE_MESSAGES.getOrDefault(targetCommand, FALLBACK_HELP_MESSAGE);
         return new CommandResult(message, true, false, url);
     }
 }

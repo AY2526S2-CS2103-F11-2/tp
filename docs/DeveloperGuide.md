@@ -385,7 +385,7 @@ See the full list on [GitHub](https://github.com/AY2526S2-CS2103-F11-2/tp/issues
 
 **MSS:**
 1. User requests for help.
-2. CampusBridge displays the relevant section of the user guide.
+2. CampusBridge displays usage information in the result box and opens the relevant section of the user guide in the browser.
 
 Use case ends.
 
@@ -799,21 +799,27 @@ testers are expected to do more *exploratory* testing.
 1. Opening general help
 
     1. Test case: `help`<br>
-       Expected: The User Guide opens in the system default browser. Status message shows `Opened user guide in browser.`
+       Expected: A summary of available commands is shown in the result box. The User Guide opens in the system default browser.
 
    1. Alternative: Press `F1` (or `Fn + F1` on Mac).<br>
       Expected: Same as above.
 
+   1. Test case: `help` with no internet connection<br>
+      Expected: A summary of available commands is still shown in the result box. The browser may open to an error page.
+
 1. Opening command-specific help
 
     1. Test case: `help add`<br>
-       Expected: The User Guide opens in the system default browser at the `add` command section. Status message shows `Opening user guide for 'add' command.`
+       Expected: The usage message for the `add` command is shown in the result box. The User Guide opens in the system default browser at the `add` command section.
 
    1. Test case: `help ADD`<br>
-      Expected: The User Guide opens in the system default browser at the `add` command section. Status message shows `Opening user guide for 'add' command.`
+      Expected: Same as `help add` (case-insensitive).
+
+   1. Test case: `help add` with no internet connection<br>
+      Expected: The usage message for the `add` command is still shown in the result box.
 
    1. Other valid command names to try: `help list`, `help edit`, `help delete`, `help find`, `help sort`, `help tag`, `help untag`, `help cleartag`, `help clear`, `help exit`<br>
-      Expected: The User Guide opens at the respective command section. Status message names the command.
+      Expected: The usage message for the respective command is shown in the result box. The User Guide opens at the respective command section.
 
 1. Invalid help arguments
 
