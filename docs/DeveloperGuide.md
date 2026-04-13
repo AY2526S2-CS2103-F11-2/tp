@@ -746,7 +746,7 @@ Use case ends.
 * GUI (Graphical user interface): A visual way for users to interact with digital components through items like icons and buttons.
 * Index: A positive integer representing the position of a contact in the currently displayed list.
 * Mainstream OS: Windows, Linux, Unix, MacOS.
-* NUS domain: Email addresses ending with `@u.nus.edu` (student), `@nus.edu.sg` (staff), or `@*.nus.edu.sg`.
+* NUS domain: Email addresses from NUS-affiliated domains, including `@u.nus.edu, @*.nus.edu, @nus.edu.sg, @*.nus.edu.sg, @duke-nus.edu.sg, @*.duke-nus.edu.sg, @yale-nus.edu.sg, and @*.yale-nus.edu.sg`.
 * Prefix: A short identifier (e.g. `n/`, `e/`, `tg/`) used in commands to denote the type of parameter that follows.
 * Professor: An academic staff member who teaches a course at NUS.
 * Role tag: A type of tag (displayed in green) used to label a contact's academic role. Its prefix is `tr/`.
