@@ -738,11 +738,13 @@ Use case ends.
 ### Glossary
 
 * Brownfield project: A software project developed upon an existing codebase, rather than starting from scratch.
+* Canvas: A web-based Learning Management System (LMS) used by NUS. It serves as a central digital platform for students to access course materials, as well as submit assignments and take quizzes.
 * CLI (Command-line interface): A text-based user interface where users type specific commands to interact with the application or OS.
 * Command: A text instruction entered by the user (e.g. `add`, `delete`, `edit`) that triggers a specific action in the application.
 * Course: An academic course offered at NUS, identified by a unique course code (e.g. CS2103T, CS2101).
 * Course tag: A type of tag (displayed in blue) used to label a contact with an NUS course code. Its prefix is `tc/`.
 * Duplicate person: A contact is considered a duplicate if another contact already has the same email OR the same non-empty Telegram handle (case-insensitive for handles).
+* Filtered view: The subset of contacts currently displayed in the CampusBridge window, which may be limited by an active search (`find` command) or sort order (`sort` command).
 * Fuzzy matching: A search technique used in the `find` command that allows for minor typos or substrings rather than requiring an exact character-for-character match.
 * General tag: A type of tag (displayed in red) for any user-defined label. Its prefix is `tg/`.
 * Groupmate: A fellow student who collaborates with you on academic projects, assignments, or study groups within the same module.
@@ -754,7 +756,7 @@ Use case ends.
 * Professor: An academic staff member who teaches a course at NUS.
 * Role tag: A type of tag (displayed in green) used to label a contact's academic role. Its prefix is `tr/`.
 * Tag: A label attached to a contact for categorization.
-* Teaching Assistant (TA): A graduate or undergraduate student who assists with teaching duties, including conducting tutorials and grading assignments.
+* Teaching assistant (TA): A graduate or undergraduate student who assists with teaching duties, including conducting tutorials and grading assignments.
 * Undoable command: A command (e.g. `add`, `delete`, `edit`, `tag`) that can be reversed using the `undo` command. Commands like `list` and `find` are not undoable.
 * Undo history stack: An internal data structure that stores previous commands, allowing the user to revert changes in reverse chronological order.
 
