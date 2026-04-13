@@ -21,7 +21,8 @@ CampusBridge is a desktop app for **NUS students** to organise and manage academ
 
 1. Open a command terminal, `cd` into the folder you put the jar file in, and use the `java -jar CampusBridge-v1.6.jar` command to run the application.<br>
    A GUI similar to the below should appear in a few seconds. Note how the app contains some sample data.<br>
-   ![Ui](images/Ui.png)
+
+![Ui](images/Ui.png)
 
 1. Type the command in the command box and press Enter to execute it. e.g. typing **`help`** and pressing Enter will open the user guide in the browser.<br>
    Some example commands you can try:
@@ -164,12 +165,12 @@ Alternatively, press `F1` or `fn + F1` to open the user guide.
 * If `COMMAND` is not a recognised command name, an error is shown listing all valid commands.
 * If more than one word is provided (e.g. `help add clear`), an invalid command format error is shown.
 
-Examples:
+**Supported commands:** `help`, `add`, `edit`, `delete`, `untag`, `cleartag`, `list`, `sort`, `find`, `clear`, `exit`
+
+**Examples:**
 * `help` — shows available commands in the result box and opens the user guide in the browser.
 * `help add` — shows the usage message for `add` in the result box and opens the user guide at the **Adding a person** section.
 * `help sort` — shows the usage message for `sort` in the result box and opens the user guide at the **Sorting persons** section.
-
-Supported commands: `help`, `add`, `edit`, `delete`, `untag`, `cleartag`, `list`, `sort`, `find`, `clear`, `exit`
 
 ![result for 'help edit'](images/helpedit.png)
 
