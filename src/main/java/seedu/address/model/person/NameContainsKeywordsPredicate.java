@@ -50,7 +50,7 @@ public class NameContainsKeywordsPredicate implements Predicate<Person> {
         boolean hasSpecialCharacters = keywords.stream()
                 .anyMatch(k -> k.matches(".*[^a-zA-Z0-9\\s].*"));
 
-        // Substring matching for keywords with special characters (e.g., "O'Connor", "Smith-Jones")
+        // Use only substring matching for keywords with special characters
         if (hasSpecialCharacters) {
             String name = person.getName().fullName.toLowerCase();
 
