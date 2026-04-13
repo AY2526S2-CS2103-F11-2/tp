@@ -144,30 +144,6 @@ public class DeleteCommandTest {
         assertUndoSuccess(deleteCommand, model, undoMessage, expectedBefore);
     }
 
-    @Test
-<<<<<<< HEAD
-    public void undo_afterExecuteByEmail_restoresPerson() {
-        Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
-        Model expectedBefore = new ModelManager(model.getAddressBook(), new UserPrefs());
-        Person personToDelete = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
-        DeleteCommand deleteCommand = new DeleteCommand(personToDelete.getEmail());
-
-        String deleteMessage = String.format(DeleteCommand.MESSAGE_DELETE_PERSON_SUCCESS,
-                Messages.format(personToDelete));
-
-        Model expectedAfterDelete = new ModelManager(model.getAddressBook(), new UserPrefs());
-        expectedAfterDelete.deletePerson(personToDelete);
-
-        assertCommandSuccess(deleteCommand, model, deleteMessage, expectedAfterDelete);
-
-        String undoMessage = String.format(DeleteCommand.MESSAGE_UNDO_SUCCESS, Messages.format(personToDelete))
-                + "\n" + Command.MESSAGE_RESTORED_CONTACT_FILTER_NOTE;
-        assertUndoSuccess(deleteCommand, model, undoMessage, expectedBefore);
-    }
-
-    @Test
-=======
->>>>>>> 16d68dfb2618f883e3a742287837ae2cc4eb35ae
     public void undo_beforeExecute_throwsCommandException() {
         Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
         DeleteCommand deleteCommand = new DeleteCommand(INDEX_FIRST_PERSON);
