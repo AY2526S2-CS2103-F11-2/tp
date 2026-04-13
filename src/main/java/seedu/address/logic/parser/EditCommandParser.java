@@ -49,19 +49,14 @@ public class EditCommandParser implements Parser<EditCommand> {
         ArgumentMultimap argMultimap =
                 ArgumentTokenizer.tokenize(args, ADD_EDIT_COMMAND_PREFIXES);
 
-        ParserUtil.validateNoEmptyPrefixValues(argMultimap, ADD_EDIT_COMMAND_PREFIXES);
+        ParserUtil.validateNoEmptyPrefixValues(argMultimap, PREFIX_NAME, PREFIX_EMAIL);
 
         String preamble = argMultimap.getPreamble().trim();
         if (preamble.isEmpty() || preamble.contains(" ")) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, EditCommand.MESSAGE_USAGE));
         }
 
-        Index index;
-        try {
-            index = ParserUtil.parseIndex(preamble);
-        } catch (ParseException pe) {
-            throw new ParseException(pe.getMessage());
-        }
+        Index index = ParserUtil.parseIndex(argMultimap.getPreamble().trim());
 
         argMultimap.verifyNoDuplicatePrefixesFor(ADD_EDIT_COMMAND_PREFIXES);
 
@@ -71,14 +66,23 @@ public class EditCommandParser implements Parser<EditCommand> {
             editPersonDescriptor.setName(ParserUtil.parseName(argMultimap.getValue(PREFIX_NAME).get()));
         }
         if (argMultimap.getValue(PREFIX_PHONE).isPresent()) {
-            editPersonDescriptor.setPhone(ParserUtil.parsePhone(argMultimap.getValue(PREFIX_PHONE).get()));
+            String phoneValue = argMultimap.getValue(PREFIX_PHONE).get();
+            if (phoneValue.isEmpty()) {
+                editPersonDescriptor.setPhoneCleared();
+            } else {
+                editPersonDescriptor.setPhone(ParserUtil.parsePhone(phoneValue));
+            }
         }
         if (argMultimap.getValue(PREFIX_EMAIL).isPresent()) {
             editPersonDescriptor.setEmail(ParserUtil.parseEmail(argMultimap.getValue(PREFIX_EMAIL).get()));
         }
         if (argMultimap.getValue(PREFIX_TELEGRAM_HANDLE).isPresent()) {
-            editPersonDescriptor.setTelegramHandle(ParserUtil.parseTelegramHandle(argMultimap
-                    .getValue(PREFIX_TELEGRAM_HANDLE).get()));
+            String handleValue = argMultimap.getValue(PREFIX_TELEGRAM_HANDLE).get();
+            if (handleValue.isEmpty()) {
+                editPersonDescriptor.setTelegramHandleCleared();
+            } else {
+                editPersonDescriptor.setTelegramHandle(ParserUtil.parseTelegramHandle(handleValue));
+            }
         }
 
         if (!editPersonDescriptor.isAnyFieldEdited()) {
