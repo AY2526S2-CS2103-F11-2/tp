@@ -451,8 +451,8 @@ Finds persons whose names, emails, or tags match the given keywords.
 * **Email keywords** use exact substring matching.
     * e.g. `gmail` will match `john@gmail.com` and `alice.gmail@example.com`.
     * Special characters in email keywords are matched as entered. For example, `john.doe` will not match `doe@gmail.com`.
-* **Tags** use exact matching.
-    * e.g. `cs2103` will match tag `cs2103` but not `cs210`.
+* **Tags** require exact keyword matches (no partial matching), but are still case-insensitive.
+    * e.g. `cs2103` will match tag `cs2103` and `CS2103` but not `cs210`.
     * Special characters in tag keywords are matched as entered. For example, in `cs2103-t`, the `-` is treated as part of the tag and is not ignored.
 * Multiple keywords within the same field are combined using **OR**.
   e.g. `n/Alex David` will match `Alex Yeoh` or `David Li`.
