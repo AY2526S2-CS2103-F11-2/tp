@@ -87,10 +87,9 @@ public class PersonBuilder {
      * Sets the {@code Phone} of the {@code Person} that we are building.
      */
     public PersonBuilder withPhone(String phone) {
-        this.phone = new Phone(phone);
+        this.phone = phone == null ? null : new Phone(phone);
         return this;
     }
-
     /**
      * Sets the {@code Email} of the {@code Person} that we are building.
      */
@@ -103,7 +102,7 @@ public class PersonBuilder {
      * Sets the {@code TelegramHandle} of the {@code Person} that we are building.
      */
     public PersonBuilder withTelegramHandle(String telegramHandle) {
-        this.telegramHandle = new TelegramHandle(telegramHandle);
+        this.telegramHandle = telegramHandle == null ? null : new TelegramHandle(telegramHandle);
         return this;
     }
 

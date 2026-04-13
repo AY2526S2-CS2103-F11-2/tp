@@ -63,4 +63,16 @@ public class EditPersonDescriptorTest {
                 + editPersonDescriptor.getTelegramHandle().orElse(null) + "}";
         assertEquals(expected, editPersonDescriptor.toString());
     }
+    @Test
+    public void equals_phoneClearedDifference_returnsFalse() {
+        EditPersonDescriptor descriptorWithClear = new EditPersonDescriptorBuilder(DESC_AMY).withPhone(null).build();
+        assertFalse(DESC_AMY.equals(descriptorWithClear));
+    }
+
+    @Test
+    public void equals_telegramHandleClearedDifference_returnsFalse() {
+        EditPersonDescriptor descriptorWithClear = new EditPersonDescriptorBuilder(DESC_AMY)
+                .withTelegramHandle(null).build();
+        assertFalse(DESC_AMY.equals(descriptorWithClear));
+    }
 }

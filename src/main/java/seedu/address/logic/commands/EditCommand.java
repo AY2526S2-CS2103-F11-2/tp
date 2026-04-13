@@ -160,6 +160,7 @@ public class EditCommand extends Command {
      * Creates and returns a {@code Person} with the details of {@code personToEdit}
      * edited with {@code editPersonDescriptor}.
      * Fields not present in the descriptor retain their original values.
+     * Fields marked as cleared in the descriptor are set to {@code null}.
      *
      * @param personToEdit the person whose details are to be used as defaults.
      * @param editPersonDescriptor the descriptor containing the new field values.
@@ -170,10 +171,11 @@ public class EditCommand extends Command {
         assert editPersonDescriptor != null;
 
         Name updatedName = editPersonDescriptor.getName().orElse(personToEdit.getName());
-        Phone updatedPhone = editPersonDescriptor.getPhone().orElse(personToEdit.getPhone());
+        Phone updatedPhone = editPersonDescriptor.isPhoneCleared()
+                ? null : editPersonDescriptor.getPhone().orElse(personToEdit.getPhone());
         Email updatedEmail = editPersonDescriptor.getEmail().orElse(personToEdit.getEmail());
-        TelegramHandle updatedTelegramHandle = editPersonDescriptor.getTelegramHandle()
-                .orElse(personToEdit.getTelegramHandle());
+        TelegramHandle updatedTelegramHandle = editPersonDescriptor.isTelegramHandleCleared()
+                ? null : editPersonDescriptor.getTelegramHandle().orElse(personToEdit.getTelegramHandle());
 
         return new Person(updatedName, updatedPhone, updatedEmail, updatedTelegramHandle, personToEdit.getTags());
     }
@@ -232,12 +234,16 @@ public class EditCommand extends Command {
      * Stores the details to edit the person with.
      * Each non-empty field value will replace the corresponding field value of the person.
      * Fields left as {@code null} indicate that the corresponding value should not be changed.
+     * The {@code phoneCleared} and {@code telegramHandleCleared} flags indicate that
+     * the respective optional field should be removed from the person.
      */
     public static class EditPersonDescriptor {
         private Name name;
         private Phone phone;
         private Email email;
         private TelegramHandle telegramHandle;
+        private boolean phoneCleared = false;
+        private boolean telegramHandleCleared = false;
 
         public EditPersonDescriptor() {}
 
@@ -251,13 +257,16 @@ public class EditCommand extends Command {
             setPhone(toCopy.phone);
             setEmail(toCopy.email);
             setTelegramHandle(toCopy.telegramHandle);
+            this.phoneCleared = toCopy.phoneCleared;
+            this.telegramHandleCleared = toCopy.telegramHandleCleared;
         }
 
         /**
          * Returns true if at least one field is edited.
          */
         public boolean isAnyFieldEdited() {
-            return CollectionUtil.isAnyNonNull(name, phone, email, telegramHandle);
+            return CollectionUtil.isAnyNonNull(name, phone, email, telegramHandle)
+                    || phoneCleared || telegramHandleCleared;
         }
 
         public void setName(Name name) {
@@ -307,7 +316,9 @@ public class EditCommand extends Command {
             return Objects.equals(name, otherEditPersonDescriptor.name)
                     && Objects.equals(phone, otherEditPersonDescriptor.phone)
                     && Objects.equals(email, otherEditPersonDescriptor.email)
-                    && Objects.equals(telegramHandle, otherEditPersonDescriptor.telegramHandle);
+                    && Objects.equals(telegramHandle, otherEditPersonDescriptor.telegramHandle)
+                    && phoneCleared == otherEditPersonDescriptor.phoneCleared
+                    && telegramHandleCleared == otherEditPersonDescriptor.telegramHandleCleared;
         }
 
         @Override
@@ -318,6 +329,22 @@ public class EditCommand extends Command {
                     .add("email", email)
                     .add("telegramHandle", telegramHandle)
                     .toString();
+        }
+
+        public void setPhoneCleared() {
+            this.phoneCleared = true;
+        }
+
+        public boolean isPhoneCleared() {
+            return phoneCleared;
+        }
+
+        public void setTelegramHandleCleared() {
+            this.telegramHandleCleared = true;
+        }
+
+        public boolean isTelegramHandleCleared() {
+            return telegramHandleCleared;
         }
     }
 }

@@ -17,9 +17,10 @@ import seedu.address.logic.parser.exceptions.ParseException;
 /**
  * Parses input arguments and creates a new {@link EditCommand} object.
  * <p>
- * Expected input format: {@code INDEX n/NAME p/PHONE e/EMAIL t/TELEGRAM_HANDLE},
+ * Expected input format: {@code INDEX n/NAME p/PHONE e/EMAIL h/TELEGRAM_HANDLE},
  * where {@code INDEX} is a positive integer and at least one field must be provided.
- * Duplicate prefixes are not allowed.
+ * Duplicate prefixes are not allowed. Empty values for {@code p/} and {@code h/}
+ * indicate that the field should be cleared.
  */
 public class EditCommandParser implements Parser<EditCommand> {
 
@@ -49,19 +50,11 @@ public class EditCommandParser implements Parser<EditCommand> {
         ArgumentMultimap argMultimap =
                 ArgumentTokenizer.tokenize(args, ADD_EDIT_COMMAND_PREFIXES);
 
-        ParserUtil.validateNoEmptyPrefixValues(argMultimap, ADD_EDIT_COMMAND_PREFIXES);
+        ParserUtil.validateNoEmptyPrefixValues(argMultimap, PREFIX_NAME, PREFIX_EMAIL);
 
-        String preamble = argMultimap.getPreamble().trim();
-        if (preamble.isEmpty() || preamble.contains(" ")) {
-            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, EditCommand.MESSAGE_USAGE));
-        }
+        ParserUtil.validatePreambleAsIndex(argMultimap, EditCommand.MESSAGE_USAGE);
 
-        Index index;
-        try {
-            index = ParserUtil.parseIndex(preamble);
-        } catch (ParseException pe) {
-            throw new ParseException(pe.getMessage());
-        }
+        Index index = ParserUtil.parseIndex(argMultimap.getPreamble().trim());
 
         argMultimap.verifyNoDuplicatePrefixesFor(ADD_EDIT_COMMAND_PREFIXES);
 
@@ -71,21 +64,28 @@ public class EditCommandParser implements Parser<EditCommand> {
             editPersonDescriptor.setName(ParserUtil.parseName(argMultimap.getValue(PREFIX_NAME).get()));
         }
         if (argMultimap.getValue(PREFIX_PHONE).isPresent()) {
-            editPersonDescriptor.setPhone(ParserUtil.parsePhone(argMultimap.getValue(PREFIX_PHONE).get()));
+            String phoneValue = argMultimap.getValue(PREFIX_PHONE).get();
+            if (phoneValue.isEmpty()) {
+                editPersonDescriptor.setPhoneCleared();
+            } else {
+                editPersonDescriptor.setPhone(ParserUtil.parsePhone(phoneValue));
+            }
         }
         if (argMultimap.getValue(PREFIX_EMAIL).isPresent()) {
             editPersonDescriptor.setEmail(ParserUtil.parseEmail(argMultimap.getValue(PREFIX_EMAIL).get()));
         }
         if (argMultimap.getValue(PREFIX_TELEGRAM_HANDLE).isPresent()) {
-            editPersonDescriptor.setTelegramHandle(ParserUtil.parseTelegramHandle(argMultimap
-                    .getValue(PREFIX_TELEGRAM_HANDLE).get()));
+            String handleValue = argMultimap.getValue(PREFIX_TELEGRAM_HANDLE).get();
+            if (handleValue.isEmpty()) {
+                editPersonDescriptor.setTelegramHandleCleared();
+            } else {
+                editPersonDescriptor.setTelegramHandle(ParserUtil.parseTelegramHandle(handleValue));
+            }
         }
-
         if (!editPersonDescriptor.isAnyFieldEdited()) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
                     EditCommand.MESSAGE_USAGE));
         }
-
         return new EditCommand(index, editPersonDescriptor);
     }
 }

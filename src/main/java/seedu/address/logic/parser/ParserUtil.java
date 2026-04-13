@@ -1,6 +1,7 @@
 package seedu.address.logic.parser;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_INDEX;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_KEYWORD_WITH_ONLY_SPECIAL_CHARACTERS;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_PREFIX_WITH_NO_INPUT;
@@ -328,6 +329,22 @@ public class ParserUtil {
                     MESSAGE_INVALID_KEYWORD_WITH_ONLY_SPECIAL_CHARACTERS,
                     prefix.getPrefix(),
                     token));
+        }
+    }
+
+    /**
+     * Validates that the preamble of the given {@code ArgumentMultimap} contains
+     * exactly one non-empty token suitable for parsing as an index.
+     *
+     * @param argMultimap the ArgumentMultimap containing the tokenized arguments
+     * @param usageMessage the command usage message to include in the exception
+     * @throws ParseException if the preamble is empty or contains more than one token
+     */
+    public static void validatePreambleAsIndex(ArgumentMultimap argMultimap, String usageMessage)
+            throws ParseException {
+        String preamble = argMultimap.getPreamble().trim();
+        if (preamble.isEmpty() || preamble.contains(" ")) {
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, usageMessage));
         }
     }
 }

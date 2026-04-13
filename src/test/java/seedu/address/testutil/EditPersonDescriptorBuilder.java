@@ -61,7 +61,11 @@ public class EditPersonDescriptorBuilder {
      * @return This builder for method chaining.
      */
     public EditPersonDescriptorBuilder withPhone(String phone) {
-        descriptor.setPhone(new Phone(phone));
+        if (phone == null) {
+            descriptor.setPhoneCleared();
+        } else {
+            descriptor.setPhone(new Phone(phone));
+        }
         return this;
     }
 
@@ -83,7 +87,11 @@ public class EditPersonDescriptorBuilder {
      * @return This builder for method chaining.
      */
     public EditPersonDescriptorBuilder withTelegramHandle(String telegramHandle) {
-        descriptor.setTelegramHandle(new TelegramHandle(telegramHandle));
+        if (telegramHandle == null) {
+            descriptor.setTelegramHandleCleared();
+        } else {
+            descriptor.setTelegramHandle(new TelegramHandle(telegramHandle));
+        }
         return this;
     }
 
