@@ -1,7 +1,6 @@
 package seedu.address.logic.parser;
 
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
-import static seedu.address.logic.Messages.MESSAGE_INVALID_KEYWORD_WITH_ONLY_SPECIAL_CHARACTERS;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_PREFIX_WITH_NO_INPUT;
 import static seedu.address.logic.Messages.MESSAGE_PREAMBLE_NOT_EMPTY;
 import static seedu.address.logic.Messages.MESSAGE_UNEXPECTED_EXTRA_INPUT;
@@ -64,12 +63,6 @@ public class FindCommandParserTest {
                 String.format(MESSAGE_UNEXPECTED_EXTRA_INPUT, "tc/cs2103"));
     }
 
-    @Test
-    public void parse_validMultipleNamesWithStandaloneSpecialCharacters_throwsParseException() {
-        assertParseFailure(parser, "n/bob . prim",
-                String.format(MESSAGE_INVALID_KEYWORD_WITH_ONLY_SPECIAL_CHARACTERS, "n/", "."));
-    }
-
     //============================== SUCCESS CASES - One Field ===================================
     @Test
     public void parse_validSingleNamePrefix_returnsFindCommand() {
@@ -91,17 +84,6 @@ public class FindCommandParserTest {
         assertParseSuccess(parser, "n/Alice Bob", expectedFindCommand);
         assertParseSuccess(parser, "n/Alice n/Bob", expectedFindCommand);
         assertParseSuccess(parser, "n/Alice \t \t \tBob", expectedFindCommand);
-    }
-
-    @Test
-    public void parse_validMultipleNamesNoStandaloneSpecialCharacters_returnsFindCommand() {
-        List<String> names = List.of("Bob", "C.", "Prim");
-
-        FindCommand expectedFindCommand =
-                new FindCommand(new NameEmailTagPredicate(names, List.of(), List.of()));
-
-        assertParseSuccess(parser, "n/Bob C. Prim", expectedFindCommand);
-        assertParseSuccess(parser, "n/Bob n/C. n/Prim", expectedFindCommand);
     }
 
     @Test

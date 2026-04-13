@@ -37,10 +37,6 @@ public class NameContainsKeywordsPredicateTest {
 
         // different predicate -> returns false
         assertFalse(firstPredicate.equals(secondPredicate));
-
-        // empty and whitespace keywords -> returns true
-        List<String> thirdPredicateKeywordList = Arrays.asList("first", " ", "second", "");
-        assertTrue(secondPredicate.equals(new NameContainsKeywordsPredicate(thirdPredicateKeywordList)));
     }
 
     //============================== SUCCESS CASES ===================================
@@ -66,10 +62,6 @@ public class NameContainsKeywordsPredicateTest {
         predicate = new NameContainsKeywordsPredicate(List.of("Alice", "B"));
         assertTrue(predicate.test(new PersonBuilder().withName("Alice Bob").build()));
 
-        // Substring match once keyword is normalized and split
-        predicate = new NameContainsKeywordsPredicate(Collections.singletonList("Alice-Bob"));
-        assertTrue(predicate.test(new PersonBuilder().withName("Alice Johnson").build()));
-
         // Mixed-case keywords
         predicate = new NameContainsKeywordsPredicate(Arrays.asList("aLIce", "bOB"));
         assertTrue(predicate.test(new PersonBuilder().withName("Alice Bob").build()));
@@ -78,6 +70,10 @@ public class NameContainsKeywordsPredicateTest {
         // 1 transposition away from Alice (within threshold of 1)
         predicate = new NameContainsKeywordsPredicate(List.of("Aliec"));
         assertTrue(predicate.test(new PersonBuilder().withName("Alice").build()));
+
+        // Keyword contains special characters and is a substring of name
+        predicate = new NameContainsKeywordsPredicate(Collections.singletonList("Alice-Johnson"));
+        assertTrue(predicate.test(new PersonBuilder().withName("Alice-Johnson").build()));
     }
 
     //============================== FAILURE CASES ===================================
@@ -104,16 +100,19 @@ public class NameContainsKeywordsPredicateTest {
         // Test fuzzy match failure (outside threshold)
         predicate = new NameContainsKeywordsPredicate(List.of("AliceXXXX")); // 4 edits away from "Alice"
         assertFalse(predicate.test(new PersonBuilder().withName("Alice").build()));
+
+        // Keyword contains special characters but name does not
+        predicate = new NameContainsKeywordsPredicate(Collections.singletonList("Alice-Johnson"));
+        assertFalse(predicate.test(new PersonBuilder().withName("Alice Johnson").build()));
     }
 
     @Test
     public void toStringMethod() {
         List<String> keywords = List.of("Keyword1", "Keyword2");
-        List<String> normalizedKeywords = List.of("keyword1", "keyword2");
         NameContainsKeywordsPredicate predicate = new NameContainsKeywordsPredicate(keywords);
 
         String expected = NameContainsKeywordsPredicate.class.getCanonicalName()
-                + "{keywords=" + normalizedKeywords + "}";
+                + "{keywords=" + keywords + "}";
         assertEquals(expected, predicate.toString());
     }
 }

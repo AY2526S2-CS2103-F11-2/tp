@@ -32,33 +32,40 @@ public class NameContainsKeywordsPredicate implements Predicate<Person> {
     // Ratio of keyword length to determine allowed edits in fuzzy matching (e.g., 20% of the keyword length)
     private static final double EDIT_DISTANCE_RATIO = 0.2;
 
-    private final List<String> normalizedKeywords;
+    private final List<String> keywords;
 
     /**
      * Constructs a {@code NameContainsKeywordsPredicate} using a list of name keywords.
-     *
-     * <p> Keywords will be normalized to lowercase and any special characters are removed.</p>
      *
      * @param keywords The list of name keywords to match against (cannot be null or contain null elements)
      * @throws NullPointerException if {@code keywords} is null or contains null elements
      */
     public NameContainsKeywordsPredicate(List<String> keywords) {
         requireAllNonNull(keywords);
-
-        this.normalizedKeywords = keywords.stream()
-                .map(StringUtil::normalizeForFuzzyMatching)
-                .flatMap(s -> Arrays.stream(s.split("\\s+")))
-                .filter(s -> !s.isEmpty())
-                .toList();
+        this.keywords = keywords;
     }
 
     @Override
     public boolean test(Person person) {
+        boolean hasSpecialCharacters = keywords.stream()
+                .anyMatch(k -> k.matches(".*[^a-zA-Z0-9\\s].*"));
+
+        // Use only substring matching for keywords with special characters
+        if (hasSpecialCharacters) {
+            String name = person.getName().fullName.toLowerCase();
+
+            return keywords.stream()
+                    .anyMatch(keyword -> name.contains(keyword.toLowerCase()));
+        }
+
         // Split name based on white spaces
         List<String> nameTokens = Arrays.asList(StringUtil.normalizeForFuzzyMatching(person.getName().fullName)
                         .split("\\s+"));
 
-        return normalizedKeywords.stream()
+        return keywords.stream()
+                .map(StringUtil::normalizeForFuzzyMatching) // normalise keywords
+                .flatMap(s -> Arrays.stream(s.split("\\s+")))
+                .filter(s -> !s.isEmpty()) // trim whitespace and remove empty tokens
                 .anyMatch(keyword -> keywordMatchesAnyToken(keyword, nameTokens));
     }
 
@@ -118,13 +125,13 @@ public class NameContainsKeywordsPredicate implements Predicate<Person> {
             return false;
         }
 
-        return normalizedKeywords.equals(otherNameContainsKeywordsPredicate.normalizedKeywords);
+        return keywords.equals(otherNameContainsKeywordsPredicate.keywords);
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this)
-                .add("keywords", normalizedKeywords)
+                .add("keywords", keywords)
                 .toString();
     }
 }
