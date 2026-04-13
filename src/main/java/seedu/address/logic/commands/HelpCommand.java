@@ -58,7 +58,7 @@ public class HelpCommand extends Command {
             + String.join(", ", VALID_COMMAND_NAMES_SORTED);
 
     /** Prefix added to offline fallback messages. */
-    public static final String OFFLINE_HELP_NOTICE = "User guide unavailable (no internet connection).\n";
+    public static final String OFFLINE_HELP_NOTICE = "User guide cannot be opened\n";
 
     /** Fallback shown when general {@code help} is called offline. */
     public static final String OFFLINE_FALLBACK_GENERAL =
