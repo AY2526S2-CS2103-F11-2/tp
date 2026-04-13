@@ -3,7 +3,7 @@ layout: page
 title: User Guide
 ---
 
-CampusBridge is a **desktop app for managing contacts, optimized for use via a Command Line Interface** (CLI) while still having the benefits of a Graphical User Interface (GUI). If you can type fast, CampusBridge can get your contact management tasks done faster than traditional GUI apps.
+CampusBridge is a desktop app for **NUS students** to organise and manage academic and campus-related contacts such as professors, teaching assistants, groupmates, and club members. It provides a **centralised place to store and search contact details that are otherwise scattered across platforms like Canvas, Telegram, and email.** Optimised for use via a Command Line Interface (CLI) while still offering the benefits of a Graphical User Interface (GUI), fast typists can get contact management tasks done quicker than with traditional GUI apps.
 
 * Table of Contents
 {:toc}
@@ -19,7 +19,7 @@ CampusBridge is a **desktop app for managing contacts, optimized for use via a C
 
 1. Copy the file to the folder you want to use as the _home folder_ for your CampusBridge application.
 
-1. Open a command terminal, `cd` into the folder you put the jar file in, and use the `java -jar CampusBridge-v1.5.1.jar` command to run the application.<br>
+1. Open a command terminal, `cd` into the folder you put the jar file in, and use the `java -jar CampusBridge-v1.6.jar` command to run the application.<br>
    A GUI similar to the below should appear in a few seconds. Note how the app contains some sample data.<br>
    ![Ui](images/Ui.png)
 
@@ -40,7 +40,7 @@ CampusBridge is a **desktop app for managing contacts, optimized for use via a C
 
    * `exit` : Exits the app.
 
-1. Refer to the [Features](#features) below for details of each command.
+1. Refer to the [Features](#features) below for additional details.
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -88,6 +88,7 @@ Emails should be of the format `local-part@domain` and adhere to the following c
 * Must end with a domain label at least 2 characters long
 * Each domain label must start and end with alphanumeric characters
 * Each domain label must consist of alphanumeric characters, separated only by hyphens, if any
+* Special characters must be separated by alphanumeric characters (e.g. `a.+b` is invalid)
 
 **Examples:**<br/>
 
@@ -102,12 +103,17 @@ Emails should be of the format `local-part@domain` and adhere to the following c
 
 CampusBridge is designed for NUS students and staff. When adding or editing a contact:
 
-| Email domain            | Behavior                                   |
-|-------------------------|--------------------------------------------|
-| `@u.nus.edu` (student)  | No warning                                 |
-| `@nus.edu.sg` (staff)   | No warning                                 |
-| `@*.nus.edu.sg` (staff) | No warning                                 |
-| Other domains           | Warning shown (but contact is still added) |
+| Email domain         | Behavior                                   |
+|----------------------|--------------------------------------------|
+| `@u.nus.edu`         | No warning                                 |
+| `@*.nus.edu`         | No warning                                 |
+| `@nus.edu.sg`        | No warning                                 |
+| `@*.nus.edu.sg`      | No warning                                 |
+| `@duke-nus.edu.sg`   | No warning                                 |
+| `@*.duke-nus.edu.sg` | No warning                                 |
+| `@yale-nus.edu.sg`   | No warning                                 |
+| `@*.yale-nus.edu.sg` | No warning                                 |
+| Other domains        | Warning shown (but contact is still added) |
 
 <div markdown="span" class="alert alert-warning">:exclamation: **Note:**
 Non-NUS emails are still accepted, but a warning will be displayed to alert you that the email does not belong to an NUS domain.
@@ -137,6 +143,8 @@ Non-NUS emails are still accepted, but a warning will be displayed to alert you 
 * Prefixes are case-insensitive.<br>
   e.g. n/NAME and N/NAME are treated the same way.
 
+* Commands are case-insensitive. e.g. ADD, Add, and add are treated the same way.
+
 * If you are using a PDF version of this document, be careful when copying and pasting commands that span multiple lines as space characters surrounding line-breaks may be omitted when copied over to the application.
 </div>
 
@@ -149,6 +157,7 @@ Opens the user guide in the browser, and optionally directly to the section for 
 Alternatively, press `F1` or `fn + F1` to open the user guide.
 
 * `COMMAND` is optional. When provided, it must be a single valid command name (e.g. `add`, `edit`).
+* `COMMAND` is case-insensitive. e.g. `help ADD`, `help Add`, and `help add` are treated the same.
 * If `COMMAND` is provided, the user guide is opened at the section for that command.
 * If `COMMAND` is not a recognised command name, an error is shown listing all valid commands.
 * If more than one word is provided (e.g. `help add clear`), an invalid command format error is shown.
@@ -158,6 +167,7 @@ Examples:
 * `help add` — opens the user guide at the **Adding a person** section.
 * `help sort` — opens the user guide at the **Sorting persons** section.
 
+Supported commands: `help`, `add`, `edit`, `delete`, `untag`, `cleartag`, `list`, `sort`, `find`, `clear`, `exit`
 
 ### Adding a person : `add`
 
@@ -205,7 +215,7 @@ Edits an existing person in the address book.
 * Existing values will be updated to the input values.
 * Any unexpected slash-prefixed token is rejected as extra input.
 * Prefixes are case-insensitive (n/ and N/ are treated the same).
-* Repeated prefixes for single-valued fields are not allowed. For example, `edit n/Amy n/Ben e/x@example.com` is invalid.
+* Repeated prefixes for single-valued fields are not allowed. For example, `edit 1 n/Amy n/Ben e/x@example.com` is invalid.
 * Phone numbers provided must contain only digits and be at least 3 digits long.
 * Requirements for an email provided is specified [here](#email-validation).
 * The updated email and Telegram handle, if provided, must remain unique.
@@ -215,7 +225,7 @@ Edits an existing person in the address book.
   Other special characters are not supported. In particular, `/` is not accepted because it may be interpreted as command syntax. If needed, replace it with a supported symbol instead, e.g. `D/O` as `D-O`.
 
 <div markdown="span" class="alert alert-info">:information_source: **Note:**
-If the updated email is not an [NUS domain](#email-validation) (`@u.nus.edu` or `@*.nus.edu.sg` or `@nus.edu.sg`), a warning message will be shown. The contact will still be updated.
+If the updated email is not an [NUS domain](#email-validation), a warning message will be shown. The contact will still be updated.
 </div>
 
 **Examples:**
@@ -450,8 +460,8 @@ Finds persons whose names, emails, or tags match the given keywords.
 * **Email keywords** use exact substring matching.
     * e.g. `gmail` will match `john@gmail.com` and `alice.gmail@example.com`.
     * Special characters in email keywords are matched as entered. For example, `john.doe` will not match `doe@gmail.com`.
-* **Tags** use exact matching.
-    * e.g. `cs2103` will match tag `cs2103` but not `cs210`.
+* **Tags** require exact keyword matches (no partial matching), but are still case-insensitive.
+    * e.g. `cs2103` will match tag `cs2103` and `CS2103` but not `cs210`.
     * Special characters in tag keywords are matched as entered. For example, in `cs2103-t`, the `-` is treated as part of the tag and is not ignored.
 * Multiple keywords within the same field are combined using **OR**.
   e.g. `n/Alex David` will match `Alex Yeoh` or `David Li`.
@@ -546,22 +556,13 @@ You can repeatedly use `undo` to step backwards through your previous changes.
   ```
   When no more commands to undo, an error message will be shown indicating that there are no actions to undo.
 
-### Navigating command history
-
-Previously entered commands can be recalled using the keyboard.
-
-* Press the **Up arrow** key to go back to an earlier command.
-* Press the **Down arrow** key to go forward to a more recent command.
-
-**Examples:**
-* After running `add n/John Doe e/john@example.com`, press **Up** to recall it and modify it.
-* After running several commands, press **Up** repeatedly to scroll back through them.
-
 ### Clearing all entries : `clear`
 
 Clears all entries from the address book.
 
 **Format:** `clear`
+
+![ClearCommandSuccessResultImage](images/clearcommand.png)
 
 * `clear` keeps the current filtered view unchanged.
 * If you later use `undo`, the cleared contacts will be restored, but some restored contacts may still be hidden if they do not match the current filter.
@@ -573,6 +574,17 @@ Exits the program.
 **Format:** `exit`
 
 Alternatively, press `F3` or `fn + F3` to exit the application.
+
+### Navigating command history
+
+Previously entered commands can be recalled using the keyboard.
+
+* Press the **Up arrow** key to go back to an earlier command.
+* Press the **Down arrow** key to go forward to a more recent command.
+
+**Examples:**
+* After running `add n/John Doe e/john@example.com`, press **Up** to recall it and modify it.
+* After running several commands, press **Up** repeatedly to scroll back through them.
 
 ### Saving the data
 

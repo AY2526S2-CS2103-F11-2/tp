@@ -17,7 +17,7 @@ public class HelpCommandParser implements Parser<HelpCommand> {
      * @throws ParseException if the user input does not conform to the expected format
      */
     public HelpCommand parse(String args) throws ParseException {
-        String trimmed = args.trim();
+        String trimmed = args.trim().toLowerCase();
         if (trimmed.isEmpty()) {
             return new HelpCommand();
         }

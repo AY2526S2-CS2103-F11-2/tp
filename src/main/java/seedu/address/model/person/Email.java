@@ -3,6 +3,7 @@ package seedu.address.model.person;
 import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.AppUtil.checkArgument;
 
+import java.util.Arrays;
 import java.util.Locale;
 
 /**
@@ -16,7 +17,7 @@ public class Email {
             + "and adhere to the following constraints:\n"
             + "1. The local-part should only contain alphanumeric characters and these special characters, excluding "
             + "the parentheses, (" + SPECIAL_CHARACTERS + "). The local-part may not start or end with any special "
-            + "characters.\n"
+            + "characters. Special characters must be separated by alphanumeric characters.\n"
             + "2. This is followed by a '@' and then a domain name. The domain name is made up of domain labels "
             + "separated by periods.\n"
             + "The domain name must:\n"
@@ -32,9 +33,11 @@ public class Email {
     private static final String DOMAIN_LAST_PART_REGEX = "(" + DOMAIN_PART_REGEX + "){2,}$"; // At least two chars
     private static final String DOMAIN_REGEX = "(" + DOMAIN_PART_REGEX + "\\.)*" + DOMAIN_LAST_PART_REGEX;
     public static final String VALIDATION_REGEX = LOCAL_PART_REGEX + "@" + DOMAIN_REGEX;
-    private static final String NUS_PERIOD_STAFF_DOMAIN = "@nus.edu.sg";
-    private static final String NUS_STUDENT_DOMAIN = "@u.nus.edu";
-    private static final String NUS_STAFF_DOMAIN = ".nus.edu.sg";
+    private static final String[] NUS_DOMAINS = {
+        ".nus.edu", ".nus.edu.sg", "@nus.edu.sg",
+        ".duke-nus.edu.sg", "@duke-nus.edu.sg",
+        ".yale-nus.edu.sg", "@yale-nus.edu.sg"
+    };
     public final String value;
 
     /**
@@ -94,8 +97,6 @@ public class Email {
     }
 
     public boolean isNusDomain() {
-        return value.endsWith(NUS_STUDENT_DOMAIN) || value.endsWith(NUS_STAFF_DOMAIN)
-                || value.endsWith(NUS_PERIOD_STAFF_DOMAIN);
+        return Arrays.stream(NUS_DOMAINS).anyMatch(value::endsWith);
     }
-
 }

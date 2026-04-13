@@ -170,6 +170,7 @@ public class MainWindow extends UiPart<Stage> {
      */
     @FXML
     public void handleHelp() {
+        resultDisplay.setFeedbackToUser(HelpCommand.SHOWING_HELP_MESSAGE);
         handleHelpUrl(HelpCommand.USERGUIDE_URL);
     }
 

@@ -729,7 +729,7 @@ Use case ends.
 ### Non-Functional Requirements
 
 1. Should work on any _mainstream OS_ as long as it has Java `17` or above installed.
-2. Should be able to hold up to 1000 persons without a noticeable sluggishness in performance for typical usage.
+2. Should be able to hold up to 1000 persons and return search results or complete command executions within 1 second.
 3. A user with above average typing speed for regular English text (i.e. not code, not system admin commands) should be able to accomplish most of the tasks faster using commands than using the mouse.
 4. Changes should be implemented incrementally, i.e. in a way that allows the app to be usable after each increment, even if some features are not yet implemented.
 5. All logics and storage should be implemented locally, to ensure testability and usability in secure environments without internet access.
@@ -749,7 +749,7 @@ Use case ends.
 * GUI (Graphical user interface): A visual way for users to interact with digital components through items like icons and buttons.
 * Index: A positive integer representing the position of a contact in the currently displayed list.
 * Mainstream OS: Windows, Linux, Unix, MacOS.
-* NUS domain: Email addresses ending with `@u.nus.edu` (student), `@nus.edu.sg` (staff), or `@*.nus.edu.sg`.
+* NUS domain: Email addresses from NUS-affiliated domains, including `@u.nus.edu, @*.nus.edu, @nus.edu.sg, @*.nus.edu.sg, @duke-nus.edu.sg, @*.duke-nus.edu.sg, @yale-nus.edu.sg, and @*.yale-nus.edu.sg`.
 * Prefix: A short identifier (e.g. `n/`, `e/`, `tg/`) used in commands to denote the type of parameter that follows.
 * Professor: An academic staff member who teaches a course at NUS.
 * Role tag: A type of tag (displayed in green) used to label a contact's academic role. Its prefix is `tr/`.
@@ -781,7 +781,7 @@ testers are expected to do more *exploratory* testing.
 
    1. Resize the window to an optimum size. Move the window to a different location. Close the window.
 
-   1. Re-launch the app by running `java -jar campusbridge.jar` in the terminal.<br>
+   1. Re-launch the app by running `java -jar CampusBridge-v1.6.jar` in the terminal.<br>
 
       Expected: The most recent window size and location is retained.
 
@@ -812,17 +812,17 @@ testers are expected to do more *exploratory* testing.
     1. Test case: `help add`<br>
        Expected: The User Guide opens in the system default browser at the `add` command section. Status message shows `Opening user guide for 'add' command.`
 
-    1. Other valid command names to try: `help list`, `help edit`, `help delete`, `help find`, `help sort`, `help tag`, `help untag`, `help cleartag`, `help clear`, `help exit`<br>
-       Expected: The User Guide opens at the respective command section. Status message names the command.
+   1. Test case: `help ADD`<br>
+      Expected: The User Guide opens in the system default browser at the `add` command section. Status message shows `Opening user guide for 'add' command.`
+
+   1. Other valid command names to try: `help list`, `help edit`, `help delete`, `help find`, `help sort`, `help tag`, `help untag`, `help cleartag`, `help clear`, `help exit`<br>
+      Expected: The User Guide opens at the respective command section. Status message names the command.
 
 1. Invalid help arguments
 
     1. Test case: `help INVALID`<br>
        Expected: The User Guide does not open. Error details shown in the status message.
-
-    1. Test case: `help ADD` (uppercase)<br>
-       Expected: Same as above. Command names are case-sensitive and must be lowercase.
-
+   
     1. Test case: `help add extra`<br>
        Expected: Same as above. Only a single command name is accepted; extra words cause a format error.
 

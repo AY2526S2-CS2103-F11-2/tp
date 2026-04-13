@@ -155,4 +155,17 @@ public class EmailTest {
         assertFalse(new Email("scam@fakenus.edu.sg").isNusDomain());
         assertFalse(new Email("fake@notnus.edu.sg").isNusDomain());
     }
+
+    @Test
+    public void isNusDomain_dukeNusEmail_returnsTrue() {
+        assertTrue(new Email("student@u.duke.nus.edu").isNusDomain());
+        assertTrue(new Email("prof@duke-nus.edu.sg").isNusDomain());
+        assertTrue(new Email("user@se.duke-nus.edu.sg").isNusDomain());
+    }
+
+    @Test
+    public void isNusDomain_yaleNusEmail_returnsTrue() {
+        assertTrue(new Email("student@u.yale-nus.edu.sg").isNusDomain());
+        assertTrue(new Email("prof@yale-nus.edu.sg").isNusDomain());
+    }
 }

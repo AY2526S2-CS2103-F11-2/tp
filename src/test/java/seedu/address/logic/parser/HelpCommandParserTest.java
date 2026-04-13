@@ -48,7 +48,15 @@ public class HelpCommandParserTest {
     public void parse_invalidCommand_throwsParseException() {
         assertParseFailure(parser, "unknown",
                 String.format(HelpCommand.MESSAGE_UNKNOWN_COMMAND, "unknown"));
-        assertParseFailure(parser, "ADD",
-                String.format(HelpCommand.MESSAGE_UNKNOWN_COMMAND, "ADD"));
+        assertParseFailure(parser, "ADDD",
+                String.format(HelpCommand.MESSAGE_UNKNOWN_COMMAND, "addd"));
+    }
+
+
+    @Test
+    public void parse_validCommandUppercase_returnsHelpCommand() {
+        assertParseSuccess(parser, "ADD", new HelpCommand("add"));
+        assertParseSuccess(parser, "EDIT", new HelpCommand("edit"));
+        assertParseSuccess(parser, "List", new HelpCommand("list"));
     }
 }

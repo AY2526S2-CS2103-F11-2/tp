@@ -15,8 +15,8 @@
 ## Getting Started
 
 1. Ensure you have Java `17` or above installed.
-2. Download the latest `CampusBridge.jar` from [here](https://github.com/AY2526S2-CS2103-F11-2/tp/releases).
-3. Run `java -jar CampusBridge.jar` in your terminal.
+2. Download the latest `.jar` file from [here](https://github.com/AY2526S2-CS2103-F11-2/tp/releases).
+3. Run `java -jar CampusBridge-v1.6.jar` in your terminal.
 
 ---
 
